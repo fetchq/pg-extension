@@ -1,0 +1,59 @@
+version: '2.1'
+services:
+
+    postgres:
+        image: postgres:9.6
+        networks:
+            - development
+        ports:
+            - ${FETCHQ_NODE_PG_PORT-5432}:5432
+        environment:
+            POSTGRES_USER: ${FETCHQ_NODE_PG_USER-fetchq}
+            POSTGRES_PASSWORD: ${FETCHQ_NODE_PG_PASSWORD-fetchq}
+            POSTGRES_DB: ${FETCHQ_NODE_PG_DB-fetchq}
+        volumes:
+            # - ./services/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+            - ./data/pg:/var/lib/postgresql/data
+            - ./data/backup:/backup
+            - ./ext/fetchq.control:/usr/share/postgresql/9.6/extension/fetchq.control
+            - ./ext/fetchq--0.0.1.sql:/usr/share/postgresql/9.6/extension/fetchq--0.0.1.sql
+        restart: always
+
+    # webapp:
+    #     image: node:9.9
+    #     depends_on:
+    #         - postgres
+    #     networks:
+    #         - development
+    #     ports:
+    #         - ${APP_PORT:-3000}:3000
+    #         - ${SSR_PORT:-8080}:8080
+    #     environment:
+    #         NODE_ENV: ${NODE_ENV:-development}
+    #         LOG_LEVEL: ${LOG_LEVEL:-verbose}
+    #         SSR_PORT: ${SSR_PORT:-8080}
+    #         SSR_ENABLED: ${SSR_ENABLED:-yes}
+    #         SSR_ROOT: ${SSR_ROOT:-/usr/src/app/build}
+    #         SSR_TIMEOUT: ${SSR_TIMEOUT:-5000}
+    #         SSR_DISABLE_JS: ${SSR_DISABLE_JS:-no}
+    #         SSR_USE_WEBPACK_JS: ${SSR_USE_WEBPACK_JS:-no}
+    #         SSR_BLACKLIST: ${SSR_BLACKLIST:-}
+    #         FETCHQ_NODE_PG_HOST: ${FETCHQ_NODE_PG_HOST:-postgres}
+    #         FETCHQ_NODE_PG_PORT: ${FETCHQ_NODE_PG_PORT:-5432}
+    #         FETCHQ_NODE_PG_DB: ${FETCHQ_NODE_PG_DB:-mysocial}
+    #         FETCHQ_NODE_PG_USER: ${FETCHQ_NODE_PG_USER:-mysocial}
+    #         FETCHQ_NODE_PG_PASSWORD: ${FETCHQ_NODE_PG_PASSWORD:-mysocial}
+    #         FETCHQ_NODE_PG_DEBUG: ${FETCHQ_NODE_PG_DEBUG:-off}
+    #         FETCHQ_NODE_PG_MAX_CONN_ATTEMPTS: ${FETCHQ_NODE_PG_MAX_CONN_ATTEMPTS:-1}
+    #         FETCHQ_NODE_PG_CONN_ATTEMPTS_DELAY: ${FETCHQ_NODE_PG_CONN_ATTEMPTS_DELAY:-1}
+    #         JWT_SECRET: ${JWT_SECRET:-12345}
+    #         MAIL_HOST: ${MAIL_HOST:-xxx}
+    #         MAIL_USER: ${MAIL_USER:-xxx}
+    #         MAIL_PASSWORD: ${MAIL_PASSWORD:-xxx}
+    #     volumes:
+    #         - ./services/webapp:/usr/src/app
+    #     working_dir: /usr/src/app
+    #     entrypoint: [ "yarn", "start:dev" ]
+
+networks:
+    development:
