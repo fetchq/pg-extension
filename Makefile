@@ -7,12 +7,14 @@ reset:
 	mkdir $(CURDIR)/data/pg
 
 build-extension:
-	cat $(CURDIR)/src/tables.sql \
+	cat $(CURDIR)/src/fetchq-sys-tables.sql \
 		> $(CURDIR)/extension/fetchq--${version}.sql
 
 build-test:
 	mkdir -p $(CURDIR)/data
 	cat $(CURDIR)/tests/create-extension.sql \
+		$(CURDIR)/tests/fetchq-sys-tables.sql \
+		$(CURDIR)/tests/drop-extension.sql \
 		> $(CURDIR)/data/fetchq-tests--${version}.sql
 
 start-test: reset build-extension build-test
@@ -34,7 +36,7 @@ start-test-delay:
 stop-test:
 	docker stop fetchq
 
-test-run: build-test
+test-run: build-extension build-test
 	docker exec \
 		fetchq \
 		psql \
