@@ -37,3 +37,9 @@ fq_sys_metrics
 fq_sys_metrics_writes
 fq_sys_tasks
 fq_sys_tasks_errors
+
+## How to Work this out
+
+1. `make test-start` will run postgres
+2. `make test-run` will build the extension and run the tests
+3. `make test-stop` will kill postgres
