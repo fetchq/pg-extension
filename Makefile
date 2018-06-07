@@ -7,14 +7,18 @@ reset:
 	mkdir $(CURDIR)/data/pg
 
 build-extension:
-	cat $(CURDIR)/src/fetchq-sys-tables.sql \
+	cp $(CURDIR)/src/fetchq.control $(CURDIR)/extension/fetchq.control
+	cat $(CURDIR)/src/sys-tables.sql \
+		$(CURDIR)/src/get-queue-id.sql \
+		$(CURDIR)/src/create-queue.sql \
+		$(CURDIR)/src/drop-queue.sql \
 		> $(CURDIR)/extension/fetchq--${version}.sql
 
 build-test:
 	mkdir -p $(CURDIR)/data
-	cat $(CURDIR)/tests/create-extension.sql \
-		$(CURDIR)/tests/fetchq-sys-tables.sql \
-		$(CURDIR)/tests/drop-extension.sql \
+	cat $(CURDIR)/tests/init-test.sql \
+		$(CURDIR)/tests/sys-tables.sql \
+		$(CURDIR)/tests/create-drop-queue.sql \
 		> $(CURDIR)/data/fetchq-tests--${version}.sql
 
 test-start-pg: reset build-extension build-test
@@ -43,6 +47,7 @@ test-run: build-extension build-test
 	docker exec \
 		fetchq \
 		psql \
+			-v ON_ERROR_STOP=1 \
 			-h localhost \
 			--username fetchq \
 			--dbname fetchq \
