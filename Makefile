@@ -16,9 +16,10 @@ build-extension:
 
 build-test:
 	mkdir -p $(CURDIR)/data
-	cat $(CURDIR)/tests/sys-tables.sql \
-		$(CURDIR)/tests/create-queue.sql \
-		> $(CURDIR)/data/fetchq-tests--${version}.sql
+	cat $(CURDIR)/tests/sys-tables.test.sql \
+		$(CURDIR)/tests/create-queue.test.sql \
+		$(CURDIR)/tests/drop-queue.test.sql \
+		> $(CURDIR)/data/fetchq--${version}.test.sql
 
 test-start-pg: reset build-extension build-test
 	docker run --rm -d \
@@ -30,7 +31,7 @@ test-start-pg: reset build-extension build-test
 		-v $(CURDIR)/data/pg:/var/lib/postgresql/data \
 		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_version)/extension/fetchq.control \
 		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_version)/extension/fetchq--${version}.sql \
-		-v $(CURDIR)/data/fetchq-tests--${version}.sql:/tests/fetchq-tests--${version}.sql \
+		-v $(CURDIR)/data/fetchq--${version}.test.sql:/tests/fetchq--${version}.test.sql \
 		postgres:$(pg_version)
 
 test-start-delay:
@@ -50,6 +51,6 @@ test-run: build-extension build-test
 			-h localhost \
 			--username fetchq \
 			--dbname fetchq \
-			-a -f /tests/fetchq-tests--${version}.sql
+			-a -f /tests/fetchq--${version}.test.sql
 
 test: test-start-pg test-start-delay test-run test-stop

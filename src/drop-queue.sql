@@ -32,6 +32,13 @@ BEGIN
 	drop_query = FORMAT(drop_query, table_name);
 	EXECUTE drop_query;
 
+	-- drop domain namespace
+	DELETE FROM fetchq_sys_queues
+	WHERE name = domainStr;
+
+	-- drop maintenance tasks
+	DELETE FROM fetchq_sys_jobs WHERE subject = domainStr;
+
 	-- drop counters
 	-- DELETE FROM lq__metrics
 	-- WHERE queue = domainStr;
@@ -40,15 +47,8 @@ BEGIN
 	-- DELETE FROM lq__metrics_writes
 	-- WHERE queue = domainStr;
 
-	-- drop domain namespace
-	DELETE FROM fetchq_sys_queues
-	WHERE name = domainStr;
-
-	-- drop maintenance tasks
-	DELETE FROM fetchq_sys_jobs WHERE subject = domainStr;
-
-	-- EXCEPTION WHEN OTHERS THEN BEGIN
-	-- 	was_dropped = FALSE;
-	-- END;
+	EXCEPTION WHEN OTHERS THEN BEGIN
+		was_dropped = FALSE;
+	END;
 END; $$
 LANGUAGE plpgsql;
