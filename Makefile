@@ -16,9 +16,8 @@ build-extension:
 
 build-test:
 	mkdir -p $(CURDIR)/data
-	cat $(CURDIR)/tests/init-test.sql \
-		$(CURDIR)/tests/sys-tables.sql \
-		$(CURDIR)/tests/create-drop-queue.sql \
+	cat $(CURDIR)/tests/sys-tables.sql \
+		$(CURDIR)/tests/create-queue.sql \
 		> $(CURDIR)/data/fetchq-tests--${version}.sql
 
 test-start-pg: reset build-extension build-test
