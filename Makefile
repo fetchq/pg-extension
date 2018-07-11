@@ -63,22 +63,6 @@ build:
 		$(CURDIR)/src/utils-ts-retain.sql \
 		> $(CURDIR)/extension/fetchq--${version}.sql
 
-build-image: reset build
-	docker build --no-cache -t ${name}:9.6-${version} -f Dockerfile-9.6 .
-	docker build --no-cache -t ${name}:10.4-${version} -f Dockerfile-10.4 .
-
-publish: build-image
-	docker tag ${name}:9.6-${version} ${registry}/${name}:9.6-${version}
-	docker tag ${name}:9.6-${version} ${registry}/${name}:9.6-latest
-	docker push ${registry}/${name}:9.6-${version}
-	docker push ${registry}/${name}:9.6-latest
-	docker tag ${name}:10.4-${version} ${registry}/${name}:10.4-${version}
-	docker tag ${name}:10.4-${version} ${registry}/${name}:10.4-latest
-	docker tag ${name}:10.4-${version} ${registry}/${name}:latest
-	docker push ${registry}/${name}:10.4-${version}
-	docker push ${registry}/${name}:10.4-latest
-	docker push ${registry}/${name}:latest
-
 build-test:
 	mkdir -p $(CURDIR)/data
 	cat $(CURDIR)/tests/_before.sql \
@@ -123,13 +107,26 @@ build-test:
 		$(CURDIR)/tests/_after.sql \
 		> $(CURDIR)/data/fetchq--${version}.test.sql
 
+build-image: reset build
+	docker build --no-cache -t ${name}:9.6-${version} -f Dockerfile-9.6 .
+	docker build --no-cache -t ${name}:10.4-${version} -f Dockerfile-10.4 .
+
+publish: build-image
+	docker tag ${name}:9.6-${version} ${registry}/${name}:9.6-${version}
+	docker tag ${name}:9.6-${version} ${registry}/${name}:9.6-latest
+	docker push ${registry}/${name}:9.6-${version}
+	docker push ${registry}/${name}:9.6-latest
+	docker tag ${name}:10.4-${version} ${registry}/${name}:10.4-${version}
+	docker tag ${name}:10.4-${version} ${registry}/${name}:10.4-latest
+	docker tag ${name}:10.4-${version} ${registry}/${name}:latest
+	docker push ${registry}/${name}:10.4-${version}
+	docker push ${registry}/${name}:10.4-latest
+	docker push ${registry}/${name}:latest
+
 start-pg:
 	docker run --rm -d \
 		--name fetchq \
 		-p 5432:5432 \
-		-e "POSTGRES_USER=fetchq" \
-		-e "POSTGRES_PASSWORD=fetchq" \
-		-e "POSTGRES_DB=fetchq" \
 		-v $(CURDIR)/data/pg:/var/lib/postgresql/data \
 		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_version)/extension/fetchq.control \
 		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_version)/extension/fetchq--${version}.sql \
@@ -140,9 +137,6 @@ start-pg-prod:
 	docker run --rm -d \
 		--name fetchq \
 		-p 5432:5432 \
-		-e "POSTGRES_USER=fetchq" \
-		-e "POSTGRES_PASSWORD=fetchq" \
-		-e "POSTGRES_DB=fetchq" \
 		-v $(CURDIR)/data/pg:/var/lib/postgresql/data \
 		fetchq:$(version)
 	docker logs -f fetchq
@@ -164,8 +158,8 @@ test-run: build build-test
 		psql \
 			-v ON_ERROR_STOP=1 \
 			-h localhost \
-			--username fetchq \
-			--dbname fetchq \
+			--username postgres \
+			--dbname postgres \
 			-a -f /tests/fetchq--${version}.test.sql
 
 init: build
@@ -174,6 +168,6 @@ init: build
 		psql \
 			-v ON_ERROR_STOP=1 \
 			-h localhost \
-			--username fetchq \
-			--dbname fetchq \
+			--username postgres \
+			--dbname postgres \
 			-c 'DROP SCHEMA public CASCADE;CREATE SCHEMA public;CREATE EXTENSION fetchq;SELECT * FROM fetchq_init();'
