@@ -120,6 +120,7 @@ build-test:
 		$(CURDIR)/tests/queue-drop-metrics.test.sql \
 		$(CURDIR)/tests/utils-ts-retain.test.sql \
 		$(CURDIR)/tests/_run.sql \
+		$(CURDIR)/tests/_after.sql \
 		> $(CURDIR)/data/fetchq--${version}.test.sql
 
 start-pg:
