@@ -1,5 +1,17 @@
-# fetchq-pg-extension
+# FetchQ Postgres Extension
+
 Postgres extension that enables FetchQ capabilities
+
+## How to Work this out
+
+- `make start` will run postgres
+- `make stop` will kill postgres
+- `make test-run` will build the extension and run the tests
+  against a running Postgres instance
+- `make test` runs a full test agains a newly created database instance
+- `make init` re-initialize a running Postgres instance
+
+---
 
 ## Management Tables
 
@@ -31,16 +43,25 @@ kll - current completed kill
 ent - documents that have entered the queue
 drp - documents that have been dropped
 pkd - documents that have been piked
-prd - documents that have been processed (either of the possible actions)
+prc - documents that have been processed (either of the possible actions)
 
 #### status metrics
 
 res - documents that have been rescheduled
 rej - documents that have been rejected
-err - documents that have been triggered an unexpected error
+orp - documents that have been rescheduled because they were orphans
+err - (= rej + orp)
 
-## How to Work this out
+## Run from Docker Hub
 
-1. `make test-start` will run postgres
-2. `make test-run` will build the extension and run the tests
-3. `make test-stop` will kill postgres
+https://hub.docker.com/r/fetchq/fetchq/tags/
+
+```
+docker run --rm -d \
+		--name fetchq \
+		-p 5432:5432 \
+		-e "POSTGRES_USER=fetchq" \
+		-e "POSTGRES_PASSWORD=fetchq" \
+		-e "POSTGRES_DB=fetchq" \
+		fetchq/fetchq:10.4
+```
