@@ -4,6 +4,7 @@
 --
 DROP FUNCTION IF EXISTS fetchq_test__queue_create_02();
 DROP FUNCTION IF EXISTS fetchq_test__queue_drop_01();
+DROP FUNCTION IF EXISTS fetchq_test__queue_top_01();
 DROP FUNCTION IF EXISTS fetchq_test__doc_push_03();
 DROP FUNCTION IF EXISTS fetchq_test__doc_append_02();
 DROP FUNCTION IF EXISTS fetchq_test__doc_upsert_01();
