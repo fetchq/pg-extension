@@ -20,6 +20,7 @@ SELECT * FROM fetchq_test__mnt_reschedule_orphans_01();
 SELECT * FROM fetchq_test__mnt_mark_dead_01();
 SELECT * FROM fetchq_test__mnt_job_reschedule_01();
 SELECT * FROM fetchq_test__mnt_job_run_01();
+SELECT * FROM fetchq_test__mnt_01();
 
 SELECT * FROM fetchq_test__metric_snap_01();
 SELECT * FROM fetchq_test__metric_snap_02();
