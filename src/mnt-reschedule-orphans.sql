@@ -30,6 +30,11 @@ BEGIN
 	PERFORM fetchq_metric_log_increment(PAR_queue, 'pnd', affected_rows);
 	PERFORM fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
 
+	-- emit worker notifications
+	IF affected_rows > 0 THEN
+		PERFORM pg_notify(FORMAT('fetchq_pnd_%s', PAR_queue), affected_rows::text);
+	END IF;
+
 	EXCEPTION WHEN OTHERS THEN BEGIN
 		affected_rows = NULL;
 	END;

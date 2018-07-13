@@ -34,6 +34,7 @@ build:
 		$(CURDIR)/src/metric-reset-all.sql \
 		$(CURDIR)/src/metric-snap.sql \
 		$(CURDIR)/src/doc-push.sql \
+		$(CURDIR)/src/doc-push-many.sql \
 		$(CURDIR)/src/doc-append.sql \
 		$(CURDIR)/src/doc-upsert.sql \
 		$(CURDIR)/src/doc-pick.sql \
