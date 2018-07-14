@@ -53,6 +53,7 @@ build:
 		$(CURDIR)/src/mnt.sql \
 		$(CURDIR)/src/log-error.sql \
 		$(CURDIR)/src/queue-get-id.sql \
+		$(CURDIR)/src/queue-triggers.sql \
 		$(CURDIR)/src/queue-create.sql \
 		$(CURDIR)/src/queue-drop.sql \
 		$(CURDIR)/src/queue-set-max-attempts.sql \

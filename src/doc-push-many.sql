@@ -36,16 +36,16 @@ BEGIN
 		PERFORM fetchq_metric_log_increment(PAR_queue, 'pnd', queued_docs);
 
 		-- emit worker notifications
-		IF queued_docs > 0 THEN
-			PERFORM pg_notify(FORMAT('fetchq_pnd_%s', PAR_queue), queued_docs::text);
-		END IF;
+		-- IF queued_docs > 0 THEN
+		-- 	PERFORM pg_notify(FORMAT('fetchq_pnd_%s', PAR_queue), queued_docs::text);
+		-- END IF;
 	ELSE
 		PERFORM fetchq_metric_log_increment(PAR_queue, 'pln', queued_docs);
 
         -- emit worker notifications
-		IF queued_docs > 0 THEN
-			PERFORM pg_notify(FORMAT('fetchq_pln_%s', PAR_queue), queued_docs::text);
-		END IF;
+		-- IF queued_docs > 0 THEN
+		-- 	PERFORM pg_notify(FORMAT('fetchq_pln_%s', PAR_queue), queued_docs::text);
+		-- END IF;
 	END IF;
 
 	EXCEPTION WHEN OTHERS THEN BEGIN
