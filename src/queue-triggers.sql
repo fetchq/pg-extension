@@ -6,8 +6,8 @@ BEGIN
 	IF NEW.next_iteration > NOW() THEN
 		VAR_event = 'pln';
 	END IF;
-	
-	PERFORM pg_notify(FORMAT('%s__%s', TG_TABLE_NAME::regclass::text, VAR_event), NEW.subject);
+
+	PERFORM pg_notify(REPLACE(TG_TABLE_NAME::regclass::text, '__documents', FORMAT('__%s', VAR_event)), NEW.subject);
 	RETURN NEW;
 END; $$
 LANGUAGE plpgsql;
@@ -36,7 +36,7 @@ BEGIN
 		VAR_event = 'kll';
 	END IF;
 	
-	PERFORM pg_notify(FORMAT('%s__%s', TG_TABLE_NAME::regclass::text, VAR_event), NEW.subject);
+	PERFORM pg_notify(REPLACE(TG_TABLE_NAME::regclass::text, '__documents', FORMAT('__%s', VAR_event)), NEW.subject);
 	RETURN NEW;
 END; $$
 LANGUAGE plpgsql;
@@ -86,5 +86,7 @@ BEGIN
     VAR_q = VAR_q || 'FOR EACH ROW EXECUTE PROCEDURE fetchq_trigger_docs_notify_update();';
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;
+
+    success = true;
 END; $$
 LANGUAGE plpgsql;
