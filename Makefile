@@ -1,7 +1,7 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 1.2.0
+version ?= 1.3.0
 pg_version ?= 9.6
 
 reset:
@@ -34,6 +34,7 @@ build:
 		$(CURDIR)/src/metric-reset-all.sql \
 		$(CURDIR)/src/metric-snap.sql \
 		$(CURDIR)/src/doc-push.sql \
+		$(CURDIR)/src/doc-push-many.sql \
 		$(CURDIR)/src/doc-append.sql \
 		$(CURDIR)/src/doc-upsert.sql \
 		$(CURDIR)/src/doc-pick.sql \
@@ -52,6 +53,7 @@ build:
 		$(CURDIR)/src/mnt.sql \
 		$(CURDIR)/src/log-error.sql \
 		$(CURDIR)/src/queue-get-id.sql \
+		$(CURDIR)/src/queue-triggers.sql \
 		$(CURDIR)/src/queue-create.sql \
 		$(CURDIR)/src/queue-drop.sql \
 		$(CURDIR)/src/queue-set-max-attempts.sql \

@@ -20,17 +20,17 @@ BEGIN
 	-- PERFORM fetchq_queue_drop_indexes(PAR_queue);
 
 	-- drop queue table
-	VAR_q = 'DROP TABLE %s__documents;';
+	VAR_q = 'DROP TABLE %s__documents CASCADE;';
 	VAR_q = FORMAT(VAR_q, VAR_tableName);
 	EXECUTE VAR_q;
 
 	-- drop errors table
-	VAR_q = 'DROP TABLE %s__errors;';
+	VAR_q = 'DROP TABLE %s__errors CASCADE;';
 	VAR_q = FORMAT(VAR_q, VAR_tableName);
 	EXECUTE VAR_q;
 
 	-- drop stats table
-	VAR_q = 'DROP TABLE %s__metrics;';
+	VAR_q = 'DROP TABLE %s__metrics CASCADE;';
 	VAR_q = FORMAT(VAR_q, VAR_tableName);
 	EXECUTE VAR_q;
 
@@ -49,6 +49,9 @@ BEGIN
 	-- drop metrics logs
 	DELETE FROM fetchq_sys_metrics_writes
 	WHERE queue = PAR_queue;
+
+	-- send out notifications
+	PERFORM pg_notify('fetchq_queue_drop', PAR_queue);
 
 	EXCEPTION WHEN OTHERS THEN BEGIN
 		was_dropped = FALSE;

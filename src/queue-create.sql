@@ -57,14 +57,21 @@ BEGIN
 
 	-- add indexes
 	PERFORM fetchq_queue_create_indexes(PAR_queue, 0, 5);
+	
+	-- enable notifications
+	-- (slows down by half insert performance!)
+	-- PERFORM fetchq_queue_enable_notify(PAR_queue);
 
 	-- add new maintenance tasks
 	INSERT INTO fetchq_sys_jobs (task, queue, next_iteration, last_iteration, attempts, iterations, settings, payload) VALUES
-	('mnt', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"3s", "duration":"5m", "limit":500}', '{}'),
+	('mnt', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"1m", "duration":"5m", "limit":500}', '{}'),
 	('sts', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"3s", "duration":"5m"}', '{}'),
-	('cmp', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"3s", "duration":"5m"}', '{}'),
-	('drp', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"3s", "duration":"5m"}', '{}')
+	('cmp', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"10m", "duration":"5m"}', '{}'),
+	('drp', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"10m", "duration":"5m"}', '{}')
 	ON CONFLICT DO NOTHING;
+
+	-- send out notifications
+	PERFORM pg_notify('fetchq_queue_create', PAR_queue);
 
 	EXCEPTION WHEN OTHERS THEN BEGIN
 		was_created = FALSE;
