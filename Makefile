@@ -1,7 +1,7 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 1.2.0
+version ?= 1.3.0
 pg_version ?= 9.6
 
 reset:
