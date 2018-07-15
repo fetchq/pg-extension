@@ -50,6 +50,9 @@ BEGIN
 	DELETE FROM fetchq_sys_metrics_writes
 	WHERE queue = PAR_queue;
 
+	-- send out notifications
+	PERFORM pg_notify('fetchq_queue_drop', PAR_queue);
+
 	EXCEPTION WHEN OTHERS THEN BEGIN
 		was_dropped = FALSE;
 	END;
