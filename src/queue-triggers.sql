@@ -2,12 +2,16 @@
 CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_insert () RETURNS TRIGGER AS $$
 DECLARE
 	VAR_event VARCHAR = 'pnd';
+    VAR_notify VARCHAR;
 BEGIN
 	IF NEW.next_iteration > NOW() THEN
 		VAR_event = 'pln';
 	END IF;
 
-	PERFORM pg_notify(REPLACE(TG_TABLE_NAME::regclass::text, '__documents', FORMAT('__%s', VAR_event)), NEW.subject);
+    VAR_notify = REPLACE(TG_TABLE_NAME::regclass::text, '__documents', FORMAT('__%s', VAR_event));
+
+    -- PERFORM pg_notify('fetchq_debug', VAR_notify);
+	PERFORM pg_notify(VAR_notify, NEW.subject);
 	RETURN NEW;
 END; $$
 LANGUAGE plpgsql;
@@ -15,6 +19,7 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_update () RETURNS TRIGGER AS $$
 DECLARE
 	VAR_event VARCHAR = 'null';
+    VAR_notify VARCHAR;
 BEGIN
 	IF NEW.status = 0 THEN
 		VAR_event = 'pln';
@@ -36,7 +41,9 @@ BEGIN
 		VAR_event = 'kll';
 	END IF;
 	
-	PERFORM pg_notify(REPLACE(TG_TABLE_NAME::regclass::text, '__documents', FORMAT('__%s', VAR_event)), NEW.subject);
+    VAR_notify = REPLACE(TG_TABLE_NAME::regclass::text, '__documents', FORMAT('__%s', VAR_event));
+    -- PERFORM pg_notify('fetchq_debug', VAR_notify);
+	PERFORM pg_notify(VAR_notify, NEW.subject);
 	RETURN NEW;
 END; $$
 LANGUAGE plpgsql;
