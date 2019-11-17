@@ -157,8 +157,7 @@ start-pg-prod:
 	docker run --rm -d \
 		--name fetchq \
 		-p 5432:5432 \
-		-v $(CURDIR)/data/pg:/var/lib/postgresql/data \
-		fetchq:$(version)
+		fetchq:$(pg_version)-$(version)
 	docker logs -f fetchq
 
 start-delay:
