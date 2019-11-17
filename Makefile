@@ -118,17 +118,26 @@ build-test:
 build-image: reset build
 	docker build --no-cache -t ${name}:9.6-${version} -f Dockerfile-9.6 .
 	docker build --no-cache -t ${name}:10.4-${version} -f Dockerfile-10.4 .
+	docker build --no-cache -t ${name}:12.0-${version} -f Dockerfile-12.0 .
 
 publish: build-image
+	# 9.6
 	docker tag ${name}:9.6-${version} ${registry}/${name}:9.6-${version}
 	docker tag ${name}:9.6-${version} ${registry}/${name}:9.6-latest
 	docker push ${registry}/${name}:9.6-${version}
 	docker push ${registry}/${name}:9.6-latest
+	# 10.4
 	docker tag ${name}:10.4-${version} ${registry}/${name}:10.4-${version}
 	docker tag ${name}:10.4-${version} ${registry}/${name}:10.4-latest
-	docker tag ${name}:10.4-${version} ${registry}/${name}:latest
 	docker push ${registry}/${name}:10.4-${version}
 	docker push ${registry}/${name}:10.4-latest
+	# 12.0
+	docker tag ${name}:12.0-${version} ${registry}/${name}:12.0-${version}
+	docker tag ${name}:12.0-${version} ${registry}/${name}:12.0-latest
+	docker push ${registry}/${name}:12.0-${version}
+	docker push ${registry}/${name}:12.0-latest
+	# latest
+	docker tag ${name}:12.0-${version} ${registry}/${name}:latest
 	docker push ${registry}/${name}:latest
 
 start-pg:
