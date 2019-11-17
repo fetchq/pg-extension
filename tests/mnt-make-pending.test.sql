@@ -13,7 +13,7 @@ BEGIN
 
     -- insert dummy data & force the date in the past
     PERFORM fetchq_doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1 milliseconds', '{}');
-    UPDATE fetchq__foo__documents SET next_iteration = NOW() - INTERVAL '1 milliseconds';
+    UPDATE fetchq_catalog.fetchq__foo__documents SET next_iteration = NOW() - INTERVAL '1 milliseconds';
     PERFORM fetchq_doc_push('foo', 'a2', 0, 0, NOW() + INTERVAL '1 seconds', '{}');
     PERFORM fetchq_doc_push('foo', 'a3', 0, 0, NOW() - INTERVAL '1 seconds', '{}');
 

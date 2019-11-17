@@ -17,7 +17,7 @@ DECLARE
 	VAR_c RECORD;
 BEGIN
 	FOR VAR_q IN
-		SELECT (name) FROM fetchq_sys_queues
+		SELECT (name) FROM fetchq_catalog.fetchq_sys_queues
 	LOOP
 		SELECT * FROM fetchq_metric_reset(VAR_q.name) INTO VAR_c;
 		queue = VAR_q.name;

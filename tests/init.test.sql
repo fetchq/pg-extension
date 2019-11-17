@@ -16,13 +16,13 @@ BEGIN
     PERFORM fetchq_init();
 
     -- create the queue
-    PERFORM * from fetchq_sys_queues;
-    PERFORM * from fetchq_sys_metrics;
-    PERFORM * from fetchq_sys_metrics_writes;
-    PERFORM * from fetchq_sys_jobs;
+    PERFORM * from fetchq_catalog.fetchq_sys_queues;
+    PERFORM * from fetchq_catalog.fetchq_sys_metrics;
+    PERFORM * from fetchq_catalog.fetchq_sys_metrics_writes;
+    PERFORM * from fetchq_catalog.fetchq_sys_jobs;
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    -- PERFORM fetchq_test_clean();
 
     passed = TRUE;
 END; $$

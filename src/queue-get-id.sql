@@ -9,12 +9,12 @@ CREATE OR REPLACE FUNCTION fetchq_queue_get_id (
 ) AS
 $BODY$
 BEGIN
-	SELECT id INTO queue_id FROM fetchq_sys_queues
+	SELECT id INTO queue_id FROM fetchq_catalog.fetchq_sys_queues
 	WHERE name = PAR_queue
 	LIMIT 1;
 
 	IF queue_id IS NULL THEN
-		INSERT INTO fetchq_sys_queues (name, created_at ) VALUES (PAR_queue, now())
+		INSERT INTO fetchq_catalog.fetchq_sys_queues (name, created_at ) VALUES (PAR_queue, now())
 		ON CONFLICT DO NOTHING
 		RETURNING id INTO queue_id;
 	END IF;

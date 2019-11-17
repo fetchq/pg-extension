@@ -9,7 +9,7 @@ BEGIN
 
 	-- fetch data to work on from the writes log
 	CREATE TEMP TABLE fetchq_sys_metrics_writes_pack ON COMMIT DROP
-	AS SELECT * FROM fetchq_sys_metrics_writes WHERE created_at <= NOW();
+	AS SELECT * FROM fetchq_catalog.fetchq_sys_metrics_writes WHERE created_at <= NOW();
 
 	-- reset counters to current value
 	FOR VAR_r IN
@@ -38,7 +38,7 @@ BEGIN
 	END LOOP;
 
 	-- drop records that have been worked out
-	DELETE FROM fetchq_sys_metrics_writes WHERE id IN
+	DELETE FROM fetchq_catalog.fetchq_sys_metrics_writes WHERE id IN
 	(SELECT id FROM fetchq_sys_metrics_writes_pack);
 	GET DIAGNOSTICS affected_rows := ROW_COUNT;
 

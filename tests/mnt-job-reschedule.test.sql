@@ -10,7 +10,7 @@ BEGIN
     -- initialize test
     PERFORM fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
-    UPDATE fetchq_sys_jobs SET next_iteration = NOW() - INTERVAL '1s';
+    UPDATE fetchq_catalog.fetchq_sys_jobs SET next_iteration = NOW() - INTERVAL '1s';
 
     -- run the test
     SELECT * INTO VAR_r FROM fetchq_mnt_job_pick('5m', 1);

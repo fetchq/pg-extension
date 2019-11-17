@@ -16,7 +16,7 @@ BEGIN
 	-- pick the queue id
 	SELECT t.queue_id INTO queue_id FROM fetchq_queue_get_id(PAR_queue) AS t;
 
-	VAR_q = 'CREATE TABLE fetchq__%s__documents (';
+	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__documents (';
 	VAR_q = VAR_q || 'subject CHARACTER VARYING(50) NOT NULL PRIMARY KEY,';
 	VAR_q = VAR_q || 'version INTEGER DEFAULT 0,';
 	VAR_q = VAR_q || 'priority INTEGER DEFAULT 0,';
@@ -34,7 +34,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- errors table
-	VAR_q = 'CREATE TABLE fetchq__%s__errors (';
+	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__errors (';
 	VAR_q = VAR_q || 'id SERIAL PRIMARY KEY,';
 	VAR_q = VAR_q || 'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),';
 	VAR_q = VAR_q || 'subject CHARACTER VARYING(50) NOT NULL,';
@@ -46,7 +46,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- stats history
-	VAR_q = 'CREATE TABLE fetchq__%s__metrics (';
+	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__metrics (';
 	VAR_q = VAR_q || 'id SERIAL PRIMARY KEY,';
 	VAR_q = VAR_q || 'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),';
 	VAR_q = VAR_q || 'metric CHARACTER VARYING(50) NOT NULL,';
@@ -63,7 +63,7 @@ BEGIN
 	-- PERFORM fetchq_queue_enable_notify(PAR_queue);
 
 	-- add new maintenance tasks
-	INSERT INTO fetchq_sys_jobs (task, queue, next_iteration, last_iteration, attempts, iterations, settings, payload) VALUES
+	INSERT INTO fetchq_catalog.fetchq_sys_jobs (task, queue, next_iteration, last_iteration, attempts, iterations, settings, payload) VALUES
 	('mnt', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"1m", "duration":"5m", "limit":500}', '{}'),
 	('sts', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"3s", "duration":"5m"}', '{}'),
 	('cmp', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"10m", "duration":"5m"}', '{}'),

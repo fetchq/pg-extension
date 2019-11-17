@@ -11,7 +11,7 @@ BEGIN
     PERFORM fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
 
-    INSERT INTO fetchq__foo__errors ( created_at, subject, message ) VALUES
+    INSERT INTO fetchq_catalog.fetchq__foo__errors ( created_at, subject, message ) VALUES
     ( NOW(), 'a', 'b' ),
     ( NOW() - INTERVAL '1d', 'a', 'b' ),
     ( NOW() - INTERVAL '2d', 'a', 'b' );
@@ -44,7 +44,7 @@ BEGIN
     PERFORM fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
 
-    INSERT INTO fetchq__foo__errors ( created_at, subject, message ) VALUES
+    INSERT INTO fetchq_catalog.fetchq__foo__errors ( created_at, subject, message ) VALUES
     ( NOW(), 'a', 'b' ),
     ( NOW() - INTERVAL '1d', 'a', 'b' ),
     ( NOW() - INTERVAL '2d', 'a', 'b' );
@@ -76,7 +76,7 @@ BEGIN
     PERFORM fetchq_queue_create('foo');
     PERFORM fetchq_queue_set_errors_retention('foo', '1h');
 
-    INSERT INTO fetchq__foo__errors ( created_at, subject, message ) VALUES
+    INSERT INTO fetchq_catalog.fetchq__foo__errors ( created_at, subject, message ) VALUES
     ( NOW(), 'a', 'b' ),
     ( NOW() - INTERVAL '1d', 'a', 'b' ),
     ( NOW() - INTERVAL '2d', 'a', 'b' );

@@ -23,7 +23,7 @@ BEGIN
 
     IF queued_docs = 0 THEN
         VAR_q = '';
-        VAR_q = VAR_q || 'UPDATE fetchq__%s__documents SET ';
+        VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq__%s__documents SET ';
         VAR_q = VAR_q || 'priority = %s, ';
         VAR_q = VAR_q || 'payload = ''%s'', ';
         VAR_q = VAR_q || 'next_iteration = ''%s'' ';

@@ -72,16 +72,10 @@ build-test:
 	mkdir -p $(CURDIR)/data
 	cat $(CURDIR)/tests/_before.sql \
 		$(CURDIR)/tests/init.test.sql \
-		$(CURDIR)/tests/metric-get.test.sql \
-		$(CURDIR)/tests/metric-get-total.test.sql \
-		$(CURDIR)/tests/metric-get-common.test.sql \
-		$(CURDIR)/tests/metric-get-all.test.sql \
-		$(CURDIR)/tests/metric-compute.test.sql \
-		$(CURDIR)/tests/metric-compute-all.test.sql \
-		$(CURDIR)/tests/metric-reset.test.sql \
-		$(CURDIR)/tests/metric-reset-all.test.sql \
-		$(CURDIR)/tests/metric-snap.test.sql \
-		$(CURDIR)/tests/metric-log-pack.test.sql \
+		$(CURDIR)/tests/queue-create.test.sql \
+		$(CURDIR)/tests/queue-drop.test.sql \
+		$(CURDIR)/tests/queue-top.test.sql \
+		$(CURDIR)/tests/queue-status.test.sql \
 		$(CURDIR)/tests/doc-push.test.sql \
 		$(CURDIR)/tests/doc-append.test.sql \
 		$(CURDIR)/tests/doc-upsert.test.sql \
@@ -99,18 +93,25 @@ build-test:
 		$(CURDIR)/tests/mnt-job-reschedule.test.sql \
 		$(CURDIR)/tests/mnt-job-run.test.sql \
 		$(CURDIR)/tests/mnt.test.sql \
+		$(CURDIR)/tests/metric-get.test.sql \
+		$(CURDIR)/tests/metric-get-total.test.sql \
+		$(CURDIR)/tests/metric-get-common.test.sql \
+		$(CURDIR)/tests/metric-get-all.test.sql \
+		$(CURDIR)/tests/metric-compute.test.sql \
+		$(CURDIR)/tests/metric-compute-all.test.sql \
+		$(CURDIR)/tests/metric-reset.test.sql \
+		$(CURDIR)/tests/metric-reset-all.test.sql \
+		$(CURDIR)/tests/metric-snap.test.sql \
+		$(CURDIR)/tests/metric-log-pack.test.sql \
 		$(CURDIR)/tests/log-error.test.sql \
-		$(CURDIR)/tests/load.test.sql \
-		$(CURDIR)/tests/queue-create.test.sql \
-		$(CURDIR)/tests/queue-drop.test.sql \
 		$(CURDIR)/tests/queue-set-max-attempts.test.sql \
 		$(CURDIR)/tests/queue-set-current-version.test.sql \
 		$(CURDIR)/tests/queue-drop-version.test.sql \
 		$(CURDIR)/tests/queue-drop-errors.test.sql \
 		$(CURDIR)/tests/queue-drop-metrics.test.sql \
-		$(CURDIR)/tests/queue-top.test.sql \
 		$(CURDIR)/tests/queue-status.test.sql \
 		$(CURDIR)/tests/utils-ts-retain.test.sql \
+		$(CURDIR)/tests/load.test.sql \
 		$(CURDIR)/tests/_run.sql \
 		$(CURDIR)/tests/_after.sql \
 		> $(CURDIR)/data/fetchq--${version}.test.sql

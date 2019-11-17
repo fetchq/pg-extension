@@ -16,7 +16,7 @@ BEGIN
 
 	-- change max_attempts in the table
 	VAR_q = '';
-	VAR_q = VAR_q || 'UPDATE fetchq_sys_queues ';
+	VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq_sys_queues ';
 	VAR_q = VAR_q || 'SET current_version = %s  ';
 	VAR_q = VAR_q || 'WHERE name = ''%s'' RETURNING max_attempts';
 	VAR_q = FORMAT(VAR_q, PAR_newVersion, PAR_queue);
