@@ -1,8 +1,9 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 1.3.0
-pg_version ?= 9.6
+version ?= 2.0.0
+pg_version ?= 12.0
+pg_extension_folder ?= 12
 
 reset:
 	rm -rf $(CURDIR)/data
@@ -76,6 +77,7 @@ build-test:
 		$(CURDIR)/tests/queue-drop.test.sql \
 		$(CURDIR)/tests/queue-top.test.sql \
 		$(CURDIR)/tests/queue-status.test.sql \
+		$(CURDIR)/tests/queue-triggers.test.sql \
 		$(CURDIR)/tests/doc-push.test.sql \
 		$(CURDIR)/tests/doc-append.test.sql \
 		$(CURDIR)/tests/doc-upsert.test.sql \
@@ -146,8 +148,8 @@ start-pg:
 		--name fetchq \
 		-p 5432:5432 \
 		-v $(CURDIR)/data/pg:/var/lib/postgresql/data \
-		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_version)/extension/fetchq.control \
-		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_version)/extension/fetchq--${version}.sql \
+		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq.control \
+		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq--${version}.sql \
 		-v $(CURDIR)/data/fetchq--${version}.test.sql:/tests/fetchq--${version}.test.sql \
 		postgres:$(pg_version)
 
