@@ -21,9 +21,11 @@ BEGIN
     SELECT * INTO VAR_r FROM fetchq_doc_push(PAR_queue, PAR_subject, PAR_version, PAR_priority, PAR_nextIteration, PAR_payload);
     queued_docs = VAR_r.queued_docs;
 
+    RAISE NOTICE '>>>>>>>>> QUEUED DOCS %', queued_docs;
+
     IF queued_docs = 0 THEN
         VAR_q = '';
-        VAR_q = VAR_q || 'UPDATE fetchq__%s__documents SET ';
+        VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq__%s__documents SET ';
         VAR_q = VAR_q || 'priority = %s, ';
         VAR_q = VAR_q || 'payload = ''%s'', ';
         VAR_q = VAR_q || 'next_iteration = ''%s'' ';
@@ -35,8 +37,9 @@ BEGIN
     END IF;
 
     -- handle exception
-	-- EXCEPTION WHEN OTHERS THEN BEGIN
-	-- 	queued_docs = 0;
-	-- END;
+	EXCEPTION WHEN OTHERS THEN BEGIN
+		queued_docs = 0;
+		updated_docs = 0;
+	END;
 END; $$
 LANGUAGE plpgsql;

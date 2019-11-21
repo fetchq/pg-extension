@@ -21,7 +21,7 @@ BEGIN
     PERFORM fetchq_metric_log_pack();
 
     -- -- get first document
-    SELECT * INTO VAR_r from fetchq__foo__documents
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents
     WHERE subject = 'a1'
     AND status = 3
     AND iterations = 1
@@ -59,7 +59,7 @@ BEGIN
     PERFORM fetchq_metric_log_pack();
 
     -- -- get first document
-    SELECT * INTO VAR_r from fetchq__foo__documents
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents
     WHERE subject = 'a1'
     AND status = 3
     AND iterations = 1

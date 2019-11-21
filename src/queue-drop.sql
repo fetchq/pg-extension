@@ -9,7 +9,7 @@ CREATE OR REPLACE FUNCTION fetchq_queue_drop (
 	OUT queue_id INTEGER
 ) AS $$
 DECLARE
-	VAR_tableName VARCHAR = 'fetchq__';
+	VAR_tableName VARCHAR = 'fetchq_catalog.fetchq__';
 	VAR_q VARCHAR;
 	VAR_r RECORD;
 BEGIN
@@ -35,19 +35,19 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- drop domain namespace
-	DELETE FROM fetchq_sys_queues
+	DELETE FROM fetchq_catalog.fetchq_sys_queues
 	WHERE name = PAR_queue RETURNING id INTO VAR_r;
 	queue_id = VAR_r.id;
 
 	-- drop maintenance tasks
-	DELETE FROM fetchq_sys_jobs WHERE queue = PAR_queue;
+	DELETE FROM fetchq_catalog.fetchq_sys_jobs WHERE queue = PAR_queue;
 
 	-- drop counters
-	DELETE FROM fetchq_sys_metrics
+	DELETE FROM fetchq_catalog.fetchq_sys_metrics
 	WHERE queue = PAR_queue;
 
 	-- drop metrics logs
-	DELETE FROM fetchq_sys_metrics_writes
+	DELETE FROM fetchq_catalog.fetchq_sys_metrics_writes
 	WHERE queue = PAR_queue;
 
 	-- send out notifications

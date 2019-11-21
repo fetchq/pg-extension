@@ -8,9 +8,11 @@ BEGIN
 		VAR_event = 'pln';
 	END IF;
 
-    VAR_notify = REPLACE(TG_TABLE_NAME::regclass::text, '__documents', FORMAT('__%s', VAR_event));
+    VAR_notify = REPLACE(TG_TABLE_NAME, '__documents', FORMAT('__%s', VAR_event));
+    -- RAISE EXCEPTION 'GGGG %', VAR_notify;
+    -- RAISE EXCEPTION '>>>>>>>>>>>>>>>>> % -- %', VAR_notify, FORMAT('__%s', VAR_event);
 
-    -- PERFORM pg_notify('fetchq_debug', VAR_notify);
+    -- -- PERFORM pg_notify('fetchq_debug', VAR_notify);
 	PERFORM pg_notify(VAR_notify, NEW.subject);
 	RETURN NEW;
 END; $$
@@ -41,7 +43,7 @@ BEGIN
 		VAR_event = 'kll';
 	END IF;
 	
-    VAR_notify = REPLACE(TG_TABLE_NAME::regclass::text, '__documents', FORMAT('__%s', VAR_event));
+    VAR_notify = REPLACE(TG_TABLE_NAME, '__documents', FORMAT('__%s', VAR_event));
     -- PERFORM pg_notify('fetchq_debug', VAR_notify);
 	PERFORM pg_notify(VAR_notify, NEW.subject);
 	RETURN NEW;
@@ -58,12 +60,12 @@ DECLARE
 	VAR_q VARCHAR;
 BEGIN
 	-- after insert
-    VAR_q = 'DROP TRIGGER IF EXISTS fetchq__%s__trg_notify_insert ON fetchq__%s__documents';
+    VAR_q = 'DROP TRIGGER IF EXISTS fetchq__%s__trg_notify_insert ON fetchq_catalog.fetchq__%s__documents';
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;
 
     -- after update
-    VAR_q = 'DROP TRIGGER IF EXISTS fetchq__%s__trg_notify_update ON fetchq__%s__documents';
+    VAR_q = 'DROP TRIGGER IF EXISTS fetchq__%s__trg_notify_update ON fetchq_catalog.fetchq__%s__documents';
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;
 
@@ -82,14 +84,15 @@ BEGIN
     
     -- after insert
     VAR_q = 'CREATE TRIGGER fetchq__%s__trg_notify_insert AFTER INSERT ';
-	VAR_q = VAR_q || 'ON fetchq__%s__documents ';
+	VAR_q = VAR_q || 'ON fetchq_catalog.fetchq__%s__documents ';
     VAR_q = VAR_q || 'FOR EACH ROW EXECUTE PROCEDURE fetchq_trigger_docs_notify_insert();';
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;
 
+
     -- after update
     VAR_q = 'CREATE TRIGGER fetchq__%s__trg_notify_update AFTER UPDATE ';
-	VAR_q = VAR_q || 'ON fetchq__%s__documents ';
+	VAR_q = VAR_q || 'ON fetchq_catalog.fetchq__%s__documents ';
     VAR_q = VAR_q || 'FOR EACH ROW EXECUTE PROCEDURE fetchq_trigger_docs_notify_update();';
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;

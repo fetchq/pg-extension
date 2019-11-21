@@ -5,9 +5,15 @@ CREATE OR REPLACE FUNCTION fetchq_test_init (
     OUT done BOOLEAN
 ) AS $$
 BEGIN
+    -- Cleanup hard
+    DROP SCHEMA IF EXISTS fetchq_catalog CASCADE;
+    DROP EXTENSION IF EXISTS fetchq CASCADE;
+    DROP EXTENSION IF EXISTS "uuid-ossp";
+
+    -- Cleanup soft
     CREATE EXTENSION IF NOT EXISTS fetchq;
     PERFORM fetchq_destroy_with_terrible_consequences();
-    DROP EXTENSION fetchq;
+    DROP EXTENSION fetchq CASCADE;
     CREATE EXTENSION fetchq;
     PERFORM fetchq_init();
     done = TRUE;
@@ -20,8 +26,8 @@ CREATE OR REPLACE FUNCTION fetchq_test_clean (
 ) AS $$
 BEGIN
     -- CREATE EXTENSION IF NOT EXISTS fetchq;
-    PERFORM fetchq_destroy_with_terrible_consequences();
-    DROP EXTENSION fetchq;
+    -- PERFORM fetchq_destroy_with_terrible_consequences();
+    -- DROP EXTENSION fetchq;
     done = TRUE;
 END; $$
 LANGUAGE plpgsql;

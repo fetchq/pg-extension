@@ -14,7 +14,7 @@ BEGIN
 
 	-- @TODO: check that this is not the current index
 	VAR_q = '';
-	VAR_q = VAR_q || 'SELECT id FROM fetchq_sys_queues ';
+	VAR_q = VAR_q || 'SELECT id FROM fetchq_catalog.fetchq_sys_queues ';
 	VAR_q = VAR_q || 'WHERE name = ''%s'' AND current_version = %s';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_oldVersion);
 	EXECUTE VAR_q INTO VAR_r;

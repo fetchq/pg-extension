@@ -1,8 +1,9 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 1.3.0
-pg_version ?= 9.6
+version ?= 2.0.0
+pg_version ?= 12.0
+pg_extension_folder ?= 12
 
 reset:
 	rm -rf $(CURDIR)/data
@@ -72,16 +73,11 @@ build-test:
 	mkdir -p $(CURDIR)/data
 	cat $(CURDIR)/tests/_before.sql \
 		$(CURDIR)/tests/init.test.sql \
-		$(CURDIR)/tests/metric-get.test.sql \
-		$(CURDIR)/tests/metric-get-total.test.sql \
-		$(CURDIR)/tests/metric-get-common.test.sql \
-		$(CURDIR)/tests/metric-get-all.test.sql \
-		$(CURDIR)/tests/metric-compute.test.sql \
-		$(CURDIR)/tests/metric-compute-all.test.sql \
-		$(CURDIR)/tests/metric-reset.test.sql \
-		$(CURDIR)/tests/metric-reset-all.test.sql \
-		$(CURDIR)/tests/metric-snap.test.sql \
-		$(CURDIR)/tests/metric-log-pack.test.sql \
+		$(CURDIR)/tests/queue-create.test.sql \
+		$(CURDIR)/tests/queue-drop.test.sql \
+		$(CURDIR)/tests/queue-top.test.sql \
+		$(CURDIR)/tests/queue-status.test.sql \
+		$(CURDIR)/tests/queue-triggers.test.sql \
 		$(CURDIR)/tests/doc-push.test.sql \
 		$(CURDIR)/tests/doc-append.test.sql \
 		$(CURDIR)/tests/doc-upsert.test.sql \
@@ -99,18 +95,25 @@ build-test:
 		$(CURDIR)/tests/mnt-job-reschedule.test.sql \
 		$(CURDIR)/tests/mnt-job-run.test.sql \
 		$(CURDIR)/tests/mnt.test.sql \
+		$(CURDIR)/tests/metric-get.test.sql \
+		$(CURDIR)/tests/metric-get-total.test.sql \
+		$(CURDIR)/tests/metric-get-common.test.sql \
+		$(CURDIR)/tests/metric-get-all.test.sql \
+		$(CURDIR)/tests/metric-compute.test.sql \
+		$(CURDIR)/tests/metric-compute-all.test.sql \
+		$(CURDIR)/tests/metric-reset.test.sql \
+		$(CURDIR)/tests/metric-reset-all.test.sql \
+		$(CURDIR)/tests/metric-snap.test.sql \
+		$(CURDIR)/tests/metric-log-pack.test.sql \
 		$(CURDIR)/tests/log-error.test.sql \
-		$(CURDIR)/tests/load.test.sql \
-		$(CURDIR)/tests/queue-create.test.sql \
-		$(CURDIR)/tests/queue-drop.test.sql \
 		$(CURDIR)/tests/queue-set-max-attempts.test.sql \
 		$(CURDIR)/tests/queue-set-current-version.test.sql \
 		$(CURDIR)/tests/queue-drop-version.test.sql \
 		$(CURDIR)/tests/queue-drop-errors.test.sql \
 		$(CURDIR)/tests/queue-drop-metrics.test.sql \
-		$(CURDIR)/tests/queue-top.test.sql \
 		$(CURDIR)/tests/queue-status.test.sql \
 		$(CURDIR)/tests/utils-ts-retain.test.sql \
+		$(CURDIR)/tests/load.test.sql \
 		$(CURDIR)/tests/_run.sql \
 		$(CURDIR)/tests/_after.sql \
 		> $(CURDIR)/data/fetchq--${version}.test.sql
@@ -145,8 +148,8 @@ start-pg:
 		--name fetchq \
 		-p 5432:5432 \
 		-v $(CURDIR)/data/pg:/var/lib/postgresql/data \
-		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_version)/extension/fetchq.control \
-		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_version)/extension/fetchq--${version}.sql \
+		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq.control \
+		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq--${version}.sql \
 		-v $(CURDIR)/data/fetchq--${version}.test.sql:/tests/fetchq--${version}.test.sql \
 		postgres:$(pg_version)
 
@@ -154,8 +157,7 @@ start-pg-prod:
 	docker run --rm -d \
 		--name fetchq \
 		-p 5432:5432 \
-		-v $(CURDIR)/data/pg:/var/lib/postgresql/data \
-		fetchq:$(version)
+		fetchq:$(pg_version)-$(version)
 	docker logs -f fetchq
 
 start-delay:

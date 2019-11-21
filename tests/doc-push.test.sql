@@ -19,7 +19,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq__foo__documents WHERE subject = 'a1';
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq__foo__documents WHERE subject = 'a1';
     IF VAR_r.status <> 0 THEN
         RAISE EXCEPTION 'failed - % (Wrong status was computed for the document)', VAR_testName;
     END IF;
@@ -55,12 +55,12 @@ BEGIN
     PERFORM fetchq_queue_enable_notify('foo');
 
     -- should be able to queue a document with past schedule
-    SELECT * INTO VAR_queuedDocs FROM fetchq_doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1m', '{}');
+    SELECT * INTO VAR_queuedDocs FROM fetchq_doc_push('foo', 'a100', 0, 0, NOW() - INTERVAL '1m', '{}');
     IF VAR_queuedDocs <> 1 THEN
-        RAISE EXCEPTION 'failed - %', VAR_testName;
+        RAISE EXCEPTION 'failed - % (expected: 1, received: %)', VAR_testName, VAR_queuedDocs;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq__foo__documents WHERE subject = 'a1';
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq__foo__documents WHERE subject = 'a1';
     IF VAR_r.status <> 1 THEN
         RAISE EXCEPTION 'failed - % (Wrong status was computed for the document)', VAR_testName;
     END IF;

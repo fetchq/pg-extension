@@ -10,10 +10,10 @@ DECLARE
 BEGIN
     -- return documents
 	-- VAR_q = 'SELECT id, name, is_active ';
-	-- VAR_q = VAR_q || 'FROM fetchq_sys_queues';
+	-- VAR_q = VAR_q || 'FROM fetchq_catalog.fetchq_sys_queues';
 	-- -- VAR_q = FORMAT(VAR_q, PAR_queue, PAR_version, PAR_limit, PAR_offset);
 	-- RETURN QUERY EXECUTE VAR_q;
-    RETURN QUERY EXECUTE 'SELECT id, name, is_active FROM fetchq_sys_queues';
+    RETURN QUERY EXECUTE 'SELECT id, name, is_active FROM fetchq_catalog.fetchq_sys_queues';
 END; $$
 LANGUAGE plpgsql;
 
@@ -30,7 +30,7 @@ DECLARE
 BEGIN
     -- return documents
 	VAR_q = 'SELECT id, name, is_active ';
-	VAR_q = VAR_q || 'FROM fetchq_sys_queues ';
+	VAR_q = VAR_q || 'FROM fetchq_catalog.fetchq_sys_queues ';
 	VAR_q = VAR_q || 'WHERE name = ''%s'' ';
 	VAR_q = VAR_q || 'LIMIT 1';
 	VAR_q = FORMAT(VAR_q, PAR_queue);

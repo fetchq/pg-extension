@@ -6,7 +6,7 @@ CREATE OR REPLACE FUNCTION fetchq_metric_log_set (
 	OUT affected_rows INTEGER
 ) AS $$
 BEGIN
-	INSERT INTO fetchq_sys_metrics_writes
+	INSERT INTO fetchq_catalog.fetchq_sys_metrics_writes
 	( created_at, queue, metric, reset )
 	VALUES
 	( NOW(), PAR_queue, PAR_subject, PAR_value );

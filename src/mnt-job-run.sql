@@ -33,7 +33,7 @@ BEGIN
         -- set custom lock duration fro job's settings
         IF VAR_r.execution_duration IS NOT NULL THEN
             VAR_q = '';
-            VAR_q = VAR_q || 'UPDATE fetchq_sys_jobs ';
+            VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq_sys_jobs ';
             VAR_q = VAR_q || 'SET next_iteration = NOW() + INTERVAL ''%s'' ';
             VAR_q = VAR_q || 'WHERE id = %s;';
             VAR_q = FORMAT(VAR_q, VAR_r.execution_duration, VAR_r.id);

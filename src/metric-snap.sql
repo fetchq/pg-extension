@@ -14,7 +14,7 @@ BEGIN
     SELECT * INTO VAR_r FROM fetchq_metric_get(PAR_queue, PAR_metric);
     RAISE NOTICE '%', VAR_r.current_value;
 
-    VAR_q = 'INSERT INTO fetchq__%s__metrics ';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__metrics ';
 	VAR_q = VAR_q || '( metric,  value) VALUES ';
 	VAR_q = VAR_q || '( ''%s'',  %s );';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_metric, VAR_r.current_value);
@@ -39,7 +39,7 @@ DECLARE
 BEGIN
 	success = true;
 
-    VAR_q = 'INSERT INTO fetchq__%s__metrics ( metric,  value)';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__metrics ( metric,  value)';
 	VAR_q = VAR_q || 'SELECT metric, current_value AS value ';
 	VAR_q = VAR_q || 'FROM fetchq_metric_get(''%s'')';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
@@ -66,7 +66,7 @@ DECLARE
 BEGIN
 	success = true;
 
-    VAR_q = 'INSERT INTO fetchq__%s__metrics ( metric,  value)';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__metrics ( metric,  value)';
 	VAR_q = VAR_q || 'SELECT metric, current_value AS value ';
 	VAR_q = VAR_q || 'FROM fetchq_metric_get(''%s'') AS metrics ';
 	VAR_q = VAR_q || 'INNER JOIN (SELECT value::varchar FROM jsonb_array_elements_text(''%s'')) ';
