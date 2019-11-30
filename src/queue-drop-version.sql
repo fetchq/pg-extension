@@ -24,7 +24,7 @@ BEGIN
     END IF;
 
 	-- drop old index
-	VAR_q = 'DROP INDEX IF EXISTS fetchq_%s_for_pick_%s_idx';
+	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_pick_%s_idx';
 	EXECUTE FORMAT(VAR_q, PAR_queue, PAR_oldVersion);
 
 	EXCEPTION WHEN OTHERS THEN BEGIN
