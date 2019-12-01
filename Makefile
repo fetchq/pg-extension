@@ -75,6 +75,7 @@ build-test:
 	cat $(CURDIR)/tests/_before.sql \
 		$(CURDIR)/tests/init.test.sql \
 		$(CURDIR)/tests/queue-create.test.sql \
+		$(CURDIR)/tests/queue-create-indexes.test.sql \
 		$(CURDIR)/tests/queue-drop.test.sql \
 		$(CURDIR)/tests/queue-top.test.sql \
 		$(CURDIR)/tests/queue-status.test.sql \

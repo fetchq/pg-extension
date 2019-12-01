@@ -31,7 +31,7 @@ BEGIN
 
 	-- re-index the table
 	-- RAISE NOTICE '%', VAR_r.current_version;
-	PERFORM fetchq_queue_create_indexes(PAR_queue, VAR_r.current_version, PAR_maxAttempts);
+	PERFORM fetchq_queue_create_indexes(PAR_queue);
 
 	EXCEPTION WHEN OTHERS THEN BEGIN
 		was_reindexed = false;

@@ -13,7 +13,7 @@ DECLARE
 BEGIN
 	was_created = TRUE;
 
-	-- pick the queue id
+	-- pick the queue id, it creates the queue's index entry if doesn't exists already
 	SELECT t.queue_id INTO queue_id FROM fetchq_queue_get_id(PAR_queue) AS t;
 
 	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__documents (';
@@ -55,8 +55,8 @@ BEGIN
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q;
 
-	-- add indexes
-	PERFORM fetchq_queue_create_indexes(PAR_queue, 0, 5);
+	-- add indexes to the table
+	PERFORM fetchq_queue_create_indexes(PAR_queue);
 	
 	-- enable notifications
 	-- (slows down by half insert performance!)

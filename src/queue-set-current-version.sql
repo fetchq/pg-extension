@@ -30,7 +30,7 @@ BEGIN
 	EXECUTE FORMAT(VAR_q, PAR_queue);
 
 	-- re-index the table
-	PERFORM fetchq_queue_create_indexes(PAR_queue, PAR_newVersion, VAR_r.max_attempts);
+	PERFORM fetchq_queue_create_indexes(PAR_queue);
 
 	EXCEPTION WHEN OTHERS THEN BEGIN
 		was_reindexed = false;

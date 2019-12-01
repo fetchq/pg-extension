@@ -3,6 +3,7 @@
 -- important regression tests
 --
 DROP FUNCTION IF EXISTS fetchq_test__queue_create_02();
+DROP FUNCTION IF EXISTS fetchq_test__queue_create_indexes_01();
 DROP FUNCTION IF EXISTS fetchq_test__queue_drop_01();
 DROP FUNCTION IF EXISTS fetchq_test__queue_top_01();
 DROP FUNCTION IF EXISTS fetchq_test__queue_status_01();
@@ -44,6 +45,7 @@ DROP FUNCTION IF EXISTS fetchq_test__queue_drop_errors_02();
 DROP FUNCTION IF EXISTS fetchq_test__queue_drop_errors_03();
 DROP FUNCTION IF EXISTS fetchq_test__queue_drop_metrics_01();
 DROP FUNCTION IF EXISTS fetchq_test__queue_drop_metrics_02();
+DROP FUNCTION IF EXISTS fetchq_test__queue_drop_indexes_01();
 
 DROP FUNCTION IF EXISTS fetchq_test__doc_pick_03();
 DROP FUNCTION IF EXISTS fetchq_test__doc_pick_04();

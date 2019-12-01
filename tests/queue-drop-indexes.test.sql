@@ -13,7 +13,6 @@ BEGIN
 
     -- assert normal indexes
     SELECT count(*) as total INTO VAR_r FROM pg_indexes WHERE schemaname = 'fetchq_catalog' AND tablename = 'fetchq__foo__documents';
-
     IF VAR_r.total != 6 THEN
         RAISE EXCEPTION 'failed - (expected: 6, got: %)', VAR_r.total;
     END IF;
