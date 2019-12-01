@@ -1,5 +1,5 @@
-DROP SCHEMA IF EXISTS public CASCADE;
-CREATE SCHEMA public;
+DROP SCHEMA IF EXISTS fetchq_catalog CASCADE;
+CREATE SCHEMA fetchq_catalog;
 
 CREATE OR REPLACE FUNCTION fetchq_test_init (
     OUT done BOOLEAN
