@@ -1,7 +1,7 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 2.0.0
+version ?= 2.1.0
 pg_version ?= 12.0
 pg_extension_folder ?= 12
 
@@ -18,7 +18,6 @@ build:
 	cat $(CURDIR)/src/info.sql \
 		$(CURDIR)/src/init.sql \
 		$(CURDIR)/src/destroy.sql \
-		$(CURDIR)/src/queue-create-indexes.sql \
 		$(CURDIR)/src/metric-set.sql \
 		$(CURDIR)/src/metric-increment.sql \
 		$(CURDIR)/src/metric-log-set.sql \
@@ -56,6 +55,7 @@ build:
 		$(CURDIR)/src/queue-get-id.sql \
 		$(CURDIR)/src/queue-triggers.sql \
 		$(CURDIR)/src/queue-create.sql \
+		$(CURDIR)/src/queue-create-indexes.sql \
 		$(CURDIR)/src/queue-drop.sql \
 		$(CURDIR)/src/queue-set-max-attempts.sql \
 		$(CURDIR)/src/queue-set-current-version.sql \
@@ -64,6 +64,7 @@ build:
 		$(CURDIR)/src/queue-drop-version.sql \
 		$(CURDIR)/src/queue-drop-errors.sql \
 		$(CURDIR)/src/queue-drop-metrics.sql \
+		$(CURDIR)/src/queue-drop-indexes.sql \
 		$(CURDIR)/src/queue-top.sql \
 		$(CURDIR)/src/queue-status.sql \
 		$(CURDIR)/src/utils-ts-retain.sql \
@@ -111,6 +112,7 @@ build-test:
 		$(CURDIR)/tests/queue-drop-version.test.sql \
 		$(CURDIR)/tests/queue-drop-errors.test.sql \
 		$(CURDIR)/tests/queue-drop-metrics.test.sql \
+		$(CURDIR)/tests/queue-drop-indexes.test.sql \
 		$(CURDIR)/tests/queue-status.test.sql \
 		$(CURDIR)/tests/utils-ts-retain.test.sql \
 		$(CURDIR)/tests/load.test.sql \

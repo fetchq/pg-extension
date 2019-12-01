@@ -1,9 +1,9 @@
+SELECT * FROM fetchq_test__init();
 
 --
 -- important regression tests
 --
 
-SELECT * FROM fetchq_test__init();
 SELECT * FROM fetchq_test__queue_create_01();
 SELECT * FROM fetchq_test__queue_create_02();
 SELECT * FROM fetchq_test__queue_create_03();
@@ -62,6 +62,7 @@ SELECT * FROM fetchq_test__queue_drop_errors_02();
 SELECT * FROM fetchq_test__queue_drop_errors_03();
 SELECT * FROM fetchq_test__queue_drop_metrics_01();
 SELECT * FROM fetchq_test__queue_drop_metrics_02();
+SELECT * FROM fetchq_test__queue_drop_indexes_01();
 SELECT * FROM fetchq_test__queue_status_01();
 SELECT * FROM fetchq_test__utils_ts_retain_01();
 
