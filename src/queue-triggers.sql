@@ -1,3 +1,9 @@
+-- Event Shapes:
+-- fetchq__{queue_name}__{pnd|pln|act|cpl|kll}
+--
+-- Es: fetchq__foo__pnd
+--
+
 
 CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_insert () RETURNS TRIGGER AS $$
 DECLARE
@@ -69,6 +75,7 @@ BEGIN
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;
 
+    success = true;
 END; $$
 LANGUAGE plpgsql;
 
