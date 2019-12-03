@@ -2,8 +2,15 @@
 registry ?= fetchq
 name ?= fetchq
 version ?= 2.1.0
-pg_version ?= 12.0
-pg_extension_folder ?= 12
+
+## Testing with Postgres Versions
+## It's a good idea to always test with all the versions
+## it's manual and it sucks, we'll see about that in the future
+
+# 9.6 10.11 11.6 12.1
+pg_version ?= 9.6
+# 9.6 10 11.6 12
+pg_extension_folder ?= 9.6
 
 reset:
 	rm -rf $(CURDIR)/data
@@ -16,6 +23,7 @@ build:
 	mkdir -p $(CURDIR)/extension
 	cp $(CURDIR)/src/fetchq.control $(CURDIR)/extension/fetchq.control
 	cat $(CURDIR)/src/info.sql \
+		$(CURDIR)/src/trigger-notify-as-json.sql \
 		$(CURDIR)/src/init.sql \
 		$(CURDIR)/src/destroy.sql \
 		$(CURDIR)/src/metric-set.sql \
@@ -124,7 +132,10 @@ build-test:
 build-image: reset build
 	docker build --no-cache -t ${name}:9.6-${version} -f Dockerfile-9.6 .
 	docker build --no-cache -t ${name}:10.4-${version} -f Dockerfile-10.4 .
+	docker build --no-cache -t ${name}:10.11-${version} -f Dockerfile-10.11 .
+	docker build --no-cache -t ${name}:11.6-${version} -f Dockerfile-11.6 .
 	docker build --no-cache -t ${name}:12.0-${version} -f Dockerfile-12.0 .
+	docker build --no-cache -t ${name}:12.1-${version} -f Dockerfile-12.1 .
 
 publish: build-image
 	# 9.6
@@ -137,11 +148,26 @@ publish: build-image
 	docker tag ${name}:10.4-${version} ${registry}/${name}:10.4-latest
 	docker push ${registry}/${name}:10.4-${version}
 	docker push ${registry}/${name}:10.4-latest
+	# 10.11
+	docker tag ${name}:10.11-${version} ${registry}/${name}:10.11-${version}
+	docker tag ${name}:10.11-${version} ${registry}/${name}:10.11-latest
+	docker push ${registry}/${name}:10.11-${version}
+	docker push ${registry}/${name}:10.11-latest
+	# 11.6
+	docker tag ${name}:11.6-${version} ${registry}/${name}:11.6-${version}
+	docker tag ${name}:11.6-${version} ${registry}/${name}:11.6-latest
+	docker push ${registry}/${name}:11.6-${version}
+	docker push ${registry}/${name}:11.6-latest
 	# 12.0
 	docker tag ${name}:12.0-${version} ${registry}/${name}:12.0-${version}
 	docker tag ${name}:12.0-${version} ${registry}/${name}:12.0-latest
 	docker push ${registry}/${name}:12.0-${version}
 	docker push ${registry}/${name}:12.0-latest
+	# 12.1
+	docker tag ${name}:12.1-${version} ${registry}/${name}:12.1-${version}
+	docker tag ${name}:12.1-${version} ${registry}/${name}:12.1-latest
+	docker push ${registry}/${name}:12.1-${version}
+	docker push ${registry}/${name}:12.1-latest
 	# latest
 	docker tag ${name}:12.0-${version} ${registry}/${name}:latest
 	docker push ${registry}/${name}:latest
