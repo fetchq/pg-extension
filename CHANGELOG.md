@@ -1,5 +1,9 @@
 # FetchQ Changelog
 
+## v2.1.1
+
+- Fixes bug #26 which prevented `fetchq_metric_compute_all()` to work.
+
 ## v2.1.0
 
 - Adds `fetchq_queue_create_indexes(qname)` signature that generate per-queue indexes
