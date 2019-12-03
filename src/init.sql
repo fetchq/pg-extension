@@ -1,13 +1,14 @@
 
-DROP FUNCTION IF EXISTS fetchq_init();
 CREATE OR REPLACE FUNCTION fetchq_init (
     OUT was_initialized BOOLEAN
 ) AS $$
 BEGIN
+    was_initialized = TRUE;
+
     -- Create the FetchQ Schema
     CREATE SCHEMA IF NOT EXISTS fetchq_catalog;
 
-    -- Queues Index
+    -- Queues Register
     CREATE TABLE IF NOT EXISTS fetchq_catalog.fetchq_sys_queues (
         id SERIAL PRIMARY KEY,
         created_at TIMESTAMP WITH TIME ZONE,
@@ -17,20 +18,12 @@ BEGIN
         max_attempts INTEGER DEFAULT 5,
         errors_retention VARCHAR(25) DEFAULT '24h',
         metrics_retention JSONB DEFAULT '[]',
-        config JSON DEFAULT '{}'
+        config JSONB DEFAULT '{}'
     );
 
-    -- CREATE SEQUENCE fetchq_sys_queues_id_seq
-    --     START WITH 1
-    --     INCREMENT BY 1
-    --     NO MINVALUE
-    --     NO MAXVALUE
-    --     CACHE 1;
-
-    -- ALTER SEQUENCE fetchq_sys_queues_id_seq OWNED BY fetchq_sys_queues.id;
-    -- ALTER TABLE ONLY fetchq_sys_queues ALTER COLUMN id SET DEFAULT nextval('fetchq_sys_queues_id_seq'::regclass);
-    -- ALTER TABLE ONLY fetchq_sys_queues ADD CONSTRAINT fetchq_sys_queues_name_key UNIQUE (name);
-    -- ALTER TABLE ONLY fetchq_sys_queues ADD CONSTRAINT fetchq_sys_queues_pkey PRIMARY KEY (id);
+    CREATE TRIGGER fetchq_trigger_sys_queues_insert AFTER INSERT OR UPDATE OR DELETE
+	ON fetchq_catalog.fetchq_sys_queues
+    FOR EACH ROW EXECUTE PROCEDURE fetchq_trigger_notify_as_json();
 
     -- Metrics Overview
     CREATE TABLE IF NOT EXISTS fetchq_catalog.fetchq_sys_metrics (
@@ -41,16 +34,6 @@ BEGIN
         updated_at TIMESTAMP WITH TIME ZONE
     );
 
-    -- CREATE SEQUENCE fetchq_sys_metrics_id_seq
-    --     START WITH 1
-    --     INCREMENT BY 1
-    --     NO MINVALUE
-    --     NO MAXVALUE
-    --     CACHE 100;
-
-    -- ALTER SEQUENCE fetchq_sys_metrics_id_seq OWNED BY fetchq_sys_metrics.id;
-    -- ALTER TABLE ONLY fetchq_sys_metrics ALTER COLUMN id SET DEFAULT nextval('fetchq_sys_metrics_id_seq'::regclass);
-    -- ALTER TABLE ONLY fetchq_sys_metrics ADD CONSTRAINT fetchq_sys_metrics_pkey PRIMARY KEY (id, queue, metric);
     CREATE INDEX IF NOT EXISTS fetchq_sys_metrics_queue_idx ON fetchq_catalog.fetchq_sys_metrics USING btree (queue);
 
     -- Metrics Writes
@@ -63,16 +46,6 @@ BEGIN
         reset BIGINT
     );
 
-    -- CREATE SEQUENCE fetchq_sys_metrics_writes_id_seq
-    --     START WITH 1
-    --     INCREMENT BY 1
-    --     NO MINVALUE
-    --     NO MAXVALUE
-    --     CACHE 10000;
-
-    -- ALTER SEQUENCE fetchq_sys_metrics_writes_id_seq OWNED BY fetchq_sys_metrics_writes.id;
-    -- ALTER TABLE ONLY fetchq_sys_metrics_writes ALTER COLUMN id SET DEFAULT nextval('fetchq_sys_metrics_writes_id_seq'::regclass);
-    -- ALTER TABLE ONLY fetchq_sys_metrics_writes ADD CONSTRAINT fetchq_sys_metrics_writes_pkey PRIMARY KEY (id);
     CREATE INDEX IF NOT EXISTS fetchq_sys_metrics_writes_reset_idx ON fetchq_catalog.fetchq_sys_metrics_writes ( queue, metric ) WHERE ( reset IS NOT NULL );
     CREATE INDEX IF NOT EXISTS fetchq_sys_metrics_writes_increment_idx ON fetchq_catalog.fetchq_sys_metrics_writes ( queue, metric ) WHERE ( increment IS NOT NULL );
 
@@ -108,7 +81,6 @@ BEGIN
 	ON CONFLICT DO NOTHING;
     
     -- handle output with graceful fail support
-	was_initialized = TRUE;
     EXCEPTION WHEN OTHERS THEN BEGIN
 		was_initialized = FALSE;
 	END;
