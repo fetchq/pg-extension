@@ -66,7 +66,7 @@ SELECT * FROM fetchq_test__queue_drop_metrics_02();
 SELECT * FROM fetchq_test__queue_drop_indexes_01();
 SELECT * FROM fetchq_test__queue_status_01();
 SELECT * FROM fetchq_test__utils_ts_retain_01();
-
+SELECT * FROM fetchq_test__trace_01();
 
 
 

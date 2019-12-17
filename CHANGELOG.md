@@ -1,5 +1,10 @@
 # FetchQ Changelog
 
+## v2.2.0
+
+- Adds `fetchq_trace(subject)` api.
+- Improves migration instructions 1.x -> 2.x
+
 ## v2.1.1
 
 - Fixes bug #26 which prevented `fetchq_metric_compute_all()` to work.

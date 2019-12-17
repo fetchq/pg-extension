@@ -72,6 +72,7 @@ DROP FUNCTION IF EXISTS fetchq_test__doc_kill_02();
 DROP FUNCTION IF EXISTS fetchq_test__log_error_01();
 DROP FUNCTION IF EXISTS fetchq_test__log_error_02();
 DROP FUNCTION IF EXISTS fetchq_test__utils_ts_retain_01();
+DROP FUNCTION IF EXISTS fetchq_test__trace_01();
 
 
 
