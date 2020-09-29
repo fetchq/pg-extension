@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test__queue_create_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_create_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -7,7 +7,7 @@ DECLARE
     VAR_r RECORD;
 BEGIN
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
 
     -- create the queue
     SELECT * INTO VAR_r FROM fetchq_queue_create('foo');
@@ -27,13 +27,13 @@ BEGIN
 	END IF;
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test__queue_create_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_create_02 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -42,7 +42,7 @@ DECLARE
     VAR_r RECORD;
 BEGIN
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
 
     -- create the queue (41 characters should not create the queue)
     SELECT * INTO VAR_r FROM fetchq_queue_create('f1234567891234567891234567899999999999999');
@@ -51,13 +51,13 @@ BEGIN
     END IF;
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__queue_create_03 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_create_03 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -66,7 +66,7 @@ DECLARE
     VAR_r RECORD;
 BEGIN
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
 
     -- create the queue (41 characters should not create the queue)
     SELECT * INTO VAR_r FROM fetchq_queue_create('f12345678912345678912345678999999999999a');
@@ -75,7 +75,7 @@ BEGIN
     END IF;
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

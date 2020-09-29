@@ -1,5 +1,5 @@
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test__queue_drop_errors_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_errors_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
 
     INSERT INTO fetchq_catalog.fetchq__foo__errors ( created_at, subject, message ) VALUES
@@ -25,14 +25,14 @@ BEGIN
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__queue_drop_errors_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_errors_02 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -41,7 +41,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
 
     INSERT INTO fetchq_catalog.fetchq__foo__errors ( created_at, subject, message ) VALUES
@@ -58,12 +58,12 @@ BEGIN
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test__queue_drop_errors_03 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_errors_03 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -72,7 +72,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
     PERFORM fetchq_queue_set_errors_retention('foo', '1h');
 
@@ -90,7 +90,7 @@ BEGIN
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

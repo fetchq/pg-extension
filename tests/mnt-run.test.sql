@@ -1,5 +1,5 @@
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test__mnt_run_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_run_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
 
     -- insert dummy data & force the date in the past
@@ -50,7 +50,7 @@ BEGIN
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
@@ -61,7 +61,7 @@ LANGUAGE plpgsql;
 
 
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test__mnt_run_all_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_run_all_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -70,7 +70,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
     PERFORM fetchq_queue_create('faa');
 
@@ -97,7 +97,7 @@ BEGIN
     -- END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$

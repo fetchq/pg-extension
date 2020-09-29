@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION fetchq_test__metric_get_common_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_common_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
 
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
 
     -- set counters
     PERFORM fetchq_metric_set('a', 'cnt', 1);
@@ -49,7 +49,7 @@ BEGIN
     END IF;
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

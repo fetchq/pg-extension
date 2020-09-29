@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test__metric_log_pack_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_log_pack_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
 
     -- set some basic metrics
     PERFORM fetchq_metric_log_set('foo', 'cnt', 10);
@@ -35,7 +35,7 @@ BEGIN
     END IF;
     
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

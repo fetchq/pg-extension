@@ -1,6 +1,6 @@
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_upsert_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_upsert_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -9,7 +9,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
 
     -- should be able to queue a document
@@ -31,13 +31,13 @@ BEGIN
     END IF;
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_upsert_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_upsert_02 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -46,7 +46,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
 
     -- should be able to queue a document
@@ -70,7 +70,7 @@ BEGIN
     END IF;
 
     -- cleanup test
-    -- PERFORM fetchq_test_clean();
+    -- PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

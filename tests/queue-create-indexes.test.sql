@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test__queue_create_indexes_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_create_indexes_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -7,7 +7,7 @@ DECLARE
     VAR_r RECORD;
 BEGIN
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
     PERFORM fetchq_queue_drop_indexes('foo');
 
@@ -24,7 +24,7 @@ BEGIN
     END IF;
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$

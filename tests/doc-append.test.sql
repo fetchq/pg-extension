@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_append_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_append_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -10,7 +10,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -28,13 +28,13 @@ BEGIN
 
     -- cleanup test
     DROP EXTENSION IF EXISTS "uuid-ossp";
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_append_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_append_02 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -48,7 +48,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -67,7 +67,7 @@ BEGIN
 
     -- cleanup test
     DROP EXTENSION IF EXISTS "uuid-ossp";
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

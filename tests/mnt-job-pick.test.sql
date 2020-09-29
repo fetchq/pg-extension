@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test__mnt_job_pick_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_job_pick_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
     UPDATE fetchq_sys_jobs SET next_iteration = NOW() - INTERVAL '1s';
 
@@ -19,7 +19,7 @@ BEGIN
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

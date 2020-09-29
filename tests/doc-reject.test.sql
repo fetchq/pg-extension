@@ -1,6 +1,6 @@
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_reject_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -9,7 +9,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
 
     -- insert dummy data
@@ -41,7 +41,7 @@ BEGIN
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
@@ -50,7 +50,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_reject_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_02 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -59,7 +59,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
 
     -- insert dummy data
@@ -91,7 +91,7 @@ BEGIN
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
@@ -99,7 +99,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_reject_03 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_03 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -108,7 +108,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
     PERFORM fetchq_queue_set_max_attempts('foo', 1);
 
@@ -130,7 +130,7 @@ BEGIN
     END IF;
 
     -- cleanup
-    -- PERFORM fetchq_test_clean();
+    -- PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$

@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test__queue_drop_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_01 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -7,7 +7,7 @@ DECLARE
     VAR_r RECORD;
 BEGIN
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
 
     -- create & drop the queue
     PERFORM fetchq_queue_create('foo');
@@ -47,12 +47,12 @@ BEGIN
 
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test__queue_drop_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_02 (
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -61,7 +61,7 @@ DECLARE
     VAR_r2 RECORD;
 BEGIN
     -- initialize test
-    PERFORM fetchq_test_init();
+    PERFORM fetchq_test.fetchq_test_init();
 
     -- create & drop the queue
     SELECT * INTO VAR_r1 FROM fetchq_queue_create('foo');
@@ -77,7 +77,7 @@ BEGIN
     END IF;
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
