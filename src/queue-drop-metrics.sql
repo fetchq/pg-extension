@@ -54,7 +54,7 @@ DECLARE
     VAR_retention VARCHAR = '[]';
 BEGIN
     
-    VAR_q = 'SELECT metrics_retention FROM fetchq_catalog.fetchq_sys_queues WHERE name = ''%s'';';
+    VAR_q = 'SELECT metrics_retention FROM fetchq.queues WHERE name = ''%s'';';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q INTO VAR_r;
 

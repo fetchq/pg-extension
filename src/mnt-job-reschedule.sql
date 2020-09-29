@@ -11,7 +11,7 @@ BEGIN
     success = true;
 
     VAR_q = '';
-    VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq_sys_jobs SET ';
+    VAR_q = VAR_q || 'UPDATE fetchq.jobs SET ';
     VAR_q = VAR_q || 'next_iteration = NOW() + ''%s'', ';
     VAR_q = VAR_q || 'iterations = iterations + 1, ';
     VAR_q = VAR_q || 'attempts = 0 ';

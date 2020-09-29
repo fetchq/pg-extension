@@ -8,7 +8,7 @@ CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_get_total(
 ) AS $$
 BEGIN
 	SELECT sum(value) INTO current_value
-	FROM fetchq_sys_metrics
+	FROM __fetchq_metrics
 	WHERE metric = PAR_metric;
 
 	does_exists = TRUE;

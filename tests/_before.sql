@@ -4,6 +4,9 @@ CREATE SCHEMA public;
 DROP SCHEMA IF EXISTS fetchq_catalog CASCADE;
 CREATE SCHEMA fetchq_catalog;
 
+DROP SCHEMA IF EXISTS fetchq CASCADE;
+CREATE SCHEMA fetchq;
+
 DROP SCHEMA IF EXISTS fetchq_test CASCADE;
 CREATE SCHEMA fetchq_test;
 
@@ -14,17 +17,21 @@ CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test_init(
 BEGIN
     -- Cleanup hard
     DROP SCHEMA IF EXISTS fetchq_catalog CASCADE;
+    DROP SCHEMA IF EXISTS fetchq CASCADE;
     DROP EXTENSION IF EXISTS fetchq CASCADE;
     DROP EXTENSION IF EXISTS "uuid-ossp";
 
     -- Cleanup soft
     CREATE SCHEMA IF NOT EXISTS fetchq_catalog;
+    CREATE SCHEMA IF NOT EXISTS fetchq;
     CREATE EXTENSION IF NOT EXISTS fetchq;
     PERFORM fetchq_catalog.fetchq_destroy_with_terrible_consequences();
 
     DROP EXTENSION IF EXISTS fetchq CASCADE;
     DROP SCHEMA IF EXISTS fetchq_catalog CASCADE;
     CREATE SCHEMA IF NOT EXISTS fetchq_catalog;
+    DROP SCHEMA IF EXISTS fetchq CASCADE;
+    CREATE SCHEMA IF NOT EXISTS fetchq;
 
     CREATE EXTENSION fetchq;
     PERFORM fetchq_catalog.fetchq_init();

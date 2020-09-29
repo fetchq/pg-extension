@@ -13,7 +13,7 @@ BEGIN
 
 	-- change value in the table
 	VAR_q = '';
-	VAR_q = VAR_q || 'UPDATE fetchq_sys_queues ';
+	VAR_q = VAR_q || 'UPDATE __fetchq_queues ';
 	VAR_q = VAR_q || 'SET metrics_retention = ''%s''  ';
 	VAR_q = VAR_q || 'WHERE name = ''%s''';
 	VAR_q = FORMAT(VAR_q, PAR_retention, PAR_queue);

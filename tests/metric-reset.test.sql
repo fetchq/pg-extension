@@ -33,8 +33,8 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- empty stats so to force recreate
-    TRUNCATE fetchq_sys_metrics;
-    TRUNCATE fetchq_sys_metrics_writes;
+    TRUNCATE __fetchq_metrics;
+    TRUNCATE __fetchq_metrics_writes;
 
     -- get computed metrics
     SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_reset('foo');

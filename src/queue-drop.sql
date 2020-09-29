@@ -35,19 +35,19 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- drop domain namespace
-	DELETE FROM fetchq_catalog.fetchq_sys_queues
+	DELETE FROM fetchq.queues
 	WHERE name = PAR_queue RETURNING id INTO VAR_r;
 	queue_id = VAR_r.id;
 
 	-- drop maintenance tasks
-	DELETE FROM fetchq_catalog.fetchq_sys_jobs WHERE queue = PAR_queue;
+	DELETE FROM fetchq.jobs WHERE queue = PAR_queue;
 
 	-- drop counters
-	DELETE FROM fetchq_catalog.fetchq_sys_metrics
+	DELETE FROM fetchq.metrics
 	WHERE queue = PAR_queue;
 
 	-- drop metrics logs
-	DELETE FROM fetchq_catalog.fetchq_sys_metrics_writes
+	DELETE FROM fetchq.metrics_writes
 	WHERE queue = PAR_queue;
 
 	-- send out notifications

@@ -10,7 +10,7 @@ DECLARE
 BEGIN
     -- set all the jobs to be executed
     --(skip generic jobs)
-    UPDATE fetchq_catalog.fetchq_sys_jobs SET next_iteration = NOW() - INTERVAL '1ms'
+    UPDATE fetchq.jobs SET next_iteration = NOW() - INTERVAL '1ms'
     WHERE queue != '*';
 
     -- run all the available jobs

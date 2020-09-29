@@ -20,26 +20,26 @@ BEGIN
     END IF;
 
     -- check queue index
-    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_catalog.fetchq_sys_queues WHERE name = 'foo';
+    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq.queues WHERE name = 'foo';
     IF VAR_numDocs > 0 THEN
 		RAISE EXCEPTION 'queue index was not dropped';
 	END IF;
 
     -- check jobs table
-    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_catalog.fetchq_sys_jobs WHERE queue = 'foo';
+    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq.jobs WHERE queue = 'foo';
     IF VAR_numDocs > 0 THEN
 		RAISE EXCEPTION 'queue jobs were not dropped';
 	END IF;
 
     -- check logs writes
-    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_catalog.fetchq_sys_metrics_writes
+    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq.metrics_writes
     WHERE queue = 'foo';
     IF VAR_numDocs > 0 THEN
 		RAISE EXCEPTION 'queue metrics writes were not dropped';
 	END IF;
 
     -- check logs
-    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_catalog.fetchq_sys_metrics
+    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq.metrics
     WHERE queue = 'foo';
     IF VAR_numDocs > 0 THEN
 		RAISE EXCEPTION 'queue metrics were not dropped';

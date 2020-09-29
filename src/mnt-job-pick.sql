@@ -18,10 +18,10 @@ DECLARE
 	VAR_q VARCHAR;
 BEGIN
     VAR_q = '';
-    VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq_sys_jobs SET ';
+    VAR_q = VAR_q || 'UPDATE fetchq.jobs SET ';
     VAR_q = VAR_q || 'next_iteration = NOW() + ''%s'', ';
     VAR_q = VAR_q || 'attempts = attempts + 1 ';
-    VAR_q = VAR_q || 'WHERE id IN(SELECT id FROM fetchq_catalog.fetchq_sys_jobs WHERE attempts < 5 AND next_iteration < NOW() ORDER BY next_iteration ASC, attempts ASC LIMIT %s FOR UPDATE SKIP LOCKED) ';
+    VAR_q = VAR_q || 'WHERE id IN(SELECT id FROM fetchq.jobs WHERE attempts < 5 AND next_iteration < NOW() ORDER BY next_iteration ASC, attempts ASC LIMIT %s FOR UPDATE SKIP LOCKED) ';
     VAR_q = VAR_q || 'RETURNING *;';
     VAR_q = FORMAT(VAR_q, PAR_lockDuration, PAR_limit);
     -- RAISE NOTICE '%', VAR_q;

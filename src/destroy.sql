@@ -10,22 +10,22 @@ BEGIN
 
     -- drop all queues
     -- FOR VAR_q IN
-	-- 	SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
+	-- 	SELECT(name) FROM fetchq.queues
 	-- LOOP
     --     PERFORM fetchq_catalog.fetchq_queue_drop(VAR_q.name);
 	-- END LOOP;
 
     -- Queues Index
-    -- DROP TABLE fetchq_catalog.fetchq_sys_queues CASCADE;
+    -- DROP TABLE fetchq.queues CASCADE;
 
     -- Metrics Overview
-    -- DROP TABLE fetchq_catalog.fetchq_sys_metrics CASCADE;
+    -- DROP TABLE fetchq.metrics CASCADE;
 
     -- Metrics Writes
-    -- DROP TABLE fetchq_catalog.fetchq_sys_metrics_writes CASCADE;
+    -- DROP TABLE fetchq.metrics_writes CASCADE;
 
     -- Maintenance Jobs
-    -- DROP TABLE fetchq_catalog.fetchq_sys_jobs CASCADE;
+    -- DROP TABLE fetchq.jobs CASCADE;
 
     -- handle output with graceful fail support
 	-- was_destroyed = TRUE;

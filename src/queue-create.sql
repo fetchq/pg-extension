@@ -63,7 +63,7 @@ BEGIN
 	-- PERFORM fetchq_queue_enable_notify(PAR_queue);
 
 	-- add new maintenance tasks
-	INSERT INTO fetchq_catalog.fetchq_sys_jobs (task, queue, next_iteration, last_iteration, attempts, iterations, settings, payload) VALUES
+	INSERT INTO fetchq.jobs (task, queue, next_iteration, last_iteration, attempts, iterations, settings, payload) VALUES
 	('mnt', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"1m", "duration":"5m", "limit":500}', '{}'),
 	('sts', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"1m", "duration":"5m"}', '{}'),
 	('cmp', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"1m", "duration":"5m"}', '{}'),

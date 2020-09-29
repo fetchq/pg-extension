@@ -19,7 +19,7 @@ BEGIN
     END IF;
 
     -- test in the table
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq_sys_queues
+    SELECT * INTO VAR_r from fetchq.queues
     WHERE name = 'foo' AND current_version = 1;
     IF VAR_r.id IS NULL THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;

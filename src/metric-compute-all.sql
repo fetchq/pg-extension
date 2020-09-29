@@ -18,7 +18,7 @@ DECLARE
 BEGIN
 	
 	FOR VAR_q IN
-		SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
+		SELECT(name) FROM fetchq.queues
 	LOOP
 		SELECT * FROM fetchq_catalog.fetchq_metric_compute(VAR_q.name) INTO VAR_c;
 		queue = VAR_q.name;

@@ -13,7 +13,7 @@ DECLARE
 BEGIN
 	-- get the current attempts limit
 	VAR_q = '';
-	VAR_q = VAR_q || 'SELECT max_attempts FROM fetchq_catalog.fetchq_sys_queues ';
+	VAR_q = VAR_q || 'SELECT max_attempts FROM fetchq.queues ';
 	VAR_q = VAR_q || 'WHERE name = ''%s'' LIMIT 1';
 	EXECUTE FORMAT(VAR_q, PAR_queue) INTO VAR_r;
 

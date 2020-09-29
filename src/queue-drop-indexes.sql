@@ -12,9 +12,9 @@ BEGIN
 	was_dropped = TRUE;
 
     --(select 'foo' as name)
-    SELECT current_version INTO VAR_r FROM fetchq_catalog.fetchq_sys_queues WHERE name = PAR_queue;
+    SELECT current_version INTO VAR_r FROM fetchq.queues WHERE name = PAR_queue;
     -- -- index for: fetchq_catalog.fetchq_doc_pick()
-    -- VAR_q = 'SELECT current_version INTO VAR_r FROM fetchq_catalog.fetchq_sys_queues WHERE name = ''%s'';';
+    -- VAR_q = 'SELECT current_version INTO VAR_r FROM fetchq.queues WHERE name = ''%s'';';
     -- VAR_q = FORMAT(VAR_q, PAR_queue);
     -- EXECUTE VAR_q;
 

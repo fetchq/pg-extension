@@ -28,7 +28,7 @@ BEGIN
     EXECUTE FORMAT(VAR_q, VAR_tableName);
 	
 	FOR VAR_queues IN
-		SELECT * FROM fetchq_catalog.fetchq_sys_queues
+		SELECT * FROM fetchq.queues
 	LOOP
 		-- ingest documents
         VAR_queueTableName = CONCAT('fetchq_catalog.', VAR_queues.name, '__documents');

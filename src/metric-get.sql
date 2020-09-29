@@ -12,7 +12,7 @@ DECLARE
 	VAR_r RECORD;
 	VAR_rows INTEGER;
 BEGIN
-	SELECT * into VAR_r FROM fetchq_catalog.fetchq_sys_metrics
+	SELECT * into VAR_r FROM fetchq.metrics
 	WHERE queue = PAR_queue
 	AND metric = PAR_subject
 	LIMIT 1;
@@ -47,7 +47,7 @@ CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_get(
 BEGIN
 	RETURN QUERY
 	SELECT t.metric, t.value AS current_value, t.updated_at AS last_update
-	FROM fetchq_catalog.fetchq_sys_metrics AS t
+	FROM fetchq.metrics AS t
 	WHERE queue = PAR_queue
 	ORDER BY metric ASC;
 END; $$

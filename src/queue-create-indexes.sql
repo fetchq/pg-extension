@@ -67,7 +67,7 @@ DECLARE
 BEGIN
 	was_created = TRUE;
 
-	SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_sys_queues WHERE name = PAR_queue;
+	SELECT * INTO VAR_r FROM fetchq.queues WHERE name = PAR_queue;
 	PERFORM fetchq_catalog.fetchq_queue_create_indexes(PAR_queue, VAR_r.current_version, VAR_r.max_attempts);
 
 	EXCEPTION WHEN OTHERS THEN BEGIN

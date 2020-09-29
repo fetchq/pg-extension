@@ -8,13 +8,13 @@ DECLARE
 BEGIN
 
 	-- fetch data to work on from the writes log
-	CREATE TEMP TABLE fetchq_sys_metrics_writes_pack ON COMMIT DROP
-	AS SELECT * FROM fetchq_catalog.fetchq_sys_metrics_writes WHERE created_at <= NOW();
+	CREATE TEMP TABLE __fetchq_metrics_writes_pack ON COMMIT DROP
+	AS SELECT * FROM fetchq.metrics_writes WHERE created_at <= NOW();
 
 	-- reset counters to current value
 	FOR VAR_r IN
 		SELECT DISTINCT ON(queue, metric) id, queue, metric, reset
-		FROM fetchq_sys_metrics_writes_pack
+		FROM __fetchq_metrics_writes_pack
 		WHERE reset IS NOT NULL
 		ORDER BY queue, metric, created_at DESC
 	LOOP
@@ -24,12 +24,12 @@ BEGIN
 	-- aggregate the rest of increments
 	FOR VAR_r IN
 		SELECT DISTINCT ON(queue, metric) id, queue, metric, increment
-		FROM fetchq_sys_metrics_writes_pack
+		FROM __fetchq_metrics_writes_pack
 		WHERE increment IS NOT NULL
 		ORDER BY queue, metric, created_at ASC
 	LOOP
 		SELECT SUM(increment) INTO VAR_sum
-		FROM fetchq_sys_metrics_writes_pack
+		FROM __fetchq_metrics_writes_pack
 		WHERE queue = VAR_r.queue
 		AND metric = VAR_r.metric
 		AND increment IS NOT NULL;
@@ -38,12 +38,12 @@ BEGIN
 	END LOOP;
 
 	-- drop records that have been worked out
-	DELETE FROM fetchq_catalog.fetchq_sys_metrics_writes WHERE id IN
-	(SELECT id FROM fetchq_sys_metrics_writes_pack);
+	DELETE FROM fetchq.metrics_writes WHERE id IN
+	(SELECT id FROM __fetchq_metrics_writes_pack);
 	GET DIAGNOSTICS affected_rows := ROW_COUNT;
 
 	-- forcefully drop the temp table;
-	DROP TABLE fetchq_sys_metrics_writes_pack;
+	DROP TABLE __fetchq_metrics_writes_pack;
 
 END; $$
 LANGUAGE plpgsql;

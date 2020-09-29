@@ -16,7 +16,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_metric_log_decrement('foo', 'cnt', 2);
 
     -- fake some future metrics
-    INSERT INTO fetchq_catalog.fetchq_sys_metrics_writes
+    INSERT INTO fetchq.metrics_writes
    (created_at, queue, metric, increment, reset)
     VALUES
    (NOW() + INTERVAL '1s', 'foo', 'cnt', 1, null);

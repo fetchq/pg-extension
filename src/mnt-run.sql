@@ -35,7 +35,7 @@ DECLARE
 	VAR_c RECORD;
 BEGIN
 	FOR VAR_q IN
-		SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
+		SELECT(name) FROM fetchq.queues
 	LOOP
 		SELECT * FROM fetchq_catalog.fetchq_mnt_run(VAR_q.name, PAR_limit) INTO VAR_c;
 		queue = VAR_q.name;

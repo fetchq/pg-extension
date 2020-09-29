@@ -12,7 +12,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
     PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1s', '{}');
     -- PERFORM fetchq_catalog.fetchq_metric_log_pack();
-    UPDATE fetchq_catalog.fetchq_sys_jobs SET next_iteration = NOW() - INTERVAL '1s';
+    UPDATE fetchq.jobs SET next_iteration = NOW() - INTERVAL '1s';
 
     -- run the test
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_mnt_job_run();

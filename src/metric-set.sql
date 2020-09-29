@@ -12,10 +12,10 @@ BEGIN
 	was_created := false;
 	current_value := 0;
 
-	UPDATE fetchq_catalog.fetchq_sys_metrics
+	UPDATE fetchq.metrics
 	SET value = PAR_value, updated_at = now()
 	WHERE id IN(
-		SELECT id FROM fetchq_catalog.fetchq_sys_metrics
+		SELECT id FROM fetchq.metrics
 		WHERE queue = PAR_queue
 		AND metric = PAR_subject
 		LIMIT 1
@@ -25,7 +25,7 @@ BEGIN
 	GET DIAGNOSTICS updated_rows := ROW_COUNT;
 
 	IF updated_rows = 0 THEN
-		INSERT INTO fetchq_catalog.fetchq_sys_metrics
+		INSERT INTO fetchq.metrics
 			(queue, metric, value, updated_at)
 		VALUES
 			(PAR_queue, PAR_subject, PAR_value, now())

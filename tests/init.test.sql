@@ -16,10 +16,10 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_init();
 
     -- create the queue
-    PERFORM * from fetchq_catalog.fetchq_sys_queues;
-    PERFORM * from fetchq_catalog.fetchq_sys_metrics;
-    PERFORM * from fetchq_catalog.fetchq_sys_metrics_writes;
-    PERFORM * from fetchq_catalog.fetchq_sys_jobs;
+    PERFORM * from fetchq.queues;
+    PERFORM * from fetchq.metrics;
+    PERFORM * from fetchq.metrics_writes;
+    PERFORM * from fetchq.jobs;
 
     -- cleanup test
     PERFORM fetchq_test.fetchq_test_clean();
