@@ -1,5 +1,5 @@
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_metric_log_pack();
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_log_pack(
+DROP FUNCTION IF EXISTS fetchq.metric_log_pack();
+CREATE OR REPLACE FUNCTION fetchq.metric_log_pack(
 	OUT affected_rows INTEGER
 ) AS $$
 DECLARE
@@ -18,7 +18,7 @@ BEGIN
 		WHERE reset IS NOT NULL
 		ORDER BY queue, metric, created_at DESC
 	LOOP
-		PERFORM fetchq_catalog.fetchq_metric_set(VAR_r.queue, VAR_r.metric, VAR_r.reset::integer);
+		PERFORM fetchq.metric_set(VAR_r.queue, VAR_r.metric, VAR_r.reset::integer);
 	END LOOP;
 
 	-- aggregate the rest of increments
@@ -34,7 +34,7 @@ BEGIN
 		AND metric = VAR_r.metric
 		AND increment IS NOT NULL;
 
-		PERFORM fetchq_catalog.fetchq_metric_increment(VAR_r.queue, VAR_r.metric, VAR_sum);
+		PERFORM fetchq.metric_increment(VAR_r.queue, VAR_r.metric, VAR_sum);
 	END LOOP;
 
 	-- drop records that have been worked out

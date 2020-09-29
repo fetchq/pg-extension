@@ -1,7 +1,7 @@
 -- @TODO: MAX ATTEMTS MUST COME FROM THE QUEUE
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_doc_reject(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_doc_reject(
+DROP FUNCTION IF EXISTS fetchq.doc_reject(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB);
+CREATE OR REPLACE FUNCTION fetchq.doc_reject(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_message VARCHAR,
@@ -36,25 +36,25 @@ BEGIN
 
     IF affected_rows > 0 THEN
         -- log error
-        PERFORM fetchq_catalog.fetchq_log_error(PAR_queue, VAR_r.subject, PAR_message, PAR_details);
+        PERFORM fetchq.log_error(PAR_queue, VAR_r.subject, PAR_message, PAR_details);
 
         -- update metrics
-        PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'prc', 1);
-        PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'err', 1);
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'rej', 1);
-		PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'act', 1);
+        PERFORM fetchq.metric_log_increment(PAR_queue, 'prc', 1);
+        PERFORM fetchq.metric_log_increment(PAR_queue, 'err', 1);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'rej', 1);
+		PERFORM fetchq.metric_log_decrement(PAR_queue, 'act', 1);
 		IF VAR_r.status = -1 THEN
-			PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'kll', 1);
+			PERFORM fetchq.metric_log_increment(PAR_queue, 'kll', 1);
 		ELSE
-			PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pnd', 1);
+			PERFORM fetchq.metric_log_increment(PAR_queue, 'pnd', 1);
 		END IF;
     END IF;
 
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_doc_reject(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_doc_reject(
+DROP FUNCTION IF EXISTS fetchq.doc_reject(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.doc_reject(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_message VARCHAR,
@@ -90,17 +90,17 @@ BEGIN
 
     IF affected_rows > 0 THEN
         -- log error
-        PERFORM fetchq_catalog.fetchq_log_error(PAR_queue, VAR_r.subject, PAR_message, PAR_details, PAR_refId);
+        PERFORM fetchq.log_error(PAR_queue, VAR_r.subject, PAR_message, PAR_details, PAR_refId);
 
         -- update metrics
-        PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'prc', 1);
-        PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'err', 1);
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'rej', 1);
-		PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'act', 1);
+        PERFORM fetchq.metric_log_increment(PAR_queue, 'prc', 1);
+        PERFORM fetchq.metric_log_increment(PAR_queue, 'err', 1);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'rej', 1);
+		PERFORM fetchq.metric_log_decrement(PAR_queue, 'act', 1);
 		IF VAR_r.status = -1 THEN
-			PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'kll', 1);
+			PERFORM fetchq.metric_log_increment(PAR_queue, 'kll', 1);
 		ELSE
-			PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pnd', 1);
+			PERFORM fetchq.metric_log_increment(PAR_queue, 'pnd', 1);
 		END IF;
     END IF;
 

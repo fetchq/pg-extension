@@ -1,8 +1,8 @@
 -- MAINTENANCE // CREATE PENDINGS
 -- returns:
 -- { affected_rows: 1 }
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_mnt_make_pending(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_mnt_make_pending(
+DROP FUNCTION IF EXISTS fetchq.mnt_make_pending(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq.mnt_make_pending(
 	PAR_queue VARCHAR,
 	PAR_limit INTEGER,
 	OUT affected_rows INTEGER
@@ -27,8 +27,8 @@ BEGIN
 
     -- RAISE NOTICE '%', affected_rows;
 
-	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pnd', affected_rows);
-	PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'pln', affected_rows);
+	PERFORM fetchq.metric_log_increment(PAR_queue, 'pnd', affected_rows);
+	PERFORM fetchq.metric_log_decrement(PAR_queue, 'pln', affected_rows);
 
 	-- emit worker notifications
 	-- IF affected_rows > 0 THEN

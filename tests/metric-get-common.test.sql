@@ -11,24 +11,24 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- set counters
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'cnt', 1);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'pnd', 2);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'pln', 3);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'act', 4);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'cpl', 5);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'kll', 6);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'ent', 7);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'drp', 8);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'pkd', 9);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'prc', 10);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'res', 11);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'rej', 12);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'orp', 13);
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'err', 14);
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.metric_set('a', 'cnt', 1);
+    PERFORM fetchq.metric_set('a', 'pnd', 2);
+    PERFORM fetchq.metric_set('a', 'pln', 3);
+    PERFORM fetchq.metric_set('a', 'act', 4);
+    PERFORM fetchq.metric_set('a', 'cpl', 5);
+    PERFORM fetchq.metric_set('a', 'kll', 6);
+    PERFORM fetchq.metric_set('a', 'ent', 7);
+    PERFORM fetchq.metric_set('a', 'drp', 8);
+    PERFORM fetchq.metric_set('a', 'pkd', 9);
+    PERFORM fetchq.metric_set('a', 'prc', 10);
+    PERFORM fetchq.metric_set('a', 'res', 11);
+    PERFORM fetchq.metric_set('a', 'rej', 12);
+    PERFORM fetchq.metric_set('a', 'orp', 13);
+    PERFORM fetchq.metric_set('a', 'err', 14);
+    PERFORM fetchq.metric_log_pack();
 
     -- run the test
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get_common('a');
+    SELECT * INTO VAR_r FROM fetchq.metric_get_common('a');
     VAR_sum = VAR_sum + VAR_r.cnt;
     VAR_sum = VAR_sum + VAR_r.pnd;
     VAR_sum = VAR_sum + VAR_r.pln;

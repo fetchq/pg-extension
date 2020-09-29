@@ -2,8 +2,8 @@
 -- UPSERTS A DOMAIN AND APPARENTLY HANDLES CONCURRENT ACCESS
 -- returns:
 -- { domain_id: '1' }
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_get_id(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_get_id(
+DROP FUNCTION IF EXISTS fetchq.queue_get_id(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.queue_get_id(
 	PAR_queue VARCHAR(15),
 	OUT queue_id BIGINT
 ) AS

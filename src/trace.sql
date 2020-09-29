@@ -2,7 +2,7 @@
  * Traces a subject across the entire queue system extracting
  * the workflow plus errors.
  */
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_trace(
+CREATE OR REPLACE FUNCTION fetchq.trace(
 	PAR_subject VARCHAR,
     PAR_order VARCHAR
 ) RETURNS TABLE(
@@ -61,7 +61,7 @@ LANGUAGE plpgsql;
  * Traces a subject across the entire queue system extracting
  * the workflow plus errors.
  */
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_trace(
+CREATE OR REPLACE FUNCTION fetchq.trace(
 	PAR_subject VARCHAR
 ) RETURNS TABLE(
     step INTEGER,
@@ -73,6 +73,6 @@ CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_trace(
 )
 AS $$
 BEGIN
-	RETURN QUERY SELECT * FROM fetchq_catalog.fetchq_trace(PAR_subject, 'ASC');
+	RETURN QUERY SELECT * FROM fetchq.trace(PAR_subject, 'ASC');
 END; $$
 LANGUAGE plpgsql;

@@ -25,7 +25,7 @@ BEGIN
     CREATE SCHEMA IF NOT EXISTS fetchq_catalog;
     CREATE SCHEMA IF NOT EXISTS fetchq;
     CREATE EXTENSION IF NOT EXISTS fetchq;
-    PERFORM fetchq_catalog.fetchq_destroy_with_terrible_consequences();
+    PERFORM fetchq.destroy_with_terrible_consequences();
 
     DROP EXTENSION IF EXISTS fetchq CASCADE;
     DROP SCHEMA IF EXISTS fetchq_catalog CASCADE;
@@ -34,7 +34,7 @@ BEGIN
     CREATE SCHEMA IF NOT EXISTS fetchq;
 
     CREATE EXTENSION fetchq;
-    PERFORM fetchq_catalog.fetchq_init();
+    PERFORM fetchq.init();
     done = TRUE;
 END; $$
 LANGUAGE plpgsql;
@@ -45,7 +45,7 @@ CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test_clean(
 ) AS $$
 BEGIN
     -- CREATE EXTENSION IF NOT EXISTS fetchq;
-    -- PERFORM fetchq_catalog.fetchq_destroy_with_terrible_consequences();
+    -- PERFORM fetchq.destroy_with_terrible_consequences();
     -- DROP EXTENSION fetchq;
     done = TRUE;
 END; $$

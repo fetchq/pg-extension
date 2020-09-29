@@ -2,8 +2,8 @@
 -- RESCHEDULE AN ACTIVE DOCUMENT
 -- returns:
 -- { affected_rows: 1 }
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_doc_reschedule(CHARACTER VARYING, CHARACTER VARYING, TIMESTAMP WITH TIME ZONE);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_doc_reschedule(
+DROP FUNCTION IF EXISTS fetchq.doc_reschedule(CHARACTER VARYING, CHARACTER VARYING, TIMESTAMP WITH TIME ZONE);
+CREATE OR REPLACE FUNCTION fetchq.doc_reschedule(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_nextIteration TIMESTAMP WITH TIME ZONE,
@@ -32,10 +32,10 @@ BEGIN
 
 	-- Update counters
 	IF affected_rows > 0 THEN
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'prc', affected_rows);
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'res', affected_rows);
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pln', affected_rows);
-		PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'prc', affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'res', affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'pln', affected_rows);
+		PERFORM fetchq.metric_log_decrement(PAR_queue, 'act', affected_rows);
 	END IF;
 
 	-- raise log 'UPDATE %, DOMAIN %, VERSION %', affectedRows, domainId, versionNum;
@@ -47,8 +47,8 @@ LANGUAGE plpgsql;
 -- RESCHEDULE AN ACTIVE DOCUMENT
 -- returns:
 -- { affected_rows: 1 }
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_doc_reschedule(CHARACTER VARYING, CHARACTER VARYING, TIMESTAMP WITH TIME ZONE, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_doc_reschedule(
+DROP FUNCTION IF EXISTS fetchq.doc_reschedule(CHARACTER VARYING, CHARACTER VARYING, TIMESTAMP WITH TIME ZONE, JSONB);
+CREATE OR REPLACE FUNCTION fetchq.doc_reschedule(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_nextIteration TIMESTAMP WITH TIME ZONE,
@@ -78,10 +78,10 @@ BEGIN
 
 	-- Update counters
 	IF affected_rows > 0 THEN
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'prc', affected_rows);
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'res', affected_rows);
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pln', affected_rows);
-		PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'prc', affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'res', affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'pln', affected_rows);
+		PERFORM fetchq.metric_log_decrement(PAR_queue, 'act', affected_rows);
 	END IF;
 
 	-- raise log 'UPDATE %, DOMAIN %, VERSION %', affectedRows, domainId, versionNum;

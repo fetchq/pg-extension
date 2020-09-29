@@ -1,5 +1,5 @@
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_metric_log_decrement(CHARACTER VARYING, CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_log_decrement(
+DROP FUNCTION IF EXISTS fetchq.metric_log_decrement(CHARACTER VARYING, CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq.metric_log_decrement(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_value INTEGER,

@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_destroy_with_terrible_consequences();
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_destroy_with_terrible_consequences(
+DROP FUNCTION IF EXISTS fetchq.destroy_with_terrible_consequences();
+CREATE OR REPLACE FUNCTION fetchq.destroy_with_terrible_consequences(
     OUT was_destroyed BOOLEAN
 ) AS $$
 DECLARE
@@ -12,7 +12,7 @@ BEGIN
     -- FOR VAR_q IN
 	-- 	SELECT(name) FROM fetchq.queues
 	-- LOOP
-    --     PERFORM fetchq_catalog.fetchq_queue_drop(VAR_q.name);
+    --     PERFORM fetchq.queue_drop(VAR_q.name);
 	-- END LOOP;
 
     -- Queues Index

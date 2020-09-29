@@ -10,7 +10,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     INSERT INTO fetchq_catalog.foo__metrics( created_at, metric, value ) VALUES
     -- within the hour
@@ -29,7 +29,7 @@ BEGIN
 
     -- drop metrics by policy
     VAR_policy = '[{ "retain":"minute", "from":"1h", "to":"0s" }, { "retain":"hour", "from":"100y", "to":"1h" }]';
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_metrics('foo', VAR_policy::jsonb);
+    SELECT * INTO VAR_r FROM fetchq.queue_drop_metrics('foo', VAR_policy::jsonb);
     RAISE NOTICE 'result %', VAR_r;
 
     IF VAR_r.removed_rows IS NULL THEN
@@ -57,8 +57,8 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_catalog.fetchq_queue_set_metrics_retention('foo', '[{"to": "0s", "from": "1h", "retain": "minute"}, {"to": "1h", "from": "100y", "retain": "hour"}]');
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.queue_set_metrics_retention('foo', '[{"to": "0s", "from": "1h", "retain": "minute"}, {"to": "1h", "from": "100y", "retain": "hour"}]');
 
     INSERT INTO fetchq_catalog.foo__metrics( created_at, metric, value ) VALUES
     -- within the hour
@@ -76,7 +76,7 @@ BEGIN
     ;
 
     -- drop metrics by policy
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_metrics('foo');
+    SELECT * INTO VAR_r FROM fetchq.queue_drop_metrics('foo');
     RAISE NOTICE 'result %', VAR_r;
 
     IF VAR_r.removed_rows IS NULL THEN

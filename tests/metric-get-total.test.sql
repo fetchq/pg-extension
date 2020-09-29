@@ -11,14 +11,14 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- set counters
-    PERFORM fetchq_catalog.fetchq_metric_set('a', 'tot', 1);
-    PERFORM fetchq_catalog.fetchq_metric_set('b', 'tot', 3);
-    PERFORM fetchq_catalog.fetchq_metric_log_increment('a', 'tot', 1);
-    PERFORM fetchq_catalog.fetchq_metric_log_decrement('b', 'tot', 1);
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.metric_set('a', 'tot', 1);
+    PERFORM fetchq.metric_set('b', 'tot', 3);
+    PERFORM fetchq.metric_log_increment('a', 'tot', 1);
+    PERFORM fetchq.metric_log_decrement('b', 'tot', 1);
+    PERFORM fetchq.metric_log_pack();
 
     -- run the test
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get_total('tot');
+    SELECT * INTO VAR_r FROM fetchq.metric_get_total('tot');
     
     -- test result rows
     IF VAR_r.current_value <> 4 THEN

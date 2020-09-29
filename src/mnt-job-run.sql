@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_mnt_job_run(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_mnt_job_run(
+DROP FUNCTION IF EXISTS fetchq.mnt_job_run(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq.mnt_job_run(
     PAR_lockDuration VARCHAR,
 	PAR_limit INTEGER,
     OUT success BOOLEAN,
@@ -21,7 +21,7 @@ BEGIN
             settings->'limit' as limit_records, 
             settings->'delay' as execution_delay,
             settings->'duration' as execution_duration
-        FROM fetchq_catalog.fetchq_mnt_job_pick(PAR_lockDuration, PAR_limit)
+        FROM fetchq.mnt_job_pick(PAR_lockDuration, PAR_limit)
 	LOOP
         -- RAISE NOTICE '###########################';
 		-- RAISE NOTICE '%', VAR_r;
@@ -43,20 +43,20 @@ BEGIN
         -- run the specific task logic
         CASE
         WHEN VAR_r.task = 'lgp' THEN
-            PERFORM fetchq_catalog.fetchq_metric_log_pack();
+            PERFORM fetchq.metric_log_pack();
         WHEN VAR_r.task = 'mnt' THEN
-            PERFORM fetchq_catalog.fetchq_mnt_run(VAR_r.queue, VAR_limit);
+            PERFORM fetchq.mnt_run(VAR_r.queue, VAR_limit);
         WHEN VAR_r.task = 'drp' THEN
-            PERFORM fetchq_catalog.fetchq_queue_drop_metrics(VAR_r.queue);
-            PERFORM fetchq_catalog.fetchq_queue_drop_errors(VAR_r.queue);
+            PERFORM fetchq.queue_drop_metrics(VAR_r.queue);
+            PERFORM fetchq.queue_drop_errors(VAR_r.queue);
         WHEN VAR_r.task = 'sts' THEN
-            PERFORM fetchq_catalog.fetchq_metric_snap(VAR_r.queue);
+            PERFORM fetchq.metric_snap(VAR_r.queue);
         ELSE
             RAISE NOTICE 'DONT KNOW TASK %', VAR_r.task;
         END CASE;
 
         -- reschedule job
-        PERFORM fetchq_catalog.fetchq_mnt_job_reschedule(VAR_r.id, VAR_delay);
+        PERFORM fetchq.mnt_job_reschedule(VAR_r.id, VAR_delay);
         processed = processed + 1;
 	END LOOP;
 
@@ -66,8 +66,8 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_mnt_job_run(INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_mnt_job_run(
+DROP FUNCTION IF EXISTS fetchq.mnt_job_run(INTEGER);
+CREATE OR REPLACE FUNCTION fetchq.mnt_job_run(
 	PAR_limit INTEGER,
     OUT success BOOLEAN,
     OUT processed INTEGER
@@ -78,14 +78,14 @@ DECLARE
     VAR_limit INTEGER;
     VAR_delay VARCHAR;
 BEGIN
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_mnt_job_run('5m', PAR_limit) as t;
+    SELECT * INTO VAR_r FROM fetchq.mnt_job_run('5m', PAR_limit) as t;
     success = VAR_r.success;
     processed = VAR_r.processed;
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_mnt_job_run();
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_mnt_job_run(
+DROP FUNCTION IF EXISTS fetchq.mnt_job_run();
+CREATE OR REPLACE FUNCTION fetchq.mnt_job_run(
     OUT success BOOLEAN,
     OUT processed INTEGER
 ) AS $$
@@ -95,7 +95,7 @@ DECLARE
     VAR_limit INTEGER;
     VAR_delay VARCHAR;
 BEGIN
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_mnt_job_run(1) as t;
+    SELECT * INTO VAR_r FROM fetchq.mnt_job_run(1) as t;
     success = VAR_r.success;
     processed = VAR_r.processed;
 END; $$

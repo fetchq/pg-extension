@@ -12,8 +12,8 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- should be able to gracefully fail
-    PERFORM fetchq_catalog.fetchq_init();
-    PERFORM fetchq_catalog.fetchq_init();
+    PERFORM fetchq.init();
+    PERFORM fetchq.init();
 
     -- create the queue
     PERFORM * from fetchq.queues;

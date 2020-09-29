@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_metric_snap(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_snap(
+DROP FUNCTION IF EXISTS fetchq.metric_snap(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.metric_snap(
 	PAR_queue VARCHAR,
 	PAR_metric VARCHAR,
 	OUT success BOOLEAN,
@@ -11,7 +11,7 @@ DECLARE
     VAR_q VARCHAR;
 BEGIN
 	success = true;
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get(PAR_queue, PAR_metric);
+    SELECT * INTO VAR_r FROM fetchq.metric_get(PAR_queue, PAR_metric);
     RAISE NOTICE '%', VAR_r.current_value;
 
     VAR_q = 'INSERT INTO fetchq_catalog.%s__metrics ';
@@ -28,8 +28,8 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_metric_snap(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_snap(
+DROP FUNCTION IF EXISTS fetchq.metric_snap(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.metric_snap(
 	PAR_queue VARCHAR,
 	OUT success BOOLEAN,
     OUT inserts INTEGER
@@ -41,7 +41,7 @@ BEGIN
 
     VAR_q = 'INSERT INTO fetchq_catalog.%s__metrics( metric,  value)';
 	VAR_q = VAR_q || 'SELECT metric, current_value AS value ';
-	VAR_q = VAR_q || 'FROM fetchq_catalog.fetchq_metric_get(''%s'')';
+	VAR_q = VAR_q || 'FROM fetchq.metric_get(''%s'')';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
 	EXECUTE VAR_q;
     GET DIAGNOSTICS inserts := ROW_COUNT;
@@ -53,8 +53,8 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_metric_snap(CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_snap(
+DROP FUNCTION IF EXISTS fetchq.metric_snap(CHARACTER VARYING, JSONB);
+CREATE OR REPLACE FUNCTION fetchq.metric_snap(
 	PAR_queue VARCHAR,
     PAR_whiteList JSONB,
 	OUT success BOOLEAN,
@@ -68,7 +68,7 @@ BEGIN
 
     VAR_q = 'INSERT INTO fetchq_catalog.%s__metrics( metric,  value)';
 	VAR_q = VAR_q || 'SELECT metric, current_value AS value ';
-	VAR_q = VAR_q || 'FROM fetchq_catalog.fetchq_metric_get(''%s'') AS metrics ';
+	VAR_q = VAR_q || 'FROM fetchq.metric_get(''%s'') AS metrics ';
 	VAR_q = VAR_q || 'INNER JOIN(SELECT value::varchar FROM jsonb_array_elements_text(''%s'')) ';
 	VAR_q = VAR_q || 'AS filters ON metrics.metric = filters.value;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, PAR_whiteList);

@@ -10,11 +10,11 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- create & drop the queue
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 0, NOW() + INTERVAL '1m', '{}');
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop('foo');
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
+    PERFORM fetchq.metric_log_pack();
+    PERFORM fetchq.doc_push('foo', 'a2', 0, 0, NOW() + INTERVAL '1m', '{}');
+    SELECT * INTO VAR_r FROM fetchq.queue_drop('foo');
     IF VAR_r.was_dropped IS NOT true THEN
         RAISE EXCEPTION 'could not drop the queue';
     END IF;
@@ -64,8 +64,8 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- create & drop the queue
-    SELECT * INTO VAR_r1 FROM fetchq_catalog.fetchq_queue_create('foo');
-    SELECT * INTO VAR_r2 FROM fetchq_catalog.fetchq_queue_drop('foo');
+    SELECT * INTO VAR_r1 FROM fetchq.queue_create('foo');
+    SELECT * INTO VAR_r2 FROM fetchq.queue_drop('foo');
     IF VAR_r2.was_dropped IS NOT true THEN
         RAISE EXCEPTION 'could not drop the queue';
     END IF;

@@ -10,10 +10,10 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     -- should be able to queue a document
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_upsert('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
+    SELECT * INTO VAR_r FROM fetchq.doc_upsert('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
     IF VAR_r.queued_docs IS NULL THEN
         RAISE EXCEPTION 'failed(null value) - %', VAR_testName;
     END IF;
@@ -22,7 +22,7 @@ BEGIN
     END IF;
 
     -- should be able to update such document
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_upsert('foo', 'a1', 0, 1, '2222-11-10 12:00', '{"a":1}');
+    SELECT * INTO VAR_r FROM fetchq.doc_upsert('foo', 'a1', 0, 1, '2222-11-10 12:00', '{"a":1}');
     IF VAR_r.updated_docs IS NULL THEN
         RAISE EXCEPTION 'failed(null value on update) - %', VAR_testName;
     END IF;
@@ -47,10 +47,10 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     -- should be able to queue a document
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_upsert('foo', 'a1', 0, 0, NOW() - INTERVAL '1m', '{}');
+    SELECT * INTO VAR_r FROM fetchq.doc_upsert('foo', 'a1', 0, 0, NOW() - INTERVAL '1m', '{}');
     IF VAR_r.queued_docs IS NULL THEN
         RAISE EXCEPTION 'failed(null value) - %', VAR_testName;
     END IF;
@@ -58,10 +58,10 @@ BEGIN
         RAISE EXCEPTION 'failed(expected: 1, received: %) - %', VAR_r.queued_docs, VAR_testName;
     END IF;
 
-    PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
+    PERFORM fetchq.doc_pick('foo', 0, 1, '5m');
 
     -- should be able to update such document
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_upsert('foo', 'a1', 0, 1, '2222-11-10 12:00', '{"a":1}');
+    SELECT * INTO VAR_r FROM fetchq.doc_upsert('foo', 'a1', 0, 1, '2222-11-10 12:00', '{"a":1}');
     IF VAR_r.updated_docs IS NULL THEN
         RAISE EXCEPTION 'failed(null value on update) - %', VAR_testName;
     END IF;

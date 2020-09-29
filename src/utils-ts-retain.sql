@@ -2,8 +2,8 @@
 -- DROP RECORDS FROM A GENERIC TIMESERIE TABLE
 -- select(*) from lock_queue_drop_time( 'targetTable', 'timeField', 'retainAmount', 'older date', 'newer date')
 -- retainAmount: microseconds | milliseconds | second | minute | hour | day | week | month | quarter | year | decade | century | millennium
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_utils_ts_retain(character varying, character varying, character varying, timestamp with time zone, timestamp with time zone);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_utils_ts_retain(
+DROP FUNCTION IF EXISTS fetchq.utils_ts_retain(character varying, character varying, character varying, timestamp with time zone, timestamp with time zone);
+CREATE OR REPLACE FUNCTION fetchq.utils_ts_retain(
 	tableName VARCHAR,
 	fieldName VARCHAR,
 	retainStr VARCHAR,

@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_drop_version(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_drop_version(
+DROP FUNCTION IF EXISTS fetchq.queue_drop_version(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq.queue_drop_version(
 	PAR_queue VARCHAR,
 	PAR_oldVersion INTEGER,
 	OUT was_dropped BOOLEAN
@@ -24,7 +24,7 @@ BEGIN
     END IF;
 
 	-- drop old index
-	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_pick_%s_idx';
+	VAR_q = 'DROP INDEX IF EXISTS fetchq.%s_for_pick_%s_idx';
 	EXECUTE FORMAT(VAR_q, PAR_queue, PAR_oldVersion);
 
 	EXCEPTION WHEN OTHERS THEN BEGIN

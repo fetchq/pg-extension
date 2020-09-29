@@ -10,7 +10,7 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- create the queue
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_create('foo');
+    SELECT * INTO VAR_r FROM fetchq.queue_create('foo');
     IF VAR_r.was_created IS NOT true THEN
         RAISE EXCEPTION 'could not create the queue';
     END IF;
@@ -45,7 +45,7 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- create the queue(41 characters should not create the queue)
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_create('f1234567891234567891234567899999999999999');
+    SELECT * INTO VAR_r FROM fetchq.queue_create('f1234567891234567891234567899999999999999');
     IF VAR_r.was_created IS NOT false THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
@@ -69,7 +69,7 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- create the queue(41 characters should not create the queue)
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_create('f12345678912345678912345678999999999999a');
+    SELECT * INTO VAR_r FROM fetchq.queue_create('f12345678912345678912345678999999999999a');
     IF VAR_r.was_created IS NOT true THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;

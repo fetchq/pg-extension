@@ -9,16 +9,16 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    SELECT * INTO VAR_r FROM fetchq.doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
-    PERFORM fetchq_catalog.fetchq_doc_kill('foo', 'a1');
-    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.doc_kill('foo', 'a1');
+    PERFORM fetchq.mnt_run_all(100);
+    PERFORM fetchq.metric_log_pack();
 
     -- -- get first document
     SELECT * INTO VAR_r from fetchq_catalog.foo__documents
@@ -46,16 +46,16 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    SELECT * INTO VAR_r FROM fetchq.doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
-    PERFORM fetchq_catalog.fetchq_doc_kill('foo', 'a1', '{"a":22}');
-    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.doc_kill('foo', 'a1', '{"a":22}');
+    PERFORM fetchq.mnt_run_all(100);
+    PERFORM fetchq.metric_log_pack();
 
     -- -- get first document
     SELECT * INTO VAR_r from fetchq_catalog.foo__documents

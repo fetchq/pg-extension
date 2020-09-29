@@ -9,14 +9,14 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     INSERT INTO fetchq_catalog.foo__errors( created_at, subject, message ) VALUES
    ( NOW(), 'a', 'b' ),
    ( NOW() - INTERVAL '1d', 'a', 'b' ),
    ( NOW() - INTERVAL '2d', 'a', 'b' );
 
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_errors('foo', '24 hours');
+    SELECT * INTO VAR_r FROM fetchq.queue_drop_errors('foo', '24 hours');
     IF VAR_r.affected_rows IS NULL THEN
         RAISE EXCEPTION 'failed -(null value) %', VAR_testName;
     END IF;
@@ -42,14 +42,14 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     INSERT INTO fetchq_catalog.foo__errors( created_at, subject, message ) VALUES
    ( NOW(), 'a', 'b' ),
    ( NOW() - INTERVAL '1d', 'a', 'b' ),
    ( NOW() - INTERVAL '2d', 'a', 'b' );
 
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_errors('foo', NOW() - INTERVAL '24h');
+    SELECT * INTO VAR_r FROM fetchq.queue_drop_errors('foo', NOW() - INTERVAL '24h');
     IF VAR_r.affected_rows IS NULL THEN
         RAISE EXCEPTION 'failed -(null value) %', VAR_testName;
     END IF;
@@ -73,15 +73,15 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_catalog.fetchq_queue_set_errors_retention('foo', '1h');
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.queue_set_errors_retention('foo', '1h');
 
     INSERT INTO fetchq_catalog.foo__errors( created_at, subject, message ) VALUES
    ( NOW(), 'a', 'b' ),
    ( NOW() - INTERVAL '1d', 'a', 'b' ),
    ( NOW() - INTERVAL '2d', 'a', 'b' );
 
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_errors('foo');
+    SELECT * INTO VAR_r FROM fetchq.queue_drop_errors('foo');
     IF VAR_r.affected_rows IS NULL THEN
         RAISE EXCEPTION 'failed -(null value) %', VAR_testName;
     END IF;

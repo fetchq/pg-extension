@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_drop_indexes(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_drop_indexes(
+DROP FUNCTION IF EXISTS fetchq.queue_drop_indexes(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.queue_drop_indexes(
 	PAR_queue VARCHAR,
 	OUT was_dropped BOOLEAN
 ) AS $$
@@ -13,7 +13,7 @@ BEGIN
 
     --(select 'foo' as name)
     SELECT current_version INTO VAR_r FROM fetchq.queues WHERE name = PAR_queue;
-    -- -- index for: fetchq_catalog.fetchq_doc_pick()
+    -- -- index for: fetchq.doc_pick()
     -- VAR_q = 'SELECT current_version INTO VAR_r FROM fetchq.queues WHERE name = ''%s'';';
     -- VAR_q = FORMAT(VAR_q, PAR_queue);
     -- EXECUTE VAR_q;
@@ -22,22 +22,22 @@ BEGIN
 	VAR_q = FORMAT(VAR_q, PAR_queue, VAR_r.current_version);
 	EXECUTE VAR_q;
 
-	-- index for: fetchq_catalog.fetchq_mnt_make_pending()
+	-- index for: fetchq.mnt_make_pending()
 	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_pnd_idx;';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q;
 
-	-- index for: fetchq_catalog.fetchq_mnt_reschedule_orphans()
+	-- index for: fetchq.mnt_reschedule_orphans()
 	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_orp_idx;';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q;
 
-	-- index for: fetchq_catalog.fetchq_mnt_mark_dead()
+	-- index for: fetchq.mnt_mark_dead()
 	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_dod_idx;';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q;
 
-	-- index for: fetchq_catalog.fetchq_doc_upsert() -- edit query
+	-- index for: fetchq.doc_upsert() -- edit query
 	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_ups_idx;';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q;

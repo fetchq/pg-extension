@@ -1,5 +1,5 @@
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_doc_kill(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_doc_kill(
+DROP FUNCTION IF EXISTS fetchq.doc_kill(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.doc_kill(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	OUT affected_rows INTEGER
@@ -23,17 +23,17 @@ BEGIN
 
 	-- Update counters
 	IF affected_rows > 0 THEN
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'prc', affected_rows);
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'kll', affected_rows);
-		PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'prc', affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'kll', affected_rows);
+		PERFORM fetchq.metric_log_decrement(PAR_queue, 'act', affected_rows);
 	END IF;
 
 	EXCEPTION WHEN OTHERS THEN BEGIN END;
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_doc_kill(CHARACTER VARYING, CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_doc_kill(
+DROP FUNCTION IF EXISTS fetchq.doc_kill(CHARACTER VARYING, CHARACTER VARYING, JSONB);
+CREATE OR REPLACE FUNCTION fetchq.doc_kill(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_payload JSONB,
@@ -59,9 +59,9 @@ BEGIN
 
 	-- Update counters
 	IF affected_rows > 0 THEN
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'prc', affected_rows);
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'kll', affected_rows);
-		PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'prc', affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'kll', affected_rows);
+		PERFORM fetchq.metric_log_decrement(PAR_queue, 'act', affected_rows);
 	END IF;
 
 	EXCEPTION WHEN OTHERS THEN BEGIN END;

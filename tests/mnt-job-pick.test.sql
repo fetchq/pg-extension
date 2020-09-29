@@ -9,11 +9,11 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
     UPDATE __fetchq_jobs SET next_iteration = NOW() - INTERVAL '1s';
 
     -- run the test
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_mnt_job_pick('5m', 1);
+    SELECT * INTO VAR_r FROM fetchq.mnt_job_pick('5m', 1);
     IF VAR_r.id IS NULL THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;

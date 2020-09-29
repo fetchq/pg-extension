@@ -11,16 +11,16 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
     
     -- insert dummy data - queue foo
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
-    PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
-    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
+    PERFORM fetchq.doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
+    PERFORM fetchq.doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
+    PERFORM fetchq.doc_pick('foo', 0, 1, '5m');
+    PERFORM fetchq.mnt_run_all(100);
+    PERFORM fetchq.metric_log_pack();
 
     -- run tests
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_snap('foo', 'cnt');
+    SELECT * INTO VAR_r from fetchq.metric_snap('foo', 'cnt');
     IF VAR_r.success IS NULL THEN
         RAISE EXCEPTION 'failed - %(success, got null value)', VAR_testName;
     END IF;
@@ -48,16 +48,16 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
     
     -- insert dummy data - queue foo
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
-    PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
-    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
+    PERFORM fetchq.doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
+    PERFORM fetchq.doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
+    PERFORM fetchq.doc_pick('foo', 0, 1, '5m');
+    PERFORM fetchq.mnt_run_all(100);
+    PERFORM fetchq.metric_log_pack();
 
     -- run tests
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_snap('foo');
+    SELECT * INTO VAR_r from fetchq.metric_snap('foo');
     IF VAR_r.success IS NULL THEN
         RAISE EXCEPTION 'failed - %(success, got null value)', VAR_testName;
     END IF;
@@ -88,16 +88,16 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
     
     -- insert dummy data - queue foo
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
-    PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
-    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
+    PERFORM fetchq.doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
+    PERFORM fetchq.doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
+    PERFORM fetchq.doc_pick('foo', 0, 1, '5m');
+    PERFORM fetchq.mnt_run_all(100);
+    PERFORM fetchq.metric_log_pack();
 
     -- run tests
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_snap('foo', '[ "cnt", "act" ]'::jsonb);
+    SELECT * INTO VAR_r from fetchq.metric_snap('foo', '[ "cnt", "act" ]'::jsonb);
     IF VAR_r.success IS NULL THEN
         RAISE EXCEPTION 'failed - %(success, got null value)', VAR_testName;
     END IF;

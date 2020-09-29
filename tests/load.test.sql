@@ -12,14 +12,14 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     -- insert documents one by one
     StartTime := clock_timestamp();
     FOR VAR_r IN
 		SELECT generate_series(1, PAR_limit) AS id, md5(random()::text) AS descr
 	LOOP
-        PERFORM fetchq_catalog.fetchq_doc_push('foo', VAR_r.descr, 0, 0, NOW() +(random() *(NOW() + '60 days' - NOW())) + '-30 days', '{}');
+        PERFORM fetchq.doc_push('foo', VAR_r.descr, 0, 0, NOW() +(random() *(NOW() + '60 days' - NOW())) + '-30 days', '{}');
 	END LOOP;
     EndTime := clock_timestamp();
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
@@ -29,8 +29,8 @@ BEGIN
 
     -- run maintenance
     StartTime := clock_timestamp();
-    PERFORM fetchq_catalog.fetchq_mnt_run_all(100000);
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.mnt_run_all(100000);
+    PERFORM fetchq.metric_log_pack();
     EndTime := clock_timestamp();
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
     RAISE NOTICE 'Maintenance Duration in millisecs=%', ROUND(Delta);
@@ -59,11 +59,11 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     -- Generate the push command with multiple documents
     StartTime := clock_timestamp();
-    VAR_q = 'select * from fetchq_catalog.fetchq_doc_push(''foo'', 0, %s, ''';
+    VAR_q = 'select * from fetchq.doc_push(''foo'', 0, %s, ''';
     FOR VAR_r IN
 		SELECT generate_series(1, PAR_limit - 1) AS id, md5(random()::text) AS descr
 	LOOP
@@ -88,8 +88,8 @@ BEGIN
 
     -- run maintenance
     StartTime := clock_timestamp();
-    PERFORM fetchq_catalog.fetchq_mnt_run_all(100000);
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.mnt_run_all(100000);
+    PERFORM fetchq.metric_log_pack();
     EndTime := clock_timestamp();
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
     RAISE NOTICE 'Maintenance Duration in millisecs=%', ROUND(Delta);
@@ -118,7 +118,7 @@ BEGIN
 
     -- Generate the push command with multiple documents
     StartTime := clock_timestamp();
-    VAR_q = 'select * from fetchq_catalog.fetchq_doc_push(''foo'', 0, ''%s'', ''';
+    VAR_q = 'select * from fetchq.doc_push(''foo'', 0, ''%s'', ''';
     FOR VAR_r IN
 		SELECT generate_series(1, PAR_limit - 1) AS id, md5(random()::text) AS descr
 	LOOP
@@ -168,8 +168,8 @@ DECLARE
     Delta double precision;
 BEGIN
     StartTime := clock_timestamp();
-    PERFORM fetchq_catalog.fetchq_mnt_run_all(PAR_limit);
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.mnt_run_all(PAR_limit);
+    PERFORM fetchq.metric_log_pack();
     EndTime := clock_timestamp();
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
     duration = ROUND(Delta);
@@ -188,9 +188,9 @@ DECLARE
     Delta double precision;
 BEGIN
     StartTime := clock_timestamp();
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick(PAR_queue, 0, PAR_limit, '5m');
+    SELECT * INTO VAR_r FROM fetchq.doc_pick(PAR_queue, 0, PAR_limit, '5m');
     RAISE NOTICE '%', VAR_r;
-    -- PERFORM fetchq_catalog.fetchq_doc_reschedule(PAR_queue, VAR_r.id, NOW() + INTERVAL '1y');
+    -- PERFORM fetchq.doc_reschedule(PAR_queue, VAR_r.id, NOW() + INTERVAL '1y');
     EndTime := clock_timestamp();
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
     duration = ROUND(Delta);
@@ -215,7 +215,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     -- populate documents
     FOR VAR_r IN
@@ -247,7 +247,7 @@ BEGIN
     --     RAISE NOTICE 'pick & resolve: % docs/s', docsPerSecond;
 	-- END LOOP;
 
-    -- SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '1m');
+    -- SELECT * INTO VAR_r FROM fetchq.doc_pick('foo', 0, 1, '1m');
     -- RAISE NOTICE '%', VAR_r;
 
     -- cleanup

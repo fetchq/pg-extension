@@ -1,8 +1,8 @@
 -- PICK AND LOCK A DOCUMENT THAT NEEDS TO BE EXECUTED NEXT
 -- returns:
 -- { document_structure }
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_doc_pick(CHARACTER VARYING, INTEGER, INTEGER, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_doc_pick(
+DROP FUNCTION IF EXISTS fetchq.doc_pick(CHARACTER VARYING, INTEGER, INTEGER, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.doc_pick(
 	PAR_queue VARCHAR,
 	PAR_version INTEGER,
 	PAR_limit INTEGER,
@@ -53,9 +53,9 @@ BEGIN
 	-- RAISE NOTICE 'aff rows %', VAR_affectedRows;
 	
 	-- update counters
-	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pkd', VAR_affectedRows);
-	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'act', VAR_affectedRows);
-	PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'pnd', VAR_affectedRows);
+	PERFORM fetchq.metric_log_increment(PAR_queue, 'pkd', VAR_affectedRows);
+	PERFORM fetchq.metric_log_increment(PAR_queue, 'act', VAR_affectedRows);
+	PERFORM fetchq.metric_log_decrement(PAR_queue, 'pnd', VAR_affectedRows);
 
 	-- return documents
 	VAR_q = 'SELECT subject, payload, version, priority, attempts, iterations, created_at, last_iteration, next_iteration, lock_upgrade ';

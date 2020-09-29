@@ -1,6 +1,6 @@
 -- PUSH MANY DOCUMENTS
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_doc_push(CHARACTER VARYING, INTEGER, TIMESTAMP WITH TIME ZONE, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_doc_push(
+DROP FUNCTION IF EXISTS fetchq.doc_push(CHARACTER VARYING, INTEGER, TIMESTAMP WITH TIME ZONE, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.doc_push(
 	PAR_queue VARCHAR,
 	PAR_version INTEGER,
 	PAR_nextIteration TIMESTAMP WITH TIME ZONE,
@@ -25,22 +25,22 @@ BEGIN
 	GET DIAGNOSTICS queued_docs := ROW_COUNT;
 
 	-- update generic counters
-	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'ent', queued_docs);
-	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'cnt', queued_docs);
+	PERFORM fetchq.metric_log_increment(PAR_queue, 'ent', queued_docs);
+	PERFORM fetchq.metric_log_increment(PAR_queue, 'cnt', queued_docs);
 
 	-- upate version counter
-	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'v' || PAR_version::text, queued_docs);
+	PERFORM fetchq.metric_log_increment(PAR_queue, 'v' || PAR_version::text, queued_docs);
 
     -- update status counter
 	IF VAR_status = 1 THEN
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pnd', queued_docs);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'pnd', queued_docs);
 
 		-- emit worker notifications
 		-- IF queued_docs > 0 THEN
 		-- 	PERFORM pg_notify(FORMAT('fetchq_pnd_%s', PAR_queue), queued_docs::text);
 		-- END IF;
 	ELSE
-		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pln', queued_docs);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'pln', queued_docs);
 
         -- emit worker notifications
 		-- IF queued_docs > 0 THEN

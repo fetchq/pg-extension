@@ -11,9 +11,9 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- set some basic metrics
-    PERFORM fetchq_catalog.fetchq_metric_log_set('foo', 'cnt', 10);
-    PERFORM fetchq_catalog.fetchq_metric_log_increment('foo', 'cnt', 5);
-    PERFORM fetchq_catalog.fetchq_metric_log_decrement('foo', 'cnt', 2);
+    PERFORM fetchq.metric_log_set('foo', 'cnt', 10);
+    PERFORM fetchq.metric_log_increment('foo', 'cnt', 5);
+    PERFORM fetchq.metric_log_decrement('foo', 'cnt', 2);
 
     -- fake some future metrics
     INSERT INTO fetchq.metrics_writes
@@ -23,13 +23,13 @@ BEGIN
     
 
     -- run maintenance
-    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.mnt_run_all(100);
+    SELECT * INTO VAR_r FROM fetchq.metric_log_pack();
     IF VAR_r.affected_rows <> 3 THEN
         RAISE EXCEPTION 'failed affected rows - %(count, expected 2, received %)', VAR_testName, VAR_r.affected_rows;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'cnt');
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'cnt');
     IF VAR_r.current_value <> 13 THEN
         RAISE EXCEPTION 'failed value - %(count, expected 13, received %)', VAR_testName, VAR_r.current_value;
     END IF;

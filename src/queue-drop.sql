@@ -2,8 +2,8 @@
 -- DROP A QUEUE
 -- returns:
 -- { was_dropped: TRUE }
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_drop(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_drop(
+DROP FUNCTION IF EXISTS fetchq.queue_drop(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.queue_drop(
 	PAR_queue VARCHAR,
 	OUT was_dropped BOOLEAN,
 	OUT queue_id INTEGER
@@ -17,7 +17,7 @@ BEGIN
 	VAR_tableName = VAR_tableName || PAR_queue;
 
 	-- drop indexes
-	-- PERFORM fetchq_catalog.fetchq_queue_drop_indexes(PAR_queue);
+	-- PERFORM fetchq.queue_drop_indexes(PAR_queue);
 
 	-- drop queue table
 	VAR_q = 'DROP TABLE %s__documents CASCADE;';

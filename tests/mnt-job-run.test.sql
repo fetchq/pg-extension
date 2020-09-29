@@ -9,13 +9,13 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1s', '{}');
-    -- PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1s', '{}');
+    -- PERFORM fetchq.metric_log_pack();
     UPDATE fetchq.jobs SET next_iteration = NOW() - INTERVAL '1s';
 
     -- run the test
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_mnt_job_run();
+    SELECT * INTO VAR_r FROM fetchq.mnt_job_run();
     IF VAR_r.success IS NULL THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;

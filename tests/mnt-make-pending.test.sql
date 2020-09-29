@@ -9,19 +9,19 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     -- insert dummy data & force the date in the past
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1 milliseconds', '{}');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1 milliseconds', '{}');
     UPDATE fetchq_catalog.foo__documents SET next_iteration = NOW() - INTERVAL '1 milliseconds';
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 0, NOW() + INTERVAL '1 seconds', '{}');
-    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 0, NOW() - INTERVAL '1 seconds', '{}');
+    PERFORM fetchq.doc_push('foo', 'a2', 0, 0, NOW() + INTERVAL '1 seconds', '{}');
+    PERFORM fetchq.doc_push('foo', 'a3', 0, 0, NOW() - INTERVAL '1 seconds', '{}');
 
-    PERFORM fetchq_catalog.fetchq_mnt_make_pending('foo', 100);
-    PERFORM fetchq_catalog.fetchq_metric_log_pack();
+    PERFORM fetchq.mnt_make_pending('foo', 100);
+    PERFORM fetchq.metric_log_pack();
 
     -- run the test
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'pnd');
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pnd');
     IF VAR_r.current_value != 2 THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;

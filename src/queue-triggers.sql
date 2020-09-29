@@ -5,7 +5,7 @@
 --
 
 
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_trigger_docs_notify_insert() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION fetchq.trigger_docs_notify_insert() RETURNS TRIGGER AS $$
 DECLARE
 	VAR_event VARCHAR = 'pnd';
     VAR_notify VARCHAR;
@@ -92,7 +92,7 @@ BEGIN
     -- after insert
     VAR_q = 'CREATE TRIGGER fetchq__%s__trg_notify_insert AFTER INSERT ';
 	VAR_q = VAR_q || 'ON fetchq_catalog.%s__documents ';
-    VAR_q = VAR_q || 'FOR EACH ROW EXECUTE PROCEDURE fetchq_catalog.fetchq_trigger_docs_notify_insert();';
+    VAR_q = VAR_q || 'FOR EACH ROW EXECUTE PROCEDURE fetchq.trigger_docs_notify_insert();';
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;
 

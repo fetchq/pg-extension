@@ -9,7 +9,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq.queue_create('foo');
 
     -- assert normal indexes
     SELECT count(*) as total INTO VAR_r FROM pg_indexes WHERE schemaname = 'fetchq_catalog' AND tablename = 'foo__documents';
@@ -18,7 +18,7 @@ BEGIN
     END IF;
 
     -- assert dropping result
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_indexes('foo');
+    SELECT * INTO VAR_r FROM fetchq.queue_drop_indexes('foo');
     IF VAR_r.was_dropped IS NOT TRUE THEN
         RAISE EXCEPTION 'failed - unexpeted response while dropping indexes';
     END IF;

@@ -2,8 +2,8 @@
 -- CREATED A QUEUE
 -- returns:
 -- { was_created: TRUE }
-DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_create(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_create(
+DROP FUNCTION IF EXISTS fetchq.queue_create(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.queue_create(
 	PAR_queue VARCHAR,
 	OUT was_created BOOLEAN,
 	OUT queue_id INTEGER
@@ -14,7 +14,7 @@ BEGIN
 	was_created = TRUE;
 
 	-- pick the queue id, it creates the queue's index entry if doesn't exists already
-	SELECT t.queue_id INTO queue_id FROM fetchq_catalog.fetchq_queue_get_id(PAR_queue) AS t;
+	SELECT t.queue_id INTO queue_id FROM fetchq.queue_get_id(PAR_queue) AS t;
 
 	VAR_q = 'CREATE TABLE fetchq_catalog.%s__documents (';
 	VAR_q = VAR_q || 'subject CHARACTER VARYING(50) NOT NULL PRIMARY KEY,';
@@ -56,7 +56,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- add indexes to the table
-	PERFORM fetchq_catalog.fetchq_queue_create_indexes(PAR_queue);
+	PERFORM fetchq.queue_create_indexes(PAR_queue);
 	
 	-- enable notifications
 	-- (slows down by half insert performance!)
