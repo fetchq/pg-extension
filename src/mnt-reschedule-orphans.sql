@@ -1,8 +1,8 @@
 -- MAINTENANCE // RESCHEDULE ORPHANS
 -- returns:
 -- { affected_rows: 1 }
-DROP FUNCTION IF EXISTS fetchq_mnt_reschedule_orphans(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_reschedule_orphans(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_mnt_reschedule_orphans(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_mnt_reschedule_orphans(
 	PAR_queue VARCHAR,
 	PAR_limit INTEGER,
 	OUT affected_rows INTEGER

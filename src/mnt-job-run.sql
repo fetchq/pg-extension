@@ -45,7 +45,7 @@ BEGIN
         WHEN VAR_r.task = 'lgp' THEN
             PERFORM fetchq_catalog.fetchq_metric_log_pack();
         WHEN VAR_r.task = 'mnt' THEN
-            PERFORM fetchq_mnt_run(VAR_r.queue, VAR_limit);
+            PERFORM fetchq_catalog.fetchq_mnt_run(VAR_r.queue, VAR_limit);
         WHEN VAR_r.task = 'drp' THEN
             PERFORM fetchq_queue_drop_metrics(VAR_r.queue);
             PERFORM fetchq_queue_drop_errors(VAR_r.queue);

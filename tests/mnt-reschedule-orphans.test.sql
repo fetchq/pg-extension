@@ -16,7 +16,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     UPDATE fetchq_catalog.fetchq__foo__documents SET next_iteration = NOW() - INTERVAL '1 milliseconds';
     
-    PERFORM fetchq_mnt_reschedule_orphans('foo', 100);
+    PERFORM fetchq_catalog.fetchq_mnt_reschedule_orphans('foo', 100);
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run the test
@@ -52,7 +52,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     UPDATE fetchq_catalog.fetchq__foo__documents SET next_iteration = NOW() - INTERVAL '1 milliseconds';
     
-    PERFORM fetchq_mnt_reschedule_orphans('foo', 100);
+    PERFORM fetchq_catalog.fetchq_mnt_reschedule_orphans('foo', 100);
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run the test

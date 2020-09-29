@@ -1,8 +1,8 @@
 -- MAINTENANCE // CREATE PENDINGS
 -- returns:
 -- { affected_rows: 1 }
-DROP FUNCTION IF EXISTS fetchq_mnt_make_pending(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_make_pending(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_mnt_make_pending(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_mnt_make_pending(
 	PAR_queue VARCHAR,
 	PAR_limit INTEGER,
 	OUT affected_rows INTEGER

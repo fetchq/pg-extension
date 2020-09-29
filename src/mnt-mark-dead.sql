@@ -1,5 +1,5 @@
-DROP FUNCTION IF EXISTS fetchq_mnt_mark_dead(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_mark_dead(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_mnt_mark_dead(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_mnt_mark_dead(
 	PAR_queue VARCHAR,
 	PAR_limit INTEGER,
 	OUT affected_rows INTEGER

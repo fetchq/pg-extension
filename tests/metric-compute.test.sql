@@ -33,7 +33,7 @@ BEGIN
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_catalog.fetchq_doc_drop('foo', VAR_r.subject);
 
-    PERFORM fetchq_mnt_run_all(100);
+    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- get computed metrics

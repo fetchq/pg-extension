@@ -36,7 +36,7 @@ BEGIN
     WHERE subject = 'a2';
 
     -- run the maintenance
-    SELECT * INTO VAR_r FROM fetchq_mnt();
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_mnt();
 
     -- test maintenance output
     IF VAR_r.processed != 8 THEN

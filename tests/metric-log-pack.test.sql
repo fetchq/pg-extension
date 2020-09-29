@@ -23,7 +23,7 @@ BEGIN
     
 
     -- run maintenance
-    PERFORM fetchq_mnt_run_all(100);
+    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_log_pack();
     IF VAR_r.affected_rows <> 3 THEN
         RAISE EXCEPTION 'failed affected rows - %(count, expected 2, received %)', VAR_testName, VAR_r.affected_rows;

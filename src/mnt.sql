@@ -1,5 +1,5 @@
-DROP FUNCTION IF EXISTS fetchq_mnt(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_mnt(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_mnt(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_mnt(
     PAR_lockDuration VARCHAR,
 	OUT processed INTEGER,
 	OUT packed INTEGER
@@ -24,15 +24,15 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq_mnt();
-CREATE OR REPLACE FUNCTION fetchq_mnt(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_mnt();
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_mnt(
 	OUT processed INTEGER,
 	OUT packed INTEGER
 ) AS $$
 DECLARE
     VAR_r RECORD;
 BEGIN
-    SELECT * INTO VAR_r FROM fetchq_mnt('5m');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_mnt('5m');
     processed = VAR_r.processed;
     packed = VAR_r.packed;
 END; $$

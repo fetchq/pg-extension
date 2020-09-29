@@ -17,7 +17,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 0, NOW() + INTERVAL '1 seconds', '{}');
     PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 0, NOW() - INTERVAL '1 seconds', '{}');
 
-    PERFORM fetchq_mnt_make_pending('foo', 100);
+    PERFORM fetchq_catalog.fetchq_mnt_make_pending('foo', 100);
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run the test

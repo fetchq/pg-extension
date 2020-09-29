@@ -17,7 +17,7 @@ BEGIN
 
     -- perform reschedule
     PERFORM fetchq_catalog.fetchq_doc_kill('foo', 'a1');
-    PERFORM fetchq_mnt_run_all(100);
+    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- -- get first document
@@ -54,7 +54,7 @@ BEGIN
 
     -- perform reschedule
     PERFORM fetchq_catalog.fetchq_doc_kill('foo', 'a1', '{"a":22}');
-    PERFORM fetchq_mnt_run_all(100);
+    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- -- get first document

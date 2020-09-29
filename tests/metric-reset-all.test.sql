@@ -48,7 +48,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_drop('faa', VAR_r.subject);
 
     -- run maintenance
-    PERFORM fetchq_mnt_run_all(100);
+    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- empty stats so to force recreate

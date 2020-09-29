@@ -24,7 +24,7 @@ BEGIN
     SET next_iteration = NOW() - INTERVAL '1 milliseconds'
     WHERE subject = 'a2';
 
-    PERFORM fetchq_mnt_run('foo', 100);
+    PERFORM fetchq_catalog.fetchq_mnt_run('foo', 100);
     PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 3, '5m');
 
     UPDATE fetchq__foo__documents
@@ -35,7 +35,7 @@ BEGIN
     SET next_iteration = NOW() - INTERVAL '1 milliseconds'
     WHERE subject = 'a2';
 
-    PERFORM fetchq_mnt_run('foo', 100);
+    PERFORM fetchq_catalog.fetchq_mnt_run('foo', 100);
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run the test
@@ -82,7 +82,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_push('faa', 'a2', 0, 0, NOW() + INTERVAL '1s', '{}');
     PERFORM fetchq_catalog.fetchq_doc_push('faa', 'a3', 0, 0, NOW() - INTERVAL '1s', '{}');
 
-    PERFORM fetchq_mnt_run_all(100);
+    PERFORM fetchq_catalog.fetchq_mnt_run_all(100);
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run the test
