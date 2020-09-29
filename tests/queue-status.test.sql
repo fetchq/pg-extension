@@ -14,17 +14,17 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
     PERFORM fetchq_catalog.fetchq_queue_create('faa');
     
-    SELECT COUNT(*) INTO VAR_numQueues FROM fetchq_queue_status();
+    SELECT COUNT(*) INTO VAR_numQueues FROM fetchq_catalog.fetchq_queue_status();
     IF VAR_numQueues != 2 THEN
         RAISE EXCEPTION 'failed - %(count, got %)', VAR_testName, VAR_numQueues;
     END IF;
 
-    SELECT COUNT(*) INTO VAR_numQueues FROM fetchq_queue_status('foo');
+    SELECT COUNT(*) INTO VAR_numQueues FROM fetchq_catalog.fetchq_queue_status('foo');
     IF VAR_numQueues != 1 THEN
         RAISE EXCEPTION 'failed - %(count, got %)', VAR_testName, VAR_numQueues;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq_queue_status('foo');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_status('foo');
     IF VAR_r.is_active IS NOT TRUE THEN
         RAISE EXCEPTION 'failed - %(is_active, got %)', VAR_testName, VAR_r.is_active;
     END IF;

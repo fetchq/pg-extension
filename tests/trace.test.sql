@@ -29,7 +29,7 @@ BEGIN
     SELECT * INTO VAR_r from fetchq_catalog.fetchq_doc_pick('q3', 0, 1, '2s');
     PERFORM fetchq_catalog.fetchq_doc_reject('q3', VAR_r.subject, 'error message', VAR_r.payload, 'refId');
 
-    SELECT * INTO VAR_r FROM fetchq_trace('d1');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_trace('d1');
     -- RAISE NOTICE '%', VAR_r;
     -- RAISE EXCEPTION '##################################################################';
 

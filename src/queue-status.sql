@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_queue_status();
-CREATE OR REPLACE FUNCTION fetchq_queue_status() RETURNS TABLE(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_status();
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_status() RETURNS TABLE(
     id INTEGER,
 	name VARCHAR,
 	is_active BOOLEAN
@@ -17,8 +17,8 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq_queue_status(VARCHAR);
-CREATE OR REPLACE FUNCTION fetchq_queue_status(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_status(VARCHAR);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_status(
     PAR_queue VARCHAR
 ) RETURNS TABLE(
     id INTEGER,
