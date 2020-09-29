@@ -1,3 +1,6 @@
+DROP SCHEMA IF EXISTS public CASCADE;
+CREATE SCHEMA public;
+
 DROP SCHEMA IF EXISTS fetchq_catalog CASCADE;
 CREATE SCHEMA fetchq_catalog;
 
