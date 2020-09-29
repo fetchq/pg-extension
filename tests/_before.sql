@@ -27,7 +27,7 @@ BEGIN
     CREATE SCHEMA IF NOT EXISTS fetchq_catalog;
 
     CREATE EXTENSION fetchq;
-    PERFORM fetchq_init();
+    PERFORM fetchq_catalog.fetchq_init();
     done = TRUE;
 END; $$
 LANGUAGE plpgsql;

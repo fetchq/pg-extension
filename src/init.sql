@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_init(
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_init(
     OUT was_initialized BOOLEAN
 ) AS $$
 BEGIN
