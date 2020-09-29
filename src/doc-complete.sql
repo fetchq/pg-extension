@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_doc_complete(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_doc_complete(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_doc_complete(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_doc_complete(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	OUT affected_rows INTEGER
@@ -34,8 +34,8 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq_doc_complete(CHARACTER VARYING, CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_doc_complete(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_doc_complete(CHARACTER VARYING, CHARACTER VARYING, JSONB);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_doc_complete(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_payload JSONB,

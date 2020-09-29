@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_doc_drop(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_doc_drop(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_doc_drop(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_doc_drop(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	OUT affected_rows INTEGER

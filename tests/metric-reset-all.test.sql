@@ -23,11 +23,11 @@ BEGIN
     SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_doc_reject('foo', VAR_r.subject, 'foo', '{"a":1}');
     SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '5m');
-    PERFORM fetchq_doc_complete('foo', VAR_r.subject);
+    PERFORM fetchq_catalog.fetchq_doc_complete('foo', VAR_r.subject);
     SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '5m');
-    PERFORM fetchq_doc_kill('foo', VAR_r.subject);
+    PERFORM fetchq_catalog.fetchq_doc_kill('foo', VAR_r.subject);
     SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '5m');
-    PERFORM fetchq_doc_drop('foo', VAR_r.subject);
+    PERFORM fetchq_catalog.fetchq_doc_drop('foo', VAR_r.subject);
 
     -- insert dummy data - queue faa
     PERFORM fetchq_catalog.fetchq_queue_create('faa');
@@ -41,11 +41,11 @@ BEGIN
     SELECT * INTO VAR_r FROM fetchq_doc_pick('faa', 0, 1, '5m');
     PERFORM fetchq_doc_reject('faa', VAR_r.subject, 'faa', '{"a":1}');
     SELECT * INTO VAR_r FROM fetchq_doc_pick('faa', 0, 1, '5m');
-    PERFORM fetchq_doc_complete('faa', VAR_r.subject);
+    PERFORM fetchq_catalog.fetchq_doc_complete('faa', VAR_r.subject);
     SELECT * INTO VAR_r FROM fetchq_doc_pick('faa', 0, 1, '5m');
-    PERFORM fetchq_doc_kill('faa', VAR_r.subject);
+    PERFORM fetchq_catalog.fetchq_doc_kill('faa', VAR_r.subject);
     SELECT * INTO VAR_r FROM fetchq_doc_pick('faa', 0, 1, '5m');
-    PERFORM fetchq_doc_drop('faa', VAR_r.subject);
+    PERFORM fetchq_catalog.fetchq_doc_drop('faa', VAR_r.subject);
 
     -- run maintenance
     PERFORM fetchq_mnt_run_all(100);

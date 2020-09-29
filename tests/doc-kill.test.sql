@@ -16,7 +16,7 @@ BEGIN
     SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
-    PERFORM fetchq_doc_kill('foo', 'a1');
+    PERFORM fetchq_catalog.fetchq_doc_kill('foo', 'a1');
     PERFORM fetchq_mnt_run_all(100);
     PERFORM fetchq_metric_log_pack();
 
@@ -53,7 +53,7 @@ BEGIN
     SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
-    PERFORM fetchq_doc_kill('foo', 'a1', '{"a":22}');
+    PERFORM fetchq_catalog.fetchq_doc_kill('foo', 'a1', '{"a":22}');
     PERFORM fetchq_mnt_run_all(100);
     PERFORM fetchq_metric_log_pack();
 

@@ -24,7 +24,7 @@ BEGIN
     PERFORM fetchq_log_error('q1', VAR_r.subject, 'just a log', '{}');
     PERFORM fetchq_doc_push('q2', VAR_r.subject, 0, 0, NOW() - INTERVAL '1ms', VAR_r.payload);
     SELECT * INTO VAR_r from fetchq_doc_pick('q2', 0, 1, '2s');
-    PERFORM fetchq_doc_complete('q2', VAR_r.subject);
+    PERFORM fetchq_catalog.fetchq_doc_complete('q2', VAR_r.subject);
     PERFORM fetchq_doc_push('q3', VAR_r.subject, 0, 0, NOW() - INTERVAL '1ms', VAR_r.payload);
     SELECT * INTO VAR_r from fetchq_doc_pick('q3', 0, 1, '2s');
     PERFORM fetchq_doc_reject('q3', VAR_r.subject, 'error message', VAR_r.payload, 'refId');
