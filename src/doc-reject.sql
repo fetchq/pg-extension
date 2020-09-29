@@ -39,14 +39,14 @@ BEGIN
         PERFORM fetchq_catalog.fetchq_log_error(PAR_queue, VAR_r.subject, PAR_message, PAR_details);
 
         -- update metrics
-        PERFORM fetchq_metric_log_increment(PAR_queue, 'prc', 1);
-        PERFORM fetchq_metric_log_increment(PAR_queue, 'err', 1);
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'rej', 1);
-		PERFORM fetchq_metric_log_decrement(PAR_queue, 'act', 1);
+        PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'prc', 1);
+        PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'err', 1);
+		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'rej', 1);
+		PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'act', 1);
 		IF VAR_r.status = -1 THEN
-			PERFORM fetchq_metric_log_increment(PAR_queue, 'kll', 1);
+			PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'kll', 1);
 		ELSE
-			PERFORM fetchq_metric_log_increment(PAR_queue, 'pnd', 1);
+			PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pnd', 1);
 		END IF;
     END IF;
 
@@ -93,14 +93,14 @@ BEGIN
         PERFORM fetchq_catalog.fetchq_log_error(PAR_queue, VAR_r.subject, PAR_message, PAR_details, PAR_refId);
 
         -- update metrics
-        PERFORM fetchq_metric_log_increment(PAR_queue, 'prc', 1);
-        PERFORM fetchq_metric_log_increment(PAR_queue, 'err', 1);
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'rej', 1);
-		PERFORM fetchq_metric_log_decrement(PAR_queue, 'act', 1);
+        PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'prc', 1);
+        PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'err', 1);
+		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'rej', 1);
+		PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'act', 1);
 		IF VAR_r.status = -1 THEN
-			PERFORM fetchq_metric_log_increment(PAR_queue, 'kll', 1);
+			PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'kll', 1);
 		ELSE
-			PERFORM fetchq_metric_log_increment(PAR_queue, 'pnd', 1);
+			PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pnd', 1);
 		END IF;
     END IF;
 

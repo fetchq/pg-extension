@@ -12,8 +12,8 @@ BEGIN
 
     -- set some basic metrics
     PERFORM fetchq_metric_log_set('foo', 'cnt', 10);
-    PERFORM fetchq_metric_log_increment('foo', 'cnt', 5);
-    PERFORM fetchq_metric_log_decrement('foo', 'cnt', 2);
+    PERFORM fetchq_catalog.fetchq_metric_log_increment('foo', 'cnt', 5);
+    PERFORM fetchq_catalog.fetchq_metric_log_decrement('foo', 'cnt', 2);
 
     -- fake some future metrics
     INSERT INTO fetchq_catalog.fetchq_sys_metrics_writes

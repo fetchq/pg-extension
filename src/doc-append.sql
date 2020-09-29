@@ -37,22 +37,22 @@ BEGIN
     GET DIAGNOSTICS VAR_queuedDocs := ROW_COUNT;
 
     -- update generic counters
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'ent', VAR_queuedDocs);
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'cnt', VAR_queuedDocs);
+	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'ent', VAR_queuedDocs);
+	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'cnt', VAR_queuedDocs);
 
 	-- upate version counter
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'v' || PAR_version::text, VAR_queuedDocs);
+	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'v' || PAR_version::text, VAR_queuedDocs);
 
     -- update status counter
 	IF VAR_status = 1 THEN
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'pnd', VAR_queuedDocs);
+		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pnd', VAR_queuedDocs);
 
         -- emit worker notifications
 		-- IF VAR_queuedDocs > 0 THEN
 		-- 	PERFORM pg_notify(FORMAT('fetchq_pnd_%s', PAR_queue), VAR_queuedDocs::text);
 		-- END IF;
 	ELSE
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'pln', VAR_queuedDocs);
+		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pln', VAR_queuedDocs);
 
         -- emit worker notifications
 		-- IF VAR_queuedDocs > 0 THEN

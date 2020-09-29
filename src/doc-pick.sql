@@ -53,9 +53,9 @@ BEGIN
 	-- RAISE NOTICE 'aff rows %', VAR_affectedRows;
 	
 	-- update counters
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'pkd', VAR_affectedRows);
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'act', VAR_affectedRows);
-	PERFORM fetchq_metric_log_decrement(PAR_queue, 'pnd', VAR_affectedRows);
+	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pkd', VAR_affectedRows);
+	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'act', VAR_affectedRows);
+	PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'pnd', VAR_affectedRows);
 
 	-- return documents
 	VAR_q = 'SELECT subject, payload, version, priority, attempts, iterations, created_at, last_iteration, next_iteration, lock_upgrade ';

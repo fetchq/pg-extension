@@ -27,8 +27,8 @@ BEGIN
 
     -- RAISE NOTICE '%', affected_rows;
 
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'pnd', affected_rows);
-	PERFORM fetchq_metric_log_decrement(PAR_queue, 'pln', affected_rows);
+	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'pnd', affected_rows);
+	PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'pln', affected_rows);
 
 	-- emit worker notifications
 	-- IF affected_rows > 0 THEN

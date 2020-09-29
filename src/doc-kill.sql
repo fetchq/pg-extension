@@ -23,9 +23,9 @@ BEGIN
 
 	-- Update counters
 	IF affected_rows > 0 THEN
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'prc', affected_rows);
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'kll', affected_rows);
-		PERFORM fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
+		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'prc', affected_rows);
+		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'kll', affected_rows);
+		PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
 	END IF;
 
 	EXCEPTION WHEN OTHERS THEN BEGIN END;
@@ -59,9 +59,9 @@ BEGIN
 
 	-- Update counters
 	IF affected_rows > 0 THEN
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'prc', affected_rows);
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'kll', affected_rows);
-		PERFORM fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
+		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'prc', affected_rows);
+		PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'kll', affected_rows);
+		PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
 	END IF;
 
 	EXCEPTION WHEN OTHERS THEN BEGIN END;

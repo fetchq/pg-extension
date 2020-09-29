@@ -22,10 +22,10 @@ BEGIN
 	EXECUTE FORMAT(VAR_q, PAR_queue, PAR_queue, VAR_r.max_attempts, PAR_limit);
 	GET DIAGNOSTICS affected_rows := ROW_COUNT;
 
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'err', affected_rows);
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'orp', affected_rows);
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'kll', affected_rows);
-	PERFORM fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
+	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'err', affected_rows);
+	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'orp', affected_rows);
+	PERFORM fetchq_catalog.fetchq_metric_log_increment(PAR_queue, 'kll', affected_rows);
+	PERFORM fetchq_catalog.fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
 
 	EXCEPTION WHEN OTHERS THEN BEGIN
 		affected_rows = NULL;

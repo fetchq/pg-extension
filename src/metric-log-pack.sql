@@ -34,7 +34,7 @@ BEGIN
 		AND metric = VAR_r.metric
 		AND increment IS NOT NULL;
 
-		PERFORM fetchq_metric_increment(VAR_r.queue, VAR_r.metric, VAR_sum);
+		PERFORM fetchq_catalog.fetchq_metric_increment(VAR_r.queue, VAR_r.metric, VAR_sum);
 	END LOOP;
 
 	-- drop records that have been worked out
