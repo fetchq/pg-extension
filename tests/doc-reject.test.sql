@@ -32,7 +32,7 @@ BEGIN
     END IF;
 
     -- get the logged error message
-    SELECT * INTO VAR_r from fetchq_data.foo__errors
+    SELECT * INTO VAR_r from fetchq_data.foo__logs
     WHERE subject = VAR_r.subject
     AND message = 'foo'
     AND ref_id IS NULL;
@@ -82,7 +82,7 @@ BEGIN
     END IF;
 
     -- get the logged error message
-    SELECT * INTO VAR_r from fetchq_data.foo__errors
+    SELECT * INTO VAR_r from fetchq_data.foo__logs
     WHERE subject = VAR_r.subject
     AND message = 'foo'
     AND ref_id = 'xxx';

@@ -34,7 +34,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- errors table
-	VAR_q = 'CREATE TABLE fetchq_data.%s__errors (';
+	VAR_q = 'CREATE TABLE fetchq_data.%s__logs (';
 	VAR_q = VAR_q || 'id SERIAL PRIMARY KEY,';
 	VAR_q = VAR_q || 'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),';
 	VAR_q = VAR_q || 'subject CHARACTER VARYING(50) NOT NULL,';

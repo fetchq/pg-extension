@@ -11,7 +11,7 @@ DECLARE
     VAR_q VARCHAR;
 BEGIN
 
-    VAR_q = 'INSERT INTO fetchq_data.%s__errors(';
+    VAR_q = 'INSERT INTO fetchq_data.%s__logs(';
 	VAR_q = VAR_q || 'created_at, subject, message, details';
     VAR_q = VAR_q || ') VALUES(';
     VAR_q = VAR_q || 'NOW(), ';
@@ -45,7 +45,7 @@ DECLARE
     VAR_q VARCHAR;
 BEGIN
 
-    VAR_q = 'INSERT INTO fetchq_data.%s__errors(';
+    VAR_q = 'INSERT INTO fetchq_data.%s__logs(';
 	VAR_q = VAR_q || 'created_at, subject, message, details, ref_id';
     VAR_q = VAR_q || ') VALUES(';
     VAR_q = VAR_q || 'NOW(), ';

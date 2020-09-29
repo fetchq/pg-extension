@@ -25,7 +25,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- drop errors table
-	VAR_q = 'DROP TABLE %s__errors CASCADE;';
+	VAR_q = 'DROP TABLE %s__logs CASCADE;';
 	VAR_q = FORMAT(VAR_q, VAR_tableName);
 	EXECUTE VAR_q;
 

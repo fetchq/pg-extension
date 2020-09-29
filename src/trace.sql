@@ -42,7 +42,7 @@ BEGIN
 		END LOOP;
 		
 		-- ingest errors
-		VAR_queueTableName = CONCAT('fetchq_data.', VAR_queues.name, '__errors');
+		VAR_queueTableName = CONCAT('fetchq_data.', VAR_queues.name, '__logs');
 		FOR VAR_record IN
 			EXECUTE FORMAT('SELECT * FROM %s WHERE subject = ''%s''', VAR_queueTableName, PAR_subject)
 		LOOP
