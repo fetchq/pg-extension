@@ -1,6 +1,6 @@
 
 -- provides a full JSON rapresentation of the event
-CREATE OR REPLACE FUNCTION fetchq_trigger_notify_as_json() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_trigger_notify_as_json() RETURNS TRIGGER AS $$
 DECLARE
 	rec RECORD;
     payload TEXT;

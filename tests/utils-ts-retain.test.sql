@@ -37,8 +37,8 @@ BEGIN
    ( '20120-11-01 13:40:03' );
 
     -- perform retention rules
-    PERFORM fetchq_utils_ts_retain( 'fetchq_catalog.test_utils_ts_retain', 'created_at', 'minute', '2010-10-01 11:00:00', '2010-10-01 13:00:00');
-    PERFORM fetchq_utils_ts_retain( 'fetchq_catalog.test_utils_ts_retain', 'created_at', 'hour', '2010-11-01 00:00:00', '2010-11-30 11:59:00');
+    PERFORM fetchq_catalog.fetchq_utils_ts_retain( 'fetchq_catalog.test_utils_ts_retain', 'created_at', 'minute', '2010-10-01 11:00:00', '2010-10-01 13:00:00');
+    PERFORM fetchq_catalog.fetchq_utils_ts_retain( 'fetchq_catalog.test_utils_ts_retain', 'created_at', 'hour', '2010-11-01 00:00:00', '2010-11-30 11:59:00');
 
     SELECT COUNT(*) AS tot INTO VAR_r FROM fetchq_catalog.test_utils_ts_retain;
     IF VAR_r.tot IS NULL THEN

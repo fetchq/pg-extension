@@ -27,7 +27,7 @@ BEGIN
         select * INTO VAR_rowCfg from jsonb_to_record(VAR_rowSrc::jsonb) as x(a text, b text, c text);
         -- RAISE NOTICE 'from: %, to: %, retain: %', VAR_rowCfg.a, VAR_rowCfg.b, VAR_rowCfg.c;
 
-        VAR_q = 'SELECT * FROM fetchq_utils_ts_retain(''fetchq__%s__metrics'', ''created_at'', ''%s'', NOW() - INTERVAL ''%s'', NOW() - INTERVAL ''%s'')';
+        VAR_q = 'SELECT * FROM fetchq_catalog.fetchq_utils_ts_retain(''fetchq__%s__metrics'', ''created_at'', ''%s'', NOW() - INTERVAL ''%s'', NOW() - INTERVAL ''%s'')';
         VAR_q = FORMAT(VAR_q, PAR_queue, VAR_rowCfg.c, VAR_rowCfg.a, VAR_rowCfg.b);
         -- RAISE NOTICE '%', VAR_q;
         EXECUTE VAR_q INTO VAR_rowRes;

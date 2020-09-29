@@ -23,7 +23,7 @@ BEGIN
 
     CREATE TRIGGER fetchq_trigger_sys_queues_insert AFTER INSERT OR UPDATE OR DELETE
 	ON fetchq_catalog.fetchq_sys_queues
-    FOR EACH ROW EXECUTE PROCEDURE fetchq_trigger_notify_as_json();
+    FOR EACH ROW EXECUTE PROCEDURE fetchq_catalog.fetchq_trigger_notify_as_json();
 
     -- Metrics Overview
     CREATE TABLE IF NOT EXISTS fetchq_catalog.fetchq_sys_metrics(
