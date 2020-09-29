@@ -56,7 +56,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- add indexes to the table
-	PERFORM fetchq_queue_create_indexes(PAR_queue);
+	PERFORM fetchq_catalog.fetchq_queue_create_indexes(PAR_queue);
 	
 	-- enable notifications
 	-- (slows down by half insert performance!)

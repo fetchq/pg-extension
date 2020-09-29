@@ -16,7 +16,7 @@ BEGIN
         RAISE EXCEPTION 'failed -(expected: 1, got: %)', VAR_r.total;
     END IF;
 
-    PERFORM fetchq_queue_create_indexes('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create_indexes('foo');
 
     SELECT count(*) as total INTO VAR_r FROM pg_indexes WHERE schemaname = 'fetchq_catalog' AND tablename = 'fetchq__foo__documents';
     IF VAR_r.total != 6 THEN
