@@ -1,0 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS fetchq;
+
+SELECT * FROM fetchq.init();
+SELECT * FROM fetchq.info();

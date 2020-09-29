@@ -1,6 +1,7 @@
-# FetchQ Postgres Extension
+# Fetchq Postgres Extension
 
-Postgres extension that enables FetchQ capabilities
+Postgres extension that enables FetchQ capabilities.
+
 
 ## How to Work this out
 
@@ -12,6 +13,29 @@ Postgres extension that enables FetchQ capabilities
 - `make init` re-initialize a running Postgres instance
 
 ---
+
+## Quick Start
+
+You can easily run the production version of Fetchq using Docker on a Linux machine:
+
+```bash
+make production
+```
+
+At this point you can connect to:
+
+```
+postgres://postgres:${POSTGRES_PASSWORD:-postgres}@postgres:5432/postgres
+```
+
+This will give you an empty PostgreSQL instance with Fetchq installed as an extension and initialized as well.
+
+From here, you can just start creating queues and handling documents:
+
+```sql
+select * from fetchq.queue_create('foo');
+select * from fetchq.doc_append('foo', '{"a":1}', 0, 0);
+```
 
 ## Management Tables
 
