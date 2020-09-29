@@ -48,7 +48,7 @@ BEGIN
             PERFORM fetchq.mnt_run(VAR_r.queue, VAR_limit);
         WHEN VAR_r.task = 'drp' THEN
             PERFORM fetchq.queue_drop_metrics(VAR_r.queue);
-            PERFORM fetchq.queue_drop_errors(VAR_r.queue);
+            PERFORM fetchq.queue_drop_logs(VAR_r.queue);
         WHEN VAR_r.task = 'sts' THEN
             PERFORM fetchq.metric_snap(VAR_r.queue);
         ELSE

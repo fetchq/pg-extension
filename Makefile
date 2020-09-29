@@ -72,10 +72,10 @@ build:
 		$(CURDIR)/src/queue-drop.sql \
 		$(CURDIR)/src/queue-set-max-attempts.sql \
 		$(CURDIR)/src/queue-set-current-version.sql \
-		$(CURDIR)/src/queue-set-errors-retention.sql \
+		$(CURDIR)/src/queue-set-logs-retention.sql \
 		$(CURDIR)/src/queue-set-metrics-retention.sql \
 		$(CURDIR)/src/queue-drop-version.sql \
-		$(CURDIR)/src/queue-drop-errors.sql \
+		$(CURDIR)/src/queue-drop-logs.sql \
 		$(CURDIR)/src/queue-drop-metrics.sql \
 		$(CURDIR)/src/queue-drop-indexes.sql \
 		$(CURDIR)/src/queue-top.sql \

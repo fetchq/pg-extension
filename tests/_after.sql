@@ -40,9 +40,9 @@
 -- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_set_max_attempts_01();
 -- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_drop_version_01();
 -- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_drop_version_02();
--- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_drop_errors_01();
--- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_drop_errors_02();
--- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_drop_errors_03();
+-- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_drop_logs_01();
+-- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_drop_logs_02();
+-- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_drop_logs_03();
 -- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_drop_metrics_01();
 -- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_drop_metrics_02();
 -- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__queue_drop_indexes_01();

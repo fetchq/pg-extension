@@ -16,7 +16,7 @@ BEGIN
         is_active BOOLEAN DEFAULT true,
         current_version INTEGER DEFAULT 0,
         max_attempts INTEGER DEFAULT 5,
-        errors_retention VARCHAR(25) DEFAULT '24h',
+        logs_retention VARCHAR(25) DEFAULT '24h',
         metrics_retention JSONB DEFAULT '[]',
         config JSONB DEFAULT '{}'
     );

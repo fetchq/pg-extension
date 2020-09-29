@@ -2,8 +2,8 @@
 -- DROP A QUEUE ERRORS WITH A RETENTION INTERVAL
 -- returns:
 -- { affected_rows: INTEGER }
-DROP FUNCTION IF EXISTS fetchq.queue_drop_errors(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq.queue_drop_errors(
+DROP FUNCTION IF EXISTS fetchq.queue_drop_logs(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.queue_drop_logs(
 	PAR_queue VARCHAR,
     PAR_retention VARCHAR,
 	OUT affected_rows INTEGER
@@ -27,8 +27,8 @@ LANGUAGE plpgsql;
 -- DROP A QUEUE ERRORS WITH A RETENTION DATE
 -- returns:
 -- { affected_rows: INTEGER }
-DROP FUNCTION IF EXISTS fetchq.queue_drop_errors(CHARACTER VARYING, TIMESTAMP WITH TIME ZONE);
-CREATE OR REPLACE FUNCTION fetchq.queue_drop_errors(
+DROP FUNCTION IF EXISTS fetchq.queue_drop_logs(CHARACTER VARYING, TIMESTAMP WITH TIME ZONE);
+CREATE OR REPLACE FUNCTION fetchq.queue_drop_logs(
 	PAR_queue VARCHAR,
     PAR_retention TIMESTAMP WITH TIME ZONE,
 	OUT affected_rows INTEGER
@@ -52,8 +52,8 @@ LANGUAGE plpgsql;
 -- DROP A QUEUE ERRORS WITH A RETENTION FROM QUEUE SETTINGS
 -- returns:
 -- { affected_rows: INTEGER }
-DROP FUNCTION IF EXISTS fetchq.queue_drop_errors(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq.queue_drop_errors(
+DROP FUNCTION IF EXISTS fetchq.queue_drop_logs(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.queue_drop_logs(
 	PAR_queue VARCHAR,
 	OUT affected_rows INTEGER
 ) AS $$
@@ -62,16 +62,16 @@ DECLARE
 	VAR_r RECORD;
     VAR_retention VARCHAR = '24h';
 BEGIN
-    VAR_q = 'SELECT errors_retention FROM fetchq.queues WHERE name = ''%s'';';
+    VAR_q = 'SELECT logs_retention FROM fetchq.queues WHERE name = ''%s'';';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q INTO VAR_r;
 
     -- override the default value
-    IF VAR_r.errors_retention IS NOT NULL THEN
-        VAR_retention = VAR_r.errors_retention;
+    IF VAR_r.logs_retention IS NOT NULL THEN
+        VAR_retention = VAR_r.logs_retention;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq.queue_drop_errors(PAR_queue, VAR_retention);
+    SELECT * INTO VAR_r FROM fetchq.queue_drop_logs(PAR_queue, VAR_retention);
     affected_rows = VAR_r.affected_rows;
 
 	EXCEPTION WHEN OTHERS THEN BEGIN
