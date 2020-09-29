@@ -29,7 +29,7 @@ BEGIN
         RAISE EXCEPTION 'failed affected rows - %(count, expected 2, received %)', VAR_testName, VAR_r.affected_rows;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'cnt');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'cnt');
     IF VAR_r.current_value <> 13 THEN
         RAISE EXCEPTION 'failed value - %(count, expected 13, received %)', VAR_testName, VAR_r.current_value;
     END IF;

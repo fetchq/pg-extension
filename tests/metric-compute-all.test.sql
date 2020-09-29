@@ -52,7 +52,7 @@ BEGIN
     PERFORM fetchq_metric_log_pack();
 
     -- get all computed metrics
-    PERFORM fetchq_metric_compute_all();
+    PERFORM fetchq_catalog.fetchq_metric_compute_all();
     GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
     IF VAR_affectedRows <> 2 THEN
         RAISE EXCEPTION 'failed - %(count, expected 2, received %)', VAR_testName, VAR_affectedRows;

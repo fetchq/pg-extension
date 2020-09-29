@@ -1,7 +1,7 @@
 -- SLOW QUERY!!!
 -- computes and shows fresh counters from all the queues
-DROP FUNCTION IF EXISTS fetchq_metric_compute_all();
-CREATE OR REPLACE FUNCTION fetchq_metric_compute_all() 
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_metric_compute_all();
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_compute_all() 
 RETURNS TABLE(
 	queue VARCHAR,
 	cnt INTEGER,
@@ -20,7 +20,7 @@ BEGIN
 	FOR VAR_q IN
 		SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
 	LOOP
-		SELECT * FROM fetchq_metric_compute(VAR_q.name) INTO VAR_c;
+		SELECT * FROM fetchq_catalog.fetchq_metric_compute(VAR_q.name) INTO VAR_c;
 		queue = VAR_q.name;
 		cnt = VAR_c.cnt;
 		pln = VAR_c.pln;

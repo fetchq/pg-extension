@@ -28,7 +28,7 @@ BEGIN
     PERFORM fetchq_metric_log_pack();
 
     -- run the test
-    SELECT * INTO VAR_r FROM fetchq_metric_get_common('a');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get_common('a');
     VAR_sum = VAR_sum + VAR_r.cnt;
     VAR_sum = VAR_sum + VAR_r.pnd;
     VAR_sum = VAR_sum + VAR_r.pln;

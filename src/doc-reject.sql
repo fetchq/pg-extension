@@ -36,7 +36,7 @@ BEGIN
 
     IF affected_rows > 0 THEN
         -- log error
-        PERFORM fetchq_log_error(PAR_queue, VAR_r.subject, PAR_message, PAR_details);
+        PERFORM fetchq_catalog.fetchq_log_error(PAR_queue, VAR_r.subject, PAR_message, PAR_details);
 
         -- update metrics
         PERFORM fetchq_metric_log_increment(PAR_queue, 'prc', 1);
@@ -90,7 +90,7 @@ BEGIN
 
     IF affected_rows > 0 THEN
         -- log error
-        PERFORM fetchq_log_error(PAR_queue, VAR_r.subject, PAR_message, PAR_details, PAR_refId);
+        PERFORM fetchq_catalog.fetchq_log_error(PAR_queue, VAR_r.subject, PAR_message, PAR_details, PAR_refId);
 
         -- update metrics
         PERFORM fetchq_metric_log_increment(PAR_queue, 'prc', 1);

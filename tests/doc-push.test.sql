@@ -26,7 +26,7 @@ BEGIN
 
     -- checkout logs
     PERFORM fetchq_metric_log_pack();
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'pln');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'pln');
     IF VAR_r.current_value <> 1 THEN
         RAISE EXCEPTION 'failed - %(Wrong planned documents count)', VAR_testName;
     END IF;
@@ -67,7 +67,7 @@ BEGIN
 
     -- checkout logs
     PERFORM fetchq_metric_log_pack();
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'pnd');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'pnd');
     IF VAR_r.current_value <> 1 THEN
         RAISE EXCEPTION 'failed - %(Wrong planned documents count)', VAR_testName;
     END IF;
@@ -101,7 +101,7 @@ BEGIN
 
     -- checkout logs
     PERFORM fetchq_metric_log_pack();
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'pnd');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'pnd');
     IF VAR_r.current_value <> 2 THEN
         RAISE EXCEPTION 'failed - %(Wrong pending documents count when adding multiple documents)', VAR_testName;
     END IF;

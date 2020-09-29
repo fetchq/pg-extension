@@ -13,7 +13,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_log_error('foo', 'a1', 'some error', '{"a":1}');
+    PERFORM fetchq_catalog.fetchq_log_error('foo', 'a1', 'some error', '{"a":1}');
 
     -- get first document
     SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__errors WHERE subject = 'a1';
@@ -41,7 +41,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_log_error('foo', 'a1', 'some error', '{"a":1}', 'ax22');
+    PERFORM fetchq_catalog.fetchq_log_error('foo', 'a1', 'some error', '{"a":1}', 'ax22');
 
     -- get first document
     SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__errors WHERE ref_id = 'ax22';

@@ -18,7 +18,7 @@ BEGIN
     PERFORM fetchq_metric_log_pack();
 
     -- run the test
-    SELECT * INTO VAR_r FROM fetchq_metric_get_total('tot');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get_total('tot');
     
     -- test result rows
     IF VAR_r.current_value <> 4 THEN

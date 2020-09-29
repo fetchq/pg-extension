@@ -128,25 +128,25 @@ BEGIN
     PERFORM fetchq_metric_log_pack();
     
     -- test CNT
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'cnt');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'cnt');
     IF VAR_r.current_value <> 4 THEN
         RAISE EXCEPTION 'failed - %(count, expected 4, received %)', VAR_testName, VAR_r.current_value;
     END IF;
 
     -- test ACT
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'act');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'act');
     IF VAR_r.current_value <> 2 THEN
         RAISE EXCEPTION 'failed - %(active, expected 2, received %)', VAR_testName, VAR_r.current_value;
     END IF;
 
     -- test PND
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'pnd');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'pnd');
     IF VAR_r.current_value <> 1 THEN
         RAISE EXCEPTION 'failed - %(pending, expected 1, received %)', VAR_testName, VAR_r.current_value;
     END IF;
 
     -- test PLN
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'pln');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'pln');
     IF VAR_r.current_value <> 1 THEN
         RAISE EXCEPTION 'failed - %(pending, expected 1, received %)', VAR_testName, VAR_r.current_value;
     END IF;

@@ -21,7 +21,7 @@ BEGIN
     -- push documents witht he same subject so to be traceable
     PERFORM fetchq_catalog.fetchq_doc_push('q1', 'd1', 0, 0, NOW() - INTERVAL '1ms', '{"a":1}');
     SELECT * INTO VAR_r from fetchq_catalog.fetchq_doc_pick('q1', 0, 1, '2s');
-    PERFORM fetchq_log_error('q1', VAR_r.subject, 'just a log', '{}');
+    PERFORM fetchq_catalog.fetchq_log_error('q1', VAR_r.subject, 'just a log', '{}');
     PERFORM fetchq_catalog.fetchq_doc_push('q2', VAR_r.subject, 0, 0, NOW() - INTERVAL '1ms', VAR_r.payload);
     SELECT * INTO VAR_r from fetchq_catalog.fetchq_doc_pick('q2', 0, 1, '2s');
     PERFORM fetchq_catalog.fetchq_doc_complete('q2', VAR_r.subject);

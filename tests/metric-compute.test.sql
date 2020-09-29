@@ -37,7 +37,7 @@ BEGIN
     PERFORM fetchq_metric_log_pack();
 
     -- get computed metrics
-    SELECT * INTO VAR_r from fetchq_metric_compute('foo');
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_compute('foo');
     IF VAR_r.cnt <> 4 THEN
         RAISE EXCEPTION 'failed - %(cnt, expected "4", got "%")', VAR_testName, VAR_r.cnt;
     END IF;

@@ -22,7 +22,7 @@ BEGIN
     PERFORM fetchq_metric_log_decrement('a', 'b', 5);
     PERFORM fetchq_metric_log_pack();
 
-    SELECT * INTO VAR_r from fetchq_metric_get('a', 'b');
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_get('a', 'b');
     IF VAR_r.current_value <> 12 THEN
         RAISE EXCEPTION 'Wrong metric computation';
     END IF;
@@ -33,7 +33,7 @@ BEGIN
     PERFORM fetchq_metric_log_set('b', 'c', 99);
     PERFORM fetchq_metric_log_pack();
 
-    SELECT * INTO VAR_r from fetchq_metric_get('b', 'c');
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_get('b', 'c');
     IF VAR_r.current_value <> 104 THEN
         RAISE EXCEPTION 'Wrong metric computation';
     END IF;
@@ -69,7 +69,7 @@ BEGIN
     PERFORM fetchq_metric_log_decrement(VAR_qA, 'b', 5);
     PERFORM fetchq_metric_log_pack();
 
-    SELECT * INTO VAR_r from fetchq_metric_get(VAR_qA, 'b');
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_get(VAR_qA, 'b');
     IF VAR_r.current_value <> 12 THEN
         RAISE EXCEPTION 'Wrong metric computation1';
     END IF;
@@ -80,7 +80,7 @@ BEGIN
     PERFORM fetchq_metric_log_set(VAR_qB, 'c', 99);
     PERFORM fetchq_metric_log_pack();
 
-    SELECT * INTO VAR_r from fetchq_metric_get(VAR_qB, 'c');
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_get(VAR_qB, 'c');
     IF VAR_r.current_value <> 104 THEN
         RAISE EXCEPTION 'Wrong metric computation2, %', VAR_r.current_value;
     END IF;
@@ -117,7 +117,7 @@ BEGIN
     PERFORM fetchq_metric_log_pack();
 
     -- run the test
-    PERFORM fetchq_metric_get(VAR_qA);
+    PERFORM fetchq_catalog.fetchq_metric_get(VAR_qA);
     GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
     
     -- test result rows
@@ -126,7 +126,7 @@ BEGIN
     END IF;
 
     -- test result order
-    SELECT * INTO VAR_r FROM fetchq_metric_get(VAR_qA);
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get(VAR_qA);
     IF VAR_r.metric <> 'a' THEN
         RAISE EXCEPTION 'failed - %(metric, expected "a", got "%")', VAR_testName, VAR_r.metric;
     END IF;

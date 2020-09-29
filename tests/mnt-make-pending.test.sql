@@ -21,7 +21,7 @@ BEGIN
     PERFORM fetchq_metric_log_pack();
 
     -- run the test
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'pnd');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'pnd');
     IF VAR_r.current_value != 2 THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;

@@ -22,7 +22,7 @@ BEGIN
     PERFORM fetchq_metric_log_pack();
 
     -- run the test
-    PERFORM fetchq_metric_get_all();
+    PERFORM fetchq_catalog.fetchq_metric_get_all();
     GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
     
     -- test result rows

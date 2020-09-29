@@ -47,12 +47,12 @@ BEGIN
     END IF;
 
     -- run the test
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'act');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'act');
     IF VAR_r.current_value != 1 THEN
         RAISE EXCEPTION 'failed - %(active count)', VAR_testName;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'kll');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'kll');
     IF VAR_r.current_value != 1 THEN
         RAISE EXCEPTION 'failed - %(killed count)', VAR_testName;
     END IF;

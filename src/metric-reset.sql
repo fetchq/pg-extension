@@ -15,7 +15,7 @@ $BODY$
 DECLARE
 	VAR_res RECORD;
 BEGIN
-	SELECT * INTO VAR_res FROM fetchq_metric_compute(PAR_queue);
+	SELECT * INTO VAR_res FROM fetchq_catalog.fetchq_metric_compute(PAR_queue);
 	
 	PERFORM fetchq_metric_set(PAR_queue, 'cnt', VAR_res.cnt);
 	PERFORM fetchq_metric_set(PAR_queue, 'pln', VAR_res.pln);
