@@ -2,8 +2,8 @@
 -- DROP A QUEUE ERRORS WITH A RETENTION INTERVAL
 -- returns:
 -- { affected_rows: INTEGER }
-DROP FUNCTION IF EXISTS fetchq_queue_drop_metrics(CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_drop_metrics(CHARACTER VARYING, JSONB);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_drop_metrics(
 	PAR_queue VARCHAR,
     PAR_config JSONB,
 	OUT removed_rows INTEGER
@@ -43,8 +43,8 @@ END; $$
 LANGUAGE plpgsql;
 
 
-DROP FUNCTION IF EXISTS fetchq_queue_drop_metrics(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_drop_metrics(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_drop_metrics(
 	PAR_queue VARCHAR,
 	OUT removed_rows INTEGER
 ) AS $$
@@ -66,7 +66,7 @@ BEGIN
     RAISE NOTICE 'retention %', VAR_retention;
 
     -- run the operation
-    SELECT * INTO VAR_r FROM fetchq_queue_drop_metrics(PAR_queue, VAR_retention::jsonb);
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_metrics(PAR_queue, VAR_retention::jsonb);
     removed_rows = VAR_r.removed_rows;
 
     -- RAISE NOTICE 'removed roes %', removed_rows;

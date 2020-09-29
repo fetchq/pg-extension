@@ -9,7 +9,7 @@ BEGIN
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_queue_drop_indexes('foo');
+    PERFORM fetchq_catalog.fetchq_queue_drop_indexes('foo');
 
     SELECT count(*) as total INTO VAR_r FROM pg_indexes WHERE schemaname = 'fetchq_catalog' AND tablename = 'fetchq__foo__documents';
     IF VAR_r.total != 1 THEN

@@ -18,7 +18,7 @@ BEGIN
     END IF;
 
     -- assert dropping result
-    SELECT * INTO VAR_r FROM fetchq_queue_drop_indexes('foo');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_indexes('foo');
     IF VAR_r.was_dropped IS NOT TRUE THEN
         RAISE EXCEPTION 'failed - unexpeted response while dropping indexes';
     END IF;

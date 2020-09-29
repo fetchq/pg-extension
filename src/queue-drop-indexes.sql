@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_queue_drop_indexes(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_indexes(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_drop_indexes(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_drop_indexes(
 	PAR_queue VARCHAR,
 	OUT was_dropped BOOLEAN
 ) AS $$

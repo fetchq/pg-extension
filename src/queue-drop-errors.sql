@@ -2,8 +2,8 @@
 -- DROP A QUEUE ERRORS WITH A RETENTION INTERVAL
 -- returns:
 -- { affected_rows: INTEGER }
-DROP FUNCTION IF EXISTS fetchq_queue_drop_errors(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_drop_errors(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_drop_errors(
 	PAR_queue VARCHAR,
     PAR_retention VARCHAR,
 	OUT affected_rows INTEGER
@@ -27,8 +27,8 @@ LANGUAGE plpgsql;
 -- DROP A QUEUE ERRORS WITH A RETENTION DATE
 -- returns:
 -- { affected_rows: INTEGER }
-DROP FUNCTION IF EXISTS fetchq_queue_drop_errors(CHARACTER VARYING, TIMESTAMP WITH TIME ZONE);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_drop_errors(CHARACTER VARYING, TIMESTAMP WITH TIME ZONE);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_drop_errors(
 	PAR_queue VARCHAR,
     PAR_retention TIMESTAMP WITH TIME ZONE,
 	OUT affected_rows INTEGER
@@ -52,8 +52,8 @@ LANGUAGE plpgsql;
 -- DROP A QUEUE ERRORS WITH A RETENTION FROM QUEUE SETTINGS
 -- returns:
 -- { affected_rows: INTEGER }
-DROP FUNCTION IF EXISTS fetchq_queue_drop_errors(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_drop_errors(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_drop_errors(
 	PAR_queue VARCHAR,
 	OUT affected_rows INTEGER
 ) AS $$
@@ -71,7 +71,7 @@ BEGIN
         VAR_retention = VAR_r.errors_retention;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq_queue_drop_errors(PAR_queue, VAR_retention);
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_errors(PAR_queue, VAR_retention);
     affected_rows = VAR_r.affected_rows;
 
 	EXCEPTION WHEN OTHERS THEN BEGIN

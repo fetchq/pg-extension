@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_queue_drop_version(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_version(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_drop_version(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_drop_version(
 	PAR_queue VARCHAR,
 	PAR_oldVersion INTEGER,
 	OUT was_dropped BOOLEAN

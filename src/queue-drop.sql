@@ -17,7 +17,7 @@ BEGIN
 	VAR_tableName = VAR_tableName || PAR_queue;
 
 	-- drop indexes
-	-- PERFORM fetchq_queue_drop_indexes(PAR_queue);
+	-- PERFORM fetchq_catalog.fetchq_queue_drop_indexes(PAR_queue);
 
 	-- drop queue table
 	VAR_q = 'DROP TABLE %s__documents CASCADE;';

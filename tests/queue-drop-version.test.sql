@@ -13,7 +13,7 @@ BEGIN
 
     -- perform the operation
     PERFORM fetchq_queue_set_current_version('foo', 1);
-    SELECT * INTO VAR_r FROM fetchq_queue_drop_version('foo', 0);
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_version('foo', 0);
 
     IF VAR_r.was_dropped <> true THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
@@ -41,7 +41,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- perform the operation
-    SELECT * INTO VAR_r FROM fetchq_queue_drop_version('foo', 0);
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_version('foo', 0);
 
     IF VAR_r.was_dropped <> false THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;

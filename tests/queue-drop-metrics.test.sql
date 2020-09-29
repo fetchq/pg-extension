@@ -29,7 +29,7 @@ BEGIN
 
     -- drop metrics by policy
     VAR_policy = '[{ "retain":"minute", "from":"1h", "to":"0s" }, { "retain":"hour", "from":"100y", "to":"1h" }]';
-    SELECT * INTO VAR_r FROM fetchq_queue_drop_metrics('foo', VAR_policy::jsonb);
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_metrics('foo', VAR_policy::jsonb);
     RAISE NOTICE 'result %', VAR_r;
 
     IF VAR_r.removed_rows IS NULL THEN
@@ -76,7 +76,7 @@ BEGIN
     ;
 
     -- drop metrics by policy
-    SELECT * INTO VAR_r FROM fetchq_queue_drop_metrics('foo');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_metrics('foo');
     RAISE NOTICE 'result %', VAR_r;
 
     IF VAR_r.removed_rows IS NULL THEN
