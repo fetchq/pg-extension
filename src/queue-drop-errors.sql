@@ -12,7 +12,7 @@ DECLARE
 	VAR_q VARCHAR;
 	VAR_r RECORD;
 BEGIN
-	VAR_q = 'DELETE FROM fetchq_catalog.fetchq__%s__errors WHERE created_at < NOW() - INTERVAL ''%s'';';
+	VAR_q = 'DELETE FROM fetchq_catalog.%s__errors WHERE created_at < NOW() - INTERVAL ''%s'';';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_retention);
 	EXECUTE VAR_q;
     GET DIAGNOSTICS affected_rows := ROW_COUNT;
@@ -37,7 +37,7 @@ DECLARE
 	VAR_q VARCHAR;
 	VAR_r RECORD;
 BEGIN
-	VAR_q = 'DELETE FROM fetchq_catalog.fetchq__%s__errors WHERE created_at < ''%s'';';
+	VAR_q = 'DELETE FROM fetchq_catalog.%s__errors WHERE created_at < ''%s'';';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_retention);
 	EXECUTE VAR_q;
     GET DIAGNOSTICS affected_rows := ROW_COUNT;

@@ -20,7 +20,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_reschedule('foo', 'a1', NOW() + INTERVAL '1y');
 
     -- get first document
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents WHERE subject = 'a1';
+    SELECT * INTO VAR_r from fetchq_catalog.foo__documents WHERE subject = 'a1';
     IF VAR_r.iterations IS NULL THEN
         RAISE EXCEPTION 'failed - %(unespected number of iterations)', VAR_testName;
     END IF;
@@ -54,7 +54,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_reschedule('foo', 'a1', NOW() + INTERVAL '1y', '{"a":1}');
 
     -- get first document
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents 
+    SELECT * INTO VAR_r from fetchq_catalog.foo__documents 
     WHERE subject = 'a1'
     AND payload @> '{"a": 1}';
 

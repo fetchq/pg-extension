@@ -15,8 +15,8 @@ BEGIN
 	EXECUTE FORMAT(VAR_q, PAR_queue) INTO VAR_r;
 
 	VAR_q = '';
-	VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq__%s__documents SET status = -1 ';
-	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.fetchq__%s__documents ';
+	VAR_q = VAR_q || 'UPDATE fetchq_catalog.%s__documents SET status = -1 ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.%s__documents ';
 	VAR_q = VAR_q || 'WHERE lock_upgrade IS NULL AND status = 2 AND attempts >= %s AND next_iteration < NOW() ';
 	VAR_q = VAR_q || 'LIMIT %s FOR UPDATE );';
 	EXECUTE FORMAT(VAR_q, PAR_queue, PAR_queue, VAR_r.max_attempts, PAR_limit);

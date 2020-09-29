@@ -17,21 +17,21 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 0, NOW() + INTERVAL '1s', '{}');
     PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 0, NOW() - INTERVAL '1s', '{}');
     
-    UPDATE fetchq_catalog.fetchq__foo__documents
+    UPDATE fetchq_catalog.foo__documents
     SET next_iteration = NOW() - INTERVAL '1 milliseconds', attempts = 4
     WHERE subject = 'a1';
 
-    UPDATE fetchq_catalog.fetchq__foo__documents
+    UPDATE fetchq_catalog.foo__documents
     SET next_iteration = NOW() - INTERVAL '1 milliseconds'
     WHERE subject = 'a2';
 
     PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 3, '5m');
 
-    UPDATE fetchq_catalog.fetchq__foo__documents
+    UPDATE fetchq_catalog.foo__documents
     SET next_iteration = NOW() - INTERVAL '1 milliseconds'
     WHERE subject = 'a1';
 
-    UPDATE fetchq_catalog.fetchq__foo__documents
+    UPDATE fetchq_catalog.foo__documents
     SET next_iteration = NOW() - INTERVAL '1 milliseconds'
     WHERE subject = 'a2';
 

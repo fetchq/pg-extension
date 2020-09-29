@@ -16,7 +16,7 @@ BEGIN
 	-- pick the queue id, it creates the queue's index entry if doesn't exists already
 	SELECT t.queue_id INTO queue_id FROM fetchq_catalog.fetchq_queue_get_id(PAR_queue) AS t;
 
-	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__documents (';
+	VAR_q = 'CREATE TABLE fetchq_catalog.%s__documents (';
 	VAR_q = VAR_q || 'subject CHARACTER VARYING(50) NOT NULL PRIMARY KEY,';
 	VAR_q = VAR_q || 'version INTEGER DEFAULT 0,';
 	VAR_q = VAR_q || 'priority INTEGER DEFAULT 0,';
@@ -34,7 +34,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- errors table
-	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__errors (';
+	VAR_q = 'CREATE TABLE fetchq_catalog.%s__errors (';
 	VAR_q = VAR_q || 'id SERIAL PRIMARY KEY,';
 	VAR_q = VAR_q || 'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),';
 	VAR_q = VAR_q || 'subject CHARACTER VARYING(50) NOT NULL,';
@@ -46,7 +46,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- stats history
-	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__metrics (';
+	VAR_q = 'CREATE TABLE fetchq_catalog.%s__metrics (';
 	VAR_q = VAR_q || 'id SERIAL PRIMARY KEY,';
 	VAR_q = VAR_q || 'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),';
 	VAR_q = VAR_q || 'metric CHARACTER VARYING(50) NOT NULL,';

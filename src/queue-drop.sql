@@ -9,7 +9,7 @@ CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_drop(
 	OUT queue_id INTEGER
 ) AS $$
 DECLARE
-	VAR_tableName VARCHAR = 'fetchq_catalog.fetchq__';
+	VAR_tableName VARCHAR = 'fetchq_catalog.';
 	VAR_q VARCHAR;
 	VAR_r RECORD;
 BEGIN

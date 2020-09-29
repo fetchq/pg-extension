@@ -17,8 +17,8 @@ CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_compute(
 ) AS
 $BODY$
 DECLARE
-	VAR_q1 CONSTANT VARCHAR := 'SELECT COUNT(subject) FROM fetchq_catalog.fetchq__%s__documents';
-	VAR_q2 CONSTANT VARCHAR := 'SELECT COUNT(subject) FROM fetchq_catalog.fetchq__%s__documents WHERE STATUS = %s';
+	VAR_q1 CONSTANT VARCHAR := 'SELECT COUNT(subject) FROM fetchq_catalog.%s__documents';
+	VAR_q2 CONSTANT VARCHAR := 'SELECT COUNT(subject) FROM fetchq_catalog.%s__documents WHERE STATUS = %s';
 BEGIN
 	cnt = 0;
 	pln = 0;
