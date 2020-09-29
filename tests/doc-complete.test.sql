@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_complete_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_complete_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,36 +8,36 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_test.fetchq_test_init();
+    PERFORM fetchq.queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    PERFORM fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq.doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
-    PERFORM fetchq_doc_complete('foo', 'a1');
-    PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq.doc_complete('foo', 'a1');
+    PERFORM fetchq.mnt_run_all(100);
+    PERFORM fetchq.metric_log_pack();
 
     -- -- get first document
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents
+    SELECT * INTO VAR_r from fetchq_data.foo__docs
     WHERE subject = 'a1'
     AND status = 3
     AND iterations = 1
     AND next_iteration >= '2970-01-01';
     IF VAR_r.subject IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find the document after complete)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find the document after complete)', VAR_testName;
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_complete_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_complete_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -46,30 +46,30 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_test.fetchq_test_init();
+    PERFORM fetchq.queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    PERFORM fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq.doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
-    PERFORM fetchq_doc_complete('foo', 'a1', '{"a":22}');
-    PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq.doc_complete('foo', 'a1', '{"a":22}');
+    PERFORM fetchq.mnt_run_all(100);
+    PERFORM fetchq.metric_log_pack();
 
     -- -- get first document
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents
+    SELECT * INTO VAR_r from fetchq_data.foo__docs
     WHERE subject = 'a1'
     AND status = 3
     AND iterations = 1
     AND next_iteration >= '2970-01-01';
     IF VAR_r.subject IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find the document after complete)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find the document after complete)', VAR_testName;
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$

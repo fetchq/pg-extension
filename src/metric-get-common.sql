@@ -1,6 +1,6 @@
 -- GET ALL COMMOMN METRICS FOR A SPECIFIC QUEUE
-DROP FUNCTION IF EXISTS fetchq_metric_get_common(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_get_common(
+DROP FUNCTION IF EXISTS fetchq.metric_get_common(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.metric_get_common(
 	PAR_queue VARCHAR,
 	OUT cnt INTEGER,
 	OUT pnd INTEGER,
@@ -23,7 +23,7 @@ DECLARE
 	VAR_c RECORD;
 BEGIN
 	FOR VAR_q IN
-		SELECT * FROM fetchq_metric_get(PAR_queue)
+		SELECT * FROM fetchq.metric_get(PAR_queue)
 	LOOP
 		IF VAR_q.metric = 'cnt' THEN cnt = VAR_q.current_value; END IF;
 		IF VAR_q.metric = 'pnd' THEN pnd = VAR_q.current_value; END IF;

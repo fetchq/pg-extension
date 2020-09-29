@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test__queue_set_current_version_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_set_current_version_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,25 +8,25 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_test.fetchq_test_init();
+    PERFORM fetchq.queue_create('foo');
 
     -- perform the operation
-    SELECT * INTO VAR_r FROM fetchq_queue_set_current_version('foo', 1);
+    SELECT * INTO VAR_r FROM fetchq.queue_set_current_version('foo', 1);
 
     IF VAR_r.affected_rows <> 1 THEN
-        RAISE EXCEPTION 'failed - % (affected_rows, expected "1", got "%")', VAR_testName, VAR_r.affected_rows;
+        RAISE EXCEPTION 'failed - %(affected_rows, expected "1", got "%")', VAR_testName, VAR_r.affected_rows;
     END IF;
 
     -- test in the table
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq_sys_queues
+    SELECT * INTO VAR_r from fetchq.queues
     WHERE name = 'foo' AND current_version = 1;
     IF VAR_r.id IS NULL THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$

@@ -2,8 +2,8 @@
 -- CREATED A QUEUE
 -- returns:
 -- { was_created: TRUE }
-DROP FUNCTION IF EXISTS fetchq_queue_create(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_create (
+DROP FUNCTION IF EXISTS fetchq.queue_create(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.queue_create(
 	PAR_queue VARCHAR,
 	OUT was_created BOOLEAN,
 	OUT queue_id INTEGER
@@ -14,9 +14,9 @@ BEGIN
 	was_created = TRUE;
 
 	-- pick the queue id, it creates the queue's index entry if doesn't exists already
-	SELECT t.queue_id INTO queue_id FROM fetchq_queue_get_id(PAR_queue) AS t;
+	SELECT t.queue_id INTO queue_id FROM fetchq.queue_get_id(PAR_queue) AS t;
 
-	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__documents (';
+	VAR_q = 'CREATE TABLE fetchq_data.%s__docs (';
 	VAR_q = VAR_q || 'subject CHARACTER VARYING(50) NOT NULL PRIMARY KEY,';
 	VAR_q = VAR_q || 'version INTEGER DEFAULT 0,';
 	VAR_q = VAR_q || 'priority INTEGER DEFAULT 0,';
@@ -34,7 +34,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- errors table
-	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__errors (';
+	VAR_q = 'CREATE TABLE fetchq_data.%s__logs (';
 	VAR_q = VAR_q || 'id SERIAL PRIMARY KEY,';
 	VAR_q = VAR_q || 'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),';
 	VAR_q = VAR_q || 'subject CHARACTER VARYING(50) NOT NULL,';
@@ -46,7 +46,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- stats history
-	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__metrics (';
+	VAR_q = 'CREATE TABLE fetchq_data.%s__metrics (';
 	VAR_q = VAR_q || 'id SERIAL PRIMARY KEY,';
 	VAR_q = VAR_q || 'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),';
 	VAR_q = VAR_q || 'metric CHARACTER VARYING(50) NOT NULL,';
@@ -56,18 +56,18 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- add indexes to the table
-	PERFORM fetchq_queue_create_indexes(PAR_queue);
+	PERFORM fetchq.queue_create_indexes(PAR_queue);
 	
 	-- enable notifications
 	-- (slows down by half insert performance!)
 	-- PERFORM fetchq_queue_enable_notify(PAR_queue);
 
 	-- add new maintenance tasks
-	INSERT INTO fetchq_catalog.fetchq_sys_jobs (task, queue, next_iteration, last_iteration, attempts, iterations, settings, payload) VALUES
-	('mnt', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"1m", "duration":"5m", "limit":500}', '{}'),
-	('sts', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"1m", "duration":"5m"}', '{}'),
-	('cmp', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"1m", "duration":"5m"}', '{}'),
-	('drp', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"1m", "duration":"5m"}', '{}')
+	INSERT INTO fetchq.jobs (task, queue, next_iteration, last_iteration, attempts, iterations, settings, payload) VALUES
+	('mnt', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"100ms", "duration":"1m", "limit":500}', '{}'),
+	('sts', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"5m", "duration":"5m"}', '{}'),
+	('cmp', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"10m", "duration":"5m"}', '{}'),
+	('drp', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"10m", "duration":"5m"}', '{}')
 	ON CONFLICT DO NOTHING;
 
 	-- send out notifications

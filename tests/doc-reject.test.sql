@@ -1,6 +1,6 @@
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_reject_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -9,39 +9,39 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_test.fetchq_test_init();
+    PERFORM fetchq.queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    SELECT * INTO VAR_r FROM fetchq.doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
-    PERFORM fetchq_doc_reject('foo', 'a1', 'foo', '{"a":1}');
-    PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq.doc_reject('foo', 'a1', 'foo', '{"a":1}');
+    PERFORM fetchq.mnt_run_all(100);
+    PERFORM fetchq.metric_log_pack();
 
     -- get first document
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents
+    SELECT * INTO VAR_r from fetchq_data.foo__docs
     WHERE subject = 'a1'
     AND status = 1
     AND iterations = 1
     AND next_iteration >= NOW() + INTERVAL '300s';
     IF VAR_r.subject IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find the document after reject)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find the document after reject)', VAR_testName;
     END IF;
 
     -- get the logged error message
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__errors
+    SELECT * INTO VAR_r from fetchq_data.foo__logs
     WHERE subject = VAR_r.subject
     AND message = 'foo'
     AND ref_id IS NULL;
     IF VAR_r.id IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find error log)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find error log)', VAR_testName;
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
@@ -50,7 +50,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_reject_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -59,39 +59,39 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_test.fetchq_test_init();
+    PERFORM fetchq.queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    SELECT * INTO VAR_r FROM fetchq.doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
-    PERFORM fetchq_doc_reject('foo', 'a1', 'foo', '{"a":1}', 'xxx');
-    PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq.doc_reject('foo', 'a1', 'foo', '{"a":1}', 'xxx');
+    PERFORM fetchq.mnt_run_all(100);
+    PERFORM fetchq.metric_log_pack();
 
     -- get first document
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents
+    SELECT * INTO VAR_r from fetchq_data.foo__docs
     WHERE subject = 'a1'
     AND status = 1
     AND iterations = 1
     AND next_iteration >= NOW() + INTERVAL '300s';
     IF VAR_r.subject IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find the document after reject)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find the document after reject)', VAR_testName;
     END IF;
 
     -- get the logged error message
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__errors
+    SELECT * INTO VAR_r from fetchq_data.foo__logs
     WHERE subject = VAR_r.subject
     AND message = 'foo'
     AND ref_id = 'xxx';
     IF VAR_r.id IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find error log)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find error log)', VAR_testName;
     END IF;
 
     -- cleanup
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
@@ -99,7 +99,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_reject_03 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_03(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -108,29 +108,29 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
-    PERFORM fetchq_queue_set_max_attempts('foo', 1);
+    PERFORM fetchq_test.fetchq_test_init();
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.queue_set_max_attempts('foo', 1);
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    SELECT * INTO VAR_r FROM fetchq.doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
-    PERFORM fetchq_doc_reject('foo', 'a1', 'foo', '{"a":1}', 'xxx');
-    PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq.doc_reject('foo', 'a1', 'foo', '{"a":1}', 'xxx');
+    PERFORM fetchq.mnt_run_all(100);
+    PERFORM fetchq.metric_log_pack();
 
     -- get first document
-    SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents
+    SELECT * INTO VAR_r from fetchq_data.foo__docs
     WHERE subject = 'a1'
     AND status = -1;
     IF VAR_r.subject IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to kill a document after reject)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to kill a document after reject)', VAR_testName;
     END IF;
 
     -- cleanup
-    -- PERFORM fetchq_test_clean();
+    -- PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$

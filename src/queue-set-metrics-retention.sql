@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_queue_set_metrics_retention(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_set_metrics_retention (
+DROP FUNCTION IF EXISTS fetchq.queue_set_metrics_retention(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.queue_set_metrics_retention(
 	PAR_queue VARCHAR,
 	PAR_retention VARCHAR,
 	OUT affected_rows INTEGER
@@ -13,7 +13,7 @@ BEGIN
 
 	-- change value in the table
 	VAR_q = '';
-	VAR_q = VAR_q || 'UPDATE fetchq_sys_queues ';
+	VAR_q = VAR_q || 'UPDATE __fetchq_queues ';
 	VAR_q = VAR_q || 'SET metrics_retention = ''%s''  ';
 	VAR_q = VAR_q || 'WHERE name = ''%s''';
 	VAR_q = FORMAT(VAR_q, PAR_retention, PAR_queue);

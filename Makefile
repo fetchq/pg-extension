@@ -1,18 +1,23 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 2.2.0
+version ?= 3.0.0
 
 ## Testing with Postgres Versions
 ## It's a good idea to always test with all the versions
 ## it's manual and it sucks, we'll see about that in the future
 
-# 9.6 10.11 11.6 12.1
-pg_version ?= 9.6
-# 9.6 10 11.6 12
-pg_extension_folder ?= 9.6
+# 9.6 10.11 11.6 12.1 12.4 13.0
+pg_version ?= 13.0
+# 9.6 10 11.6 12 13
+pg_extension_folder ?= 13
 
 reset:
+	# Cleanup current db
+	docker stop fetchq || true
+	docker rm -f fetchq || true
+
+	# Cleanup data folders
 	rm -rf $(CURDIR)/data
 	rm -rf $(CURDIR)/extension
 	mkdir $(CURDIR)/data
@@ -67,10 +72,10 @@ build:
 		$(CURDIR)/src/queue-drop.sql \
 		$(CURDIR)/src/queue-set-max-attempts.sql \
 		$(CURDIR)/src/queue-set-current-version.sql \
-		$(CURDIR)/src/queue-set-errors-retention.sql \
+		$(CURDIR)/src/queue-set-logs-retention.sql \
 		$(CURDIR)/src/queue-set-metrics-retention.sql \
 		$(CURDIR)/src/queue-drop-version.sql \
-		$(CURDIR)/src/queue-drop-errors.sql \
+		$(CURDIR)/src/queue-drop-logs.sql \
 		$(CURDIR)/src/queue-drop-metrics.sql \
 		$(CURDIR)/src/queue-drop-indexes.sql \
 		$(CURDIR)/src/queue-top.sql \
@@ -138,6 +143,8 @@ build-image: reset build
 	docker build --no-cache -t ${name}:11.6-${version} -f Dockerfile-11.6 .
 	docker build --no-cache -t ${name}:12.0-${version} -f Dockerfile-12.0 .
 	docker build --no-cache -t ${name}:12.1-${version} -f Dockerfile-12.1 .
+	docker build --no-cache -t ${name}:12.4-${version} -f Dockerfile-12.4 .
+	docker build --no-cache -t ${name}:13.0-${version} -f Dockerfile-13.0 .
 
 publish: build-image
 	# 9.6
@@ -170,29 +177,42 @@ publish: build-image
 	docker tag ${name}:12.1-${version} ${registry}/${name}:12.1-latest
 	docker push ${registry}/${name}:12.1-${version}
 	docker push ${registry}/${name}:12.1-latest
+	# 12.4
+	docker tag ${name}:12.4-${version} ${registry}/${name}:12.4-${version}
+	docker tag ${name}:12.4-${version} ${registry}/${name}:12.4-latest
+	docker push ${registry}/${name}:12.4-${version}
+	docker push ${registry}/${name}:12.4-latest
+	# 13.0
+	docker tag ${name}:13.0-${version} ${registry}/${name}:13.0-${version}
+	docker tag ${name}:13.0-${version} ${registry}/${name}:13.0-latest
+	docker push ${registry}/${name}:13.0-${version}
+	docker push ${registry}/${name}:13.0-latest
 	# latest
-	docker tag ${name}:12.0-${version} ${registry}/${name}:latest
+	docker tag ${name}:13.0-${version} ${registry}/${name}:latest
 	docker push ${registry}/${name}:latest
 
 start-pg:
 	docker run --rm -d \
 		--name fetchq \
 		-p 5432:5432 \
+		-e POSTGRES_PASSWORD=postgres \
 		-v $(CURDIR)/data/pg:/var/lib/postgresql/data \
 		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq.control \
 		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq--${version}.sql \
 		-v $(CURDIR)/data/fetchq--${version}.test.sql:/tests/fetchq--${version}.test.sql \
 		postgres:$(pg_version)
 
-start-pg-prod:
+production: reset build-image
 	docker run --rm -d \
+		-e POSTGRES_PASSWORD=postgres \
 		--name fetchq \
 		-p 5432:5432 \
 		fetchq:$(pg_version)-$(version)
 	docker logs -f fetchq
 
 start-delay:
-	sleep 20
+	until docker exec fetchq pg_isready ; do sleep 1 ; done
+	sleep 2
 
 start: reset build build-test start-pg
 	docker logs -f fetchq

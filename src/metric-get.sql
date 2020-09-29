@@ -1,7 +1,7 @@
 
 -- READS A SPECIFIC METRIC FOR A SPECIFIC QUEUE
-DROP FUNCTION IF EXISTS fetchq_metric_get(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_get (
+DROP FUNCTION IF EXISTS fetchq.metric_get(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.metric_get(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	OUT current_value INTEGER,
@@ -12,7 +12,7 @@ DECLARE
 	VAR_r RECORD;
 	VAR_rows INTEGER;
 BEGIN
-	SELECT * into VAR_r FROM fetchq_catalog.fetchq_sys_metrics
+	SELECT * into VAR_r FROM fetchq.metrics
 	WHERE queue = PAR_queue
 	AND metric = PAR_subject
 	LIMIT 1;
@@ -36,10 +36,10 @@ END; $$
 LANGUAGE plpgsql;
 
 -- READS ALL AVAILABLE METRIC FOR A QUEUE
-DROP FUNCTION IF EXISTS fetchq_metric_get(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_get (
+DROP FUNCTION IF EXISTS fetchq.metric_get(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.metric_get(
 	PAR_queue VARCHAR
-) RETURNS TABLE (
+) RETURNS TABLE(
 	metric VARCHAR,
 	current_value BIGINT,
 	last_update TIMESTAMP WITH TIME ZONE
@@ -47,7 +47,7 @@ CREATE OR REPLACE FUNCTION fetchq_metric_get (
 BEGIN
 	RETURN QUERY
 	SELECT t.metric, t.value AS current_value, t.updated_at AS last_update
-	FROM fetchq_catalog.fetchq_sys_metrics AS t
+	FROM fetchq.metrics AS t
 	WHERE queue = PAR_queue
 	ORDER BY metric ASC;
 END; $$

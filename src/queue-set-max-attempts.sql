@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_queue_set_max_attempts(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_queue_set_max_attempts (
+DROP FUNCTION IF EXISTS fetchq.queue_set_max_attempts(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq.queue_set_max_attempts(
 	PAR_queue VARCHAR,
 	PAR_maxAttempts INTEGER,
 	OUT affected_rows INTEGER,
@@ -16,7 +16,7 @@ BEGIN
 
 	-- change max_attempts in the table
 	VAR_q = '';
-	VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq_sys_queues ';
+	VAR_q = VAR_q || 'UPDATE fetchq.queues ';
 	VAR_q = VAR_q || 'SET max_attempts = %s  ';
 	VAR_q = VAR_q || 'WHERE name = ''%s'' RETURNING current_version';
 	VAR_q = FORMAT(VAR_q, PAR_maxAttempts, PAR_queue);
@@ -24,14 +24,14 @@ BEGIN
 	GET DIAGNOSTICS affected_rows := ROW_COUNT;
 
 	-- drop max_attempts related indexes
-	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_orp_idx';
+	VAR_q = 'DROP INDEX IF EXISTS fetchq.%s_for_orp_idx';
 	EXECUTE FORMAT(VAR_q, PAR_queue);
-	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_dod_idx';
+	VAR_q = 'DROP INDEX IF EXISTS fetchq.%s_for_dod_idx';
 	EXECUTE FORMAT(VAR_q, PAR_queue);
 
 	-- re-index the table
 	-- RAISE NOTICE '%', VAR_r.current_version;
-	PERFORM fetchq_queue_create_indexes(PAR_queue);
+	PERFORM fetchq.queue_create_indexes(PAR_queue);
 
 	EXCEPTION WHEN OTHERS THEN BEGIN
 		was_reindexed = false;

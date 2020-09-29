@@ -5,7 +5,7 @@
 --
 
 
-CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_insert () RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION fetchq.trigger_docs_notify_insert() RETURNS TRIGGER AS $$
 DECLARE
 	VAR_event VARCHAR = 'pnd';
     VAR_notify VARCHAR;
@@ -14,7 +14,7 @@ BEGIN
 		VAR_event = 'pln';
 	END IF;
 
-    VAR_notify = REPLACE(TG_TABLE_NAME, '__documents', FORMAT('__%s', VAR_event));
+    VAR_notify = REPLACE(TG_TABLE_NAME, '__docs', FORMAT('__%s', VAR_event));
     -- RAISE EXCEPTION 'GGGG %', VAR_notify;
     -- RAISE EXCEPTION '>>>>>>>>>>>>>>>>> % -- %', VAR_notify, FORMAT('__%s', VAR_event);
 
@@ -24,7 +24,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_update () RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_update() RETURNS TRIGGER AS $$
 DECLARE
 	VAR_event VARCHAR = 'null';
     VAR_notify VARCHAR;
@@ -49,7 +49,7 @@ BEGIN
 		VAR_event = 'kll';
 	END IF;
 	
-    VAR_notify = REPLACE(TG_TABLE_NAME, '__documents', FORMAT('__%s', VAR_event));
+    VAR_notify = REPLACE(TG_TABLE_NAME, '__docs', FORMAT('__%s', VAR_event));
     -- PERFORM pg_notify('fetchq_debug', VAR_notify);
 	PERFORM pg_notify(VAR_notify, NEW.subject);
 	RETURN NEW;
@@ -58,7 +58,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_queue_disable_notify (
+CREATE OR REPLACE FUNCTION fetchq_queue_disable_notify(
     PAR_queue VARCHAR,
     OUT success BOOLEAN
 ) AS $$
@@ -66,12 +66,12 @@ DECLARE
 	VAR_q VARCHAR;
 BEGIN
 	-- after insert
-    VAR_q = 'DROP TRIGGER IF EXISTS fetchq__%s__trg_notify_insert ON fetchq_catalog.fetchq__%s__documents';
+    VAR_q = 'DROP TRIGGER IF EXISTS fetchq__%s__trg_notify_insert ON fetchq_data.%s__docs';
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;
 
     -- after update
-    VAR_q = 'DROP TRIGGER IF EXISTS fetchq__%s__trg_notify_update ON fetchq_catalog.fetchq__%s__documents';
+    VAR_q = 'DROP TRIGGER IF EXISTS fetchq__%s__trg_notify_update ON fetchq_data.%s__docs';
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;
 
@@ -79,7 +79,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_queue_enable_notify (
+CREATE OR REPLACE FUNCTION fetchq_queue_enable_notify(
     PAR_queue VARCHAR,
     OUT success BOOLEAN
 ) AS $$
@@ -91,15 +91,15 @@ BEGIN
     
     -- after insert
     VAR_q = 'CREATE TRIGGER fetchq__%s__trg_notify_insert AFTER INSERT ';
-	VAR_q = VAR_q || 'ON fetchq_catalog.fetchq__%s__documents ';
-    VAR_q = VAR_q || 'FOR EACH ROW EXECUTE PROCEDURE fetchq_trigger_docs_notify_insert();';
+	VAR_q = VAR_q || 'ON fetchq_data.%s__docs ';
+    VAR_q = VAR_q || 'FOR EACH ROW EXECUTE PROCEDURE fetchq.trigger_docs_notify_insert();';
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;
 
 
     -- after update
     VAR_q = 'CREATE TRIGGER fetchq__%s__trg_notify_update AFTER UPDATE ';
-	VAR_q = VAR_q || 'ON fetchq_catalog.fetchq__%s__documents ';
+	VAR_q = VAR_q || 'ON fetchq_data.%s__docs ';
     VAR_q = VAR_q || 'FOR EACH ROW EXECUTE PROCEDURE fetchq_trigger_docs_notify_update();';
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;

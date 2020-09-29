@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_doc_drop(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_doc_drop (
+DROP FUNCTION IF EXISTS fetchq.doc_drop(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.doc_drop(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	OUT affected_rows INTEGER
@@ -10,7 +10,7 @@ DECLARE
 	VAR_version INTEGER;
 BEGIN
 
-	VAR_q = 'DELETE FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 RETURNING version;';
+	VAR_q = 'DELETE FROM fetchq_data.%s__docs WHERE subject = ''%s'' AND status = 2 RETURNING version;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_subject);
 
 	EXECUTE VAR_q INTO VAR_version;
@@ -19,11 +19,11 @@ BEGIN
 
 	-- Update counters
 	IF affected_rows > 0 THEN
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'prc', affected_rows);
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'drp', affected_rows);
-		PERFORM fetchq_metric_log_decrement(PAR_queue, 'act', affected_rows);
-		PERFORM fetchq_metric_log_decrement(PAR_queue, 'cnt', affected_rows);
-		PERFORM fetchq_metric_log_decrement(PAR_queue, 'v' || VAR_version::text, affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'prc', affected_rows);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'drp', affected_rows);
+		PERFORM fetchq.metric_log_decrement(PAR_queue, 'act', affected_rows);
+		PERFORM fetchq.metric_log_decrement(PAR_queue, 'cnt', affected_rows);
+		PERFORM fetchq.metric_log_decrement(PAR_queue, 'v' || VAR_version::text, affected_rows);
 	END IF;
 
 --	EXCEPTION WHEN OTHERS THEN BEGIN END;

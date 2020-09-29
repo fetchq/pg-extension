@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_log_error(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_log_error (
+DROP FUNCTION IF EXISTS fetchq.log_error(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB);
+CREATE OR REPLACE FUNCTION fetchq.log_error(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_message VARCHAR,
@@ -11,9 +11,9 @@ DECLARE
     VAR_q VARCHAR;
 BEGIN
 
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__errors (';
+    VAR_q = 'INSERT INTO fetchq_data.%s__logs(';
 	VAR_q = VAR_q || 'created_at, subject, message, details';
-    VAR_q = VAR_q || ') VALUES (';
+    VAR_q = VAR_q || ') VALUES(';
     VAR_q = VAR_q || 'NOW(), ';
     VAR_q = VAR_q || '''%s'', ';
     VAR_q = VAR_q || '''%s'', ';
@@ -32,8 +32,8 @@ END; $$
 LANGUAGE plpgsql;
 
 
-DROP FUNCTION IF EXISTS fetchq_log_error(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB, VARCHAR);
-CREATE OR REPLACE FUNCTION fetchq_log_error (
+DROP FUNCTION IF EXISTS fetchq.log_error(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB, VARCHAR);
+CREATE OR REPLACE FUNCTION fetchq.log_error(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_message VARCHAR,
@@ -45,9 +45,9 @@ DECLARE
     VAR_q VARCHAR;
 BEGIN
 
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__errors (';
+    VAR_q = 'INSERT INTO fetchq_data.%s__logs(';
 	VAR_q = VAR_q || 'created_at, subject, message, details, ref_id';
-    VAR_q = VAR_q || ') VALUES (';
+    VAR_q = VAR_q || ') VALUES(';
     VAR_q = VAR_q || 'NOW(), ';
     VAR_q = VAR_q || '''%s'', ';
     VAR_q = VAR_q || '''%s'', ';

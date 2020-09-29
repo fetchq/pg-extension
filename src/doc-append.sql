@@ -1,9 +1,9 @@
 
 -- APPEND A SINGLE DOCUMENT WITH A RANDOM GENERATED SUBJECT
 -- DEPENDS ON uuid-ossp EXTENSION
--- (CREATE EXTENSION IF NOT EXISTS "uuid-ossp";)
-DROP FUNCTION IF EXISTS fetchq_doc_append(CHARACTER VARYING, JSONB, INTEGER, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_doc_append (
+--(CREATE EXTENSION IF NOT EXISTS "uuid-ossp";)
+DROP FUNCTION IF EXISTS fetchq.doc_append(CHARACTER VARYING, JSONB, INTEGER, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq.doc_append(
     PAR_queue VARCHAR,
     PAR_payload JSONB,
     PAR_version INTEGER,
@@ -21,8 +21,8 @@ BEGIN
     subject = VAR_subject;
 
     -- push the document into the data table
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__documents (';
-	VAR_q = VAR_q || 'subject, version, priority, status, next_iteration, payload, created_at) VALUES (';
+    VAR_q = 'INSERT INTO fetchq_data.%s__docs(';
+	VAR_q = VAR_q || 'subject, version, priority, status, next_iteration, payload, created_at) VALUES(';
     VAR_q = VAR_q || '''%s'', ';
     VAR_q = VAR_q || '%s, ';
     VAR_q = VAR_q || '%s, ';
@@ -37,22 +37,22 @@ BEGIN
     GET DIAGNOSTICS VAR_queuedDocs := ROW_COUNT;
 
     -- update generic counters
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'ent', VAR_queuedDocs);
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'cnt', VAR_queuedDocs);
+	PERFORM fetchq.metric_log_increment(PAR_queue, 'ent', VAR_queuedDocs);
+	PERFORM fetchq.metric_log_increment(PAR_queue, 'cnt', VAR_queuedDocs);
 
 	-- upate version counter
-	PERFORM fetchq_metric_log_increment(PAR_queue, 'v' || PAR_version::text, VAR_queuedDocs);
+	PERFORM fetchq.metric_log_increment(PAR_queue, 'v' || PAR_version::text, VAR_queuedDocs);
 
     -- update status counter
 	IF VAR_status = 1 THEN
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'pnd', VAR_queuedDocs);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'pnd', VAR_queuedDocs);
 
         -- emit worker notifications
 		-- IF VAR_queuedDocs > 0 THEN
 		-- 	PERFORM pg_notify(FORMAT('fetchq_pnd_%s', PAR_queue), VAR_queuedDocs::text);
 		-- END IF;
 	ELSE
-		PERFORM fetchq_metric_log_increment(PAR_queue, 'pln', VAR_queuedDocs);
+		PERFORM fetchq.metric_log_increment(PAR_queue, 'pln', VAR_queuedDocs);
 
         -- emit worker notifications
 		-- IF VAR_queuedDocs > 0 THEN

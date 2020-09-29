@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_mnt_job_reschedule(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_mnt_job_reschedule (
+DROP FUNCTION IF EXISTS fetchq.mnt_job_reschedule(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.mnt_job_reschedule(
 	PAR_id INTEGER,
     PAR_delay VARCHAR,
     OUT success BOOLEAN
@@ -11,7 +11,7 @@ BEGIN
     success = true;
 
     VAR_q = '';
-    VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq_sys_jobs SET ';
+    VAR_q = VAR_q || 'UPDATE fetchq.jobs SET ';
     VAR_q = VAR_q || 'next_iteration = NOW() + ''%s'', ';
     VAR_q = VAR_q || 'iterations = iterations + 1, ';
     VAR_q = VAR_q || 'attempts = 0 ';

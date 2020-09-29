@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_queue_set_errors_retention(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_set_errors_retention (
+DROP FUNCTION IF EXISTS fetchq.queue_set_logs_retention(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.queue_set_logs_retention(
 	PAR_queue VARCHAR,
 	PAR_retention VARCHAR,
 	OUT affected_rows INTEGER
@@ -13,8 +13,8 @@ BEGIN
 
 	-- change value in the table
 	VAR_q = '';
-	VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq_sys_queues ';
-	VAR_q = VAR_q || 'SET errors_retention = ''%s''  ';
+	VAR_q = VAR_q || 'UPDATE fetchq.queues ';
+	VAR_q = VAR_q || 'SET logs_retention = ''%s''  ';
 	VAR_q = VAR_q || 'WHERE name = ''%s''';
 	VAR_q = FORMAT(VAR_q, PAR_retention, PAR_queue);
 	EXECUTE VAR_q;

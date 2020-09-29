@@ -1,2 +1,3 @@
 FROM postgres:11.6
 ADD ./extension /usr/share/postgresql/11/extension/
+ADD ./docker-entrypoint-initdb.d /docker-entrypoint-initdb.d

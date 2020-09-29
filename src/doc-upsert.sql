@@ -1,6 +1,6 @@
 -- PUSH A SINGLE DOCUMENT
-DROP FUNCTION IF EXISTS fetchq_doc_upsert(CHARACTER VARYING, CHARACTER VARYING, INTEGER, INTEGER, TIMESTAMP WITH TIME ZONE, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_doc_upsert (
+DROP FUNCTION IF EXISTS fetchq.doc_upsert(CHARACTER VARYING, CHARACTER VARYING, INTEGER, INTEGER, TIMESTAMP WITH TIME ZONE, JSONB);
+CREATE OR REPLACE FUNCTION fetchq.doc_upsert(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_version INTEGER,
@@ -18,14 +18,14 @@ BEGIN
     queued_docs = 0;
     updated_docs = 0;
 
-    SELECT * INTO VAR_r FROM fetchq_doc_push(PAR_queue, PAR_subject, PAR_version, PAR_priority, PAR_nextIteration, PAR_payload);
+    SELECT * INTO VAR_r FROM fetchq.doc_push(PAR_queue, PAR_subject, PAR_version, PAR_priority, PAR_nextIteration, PAR_payload);
     queued_docs = VAR_r.queued_docs;
 
     RAISE NOTICE '>>>>>>>>> QUEUED DOCS %', queued_docs;
 
     IF queued_docs = 0 THEN
         VAR_q = '';
-        VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq__%s__documents SET ';
+        VAR_q = VAR_q || 'UPDATE fetchq_data.%s__docs SET ';
         VAR_q = VAR_q || 'priority = %s, ';
         VAR_q = VAR_q || 'payload = ''%s'', ';
         VAR_q = VAR_q || 'next_iteration = ''%s'' ';

@@ -1,6 +1,6 @@
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_push_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_push_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -10,29 +10,29 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_test.fetchq_test_init();
+    PERFORM fetchq.queue_create('foo');
 
     -- should be able to queue a document with future schedule
-    SELECT * INTO VAR_queuedDocs FROM fetchq_doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
+    SELECT * INTO VAR_queuedDocs FROM fetchq.doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
     IF VAR_queuedDocs <> 1 THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq__foo__documents WHERE subject = 'a1';
+    SELECT * INTO VAR_r FROM fetchq_data.foo__docs WHERE subject = 'a1';
     IF VAR_r.status <> 0 THEN
-        RAISE EXCEPTION 'failed - % (Wrong status was computed for the document)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(Wrong status was computed for the document)', VAR_testName;
     END IF;
 
     -- checkout logs
-    PERFORM fetchq_metric_log_pack();
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'pln');
+    PERFORM fetchq.metric_log_pack();
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pln');
     IF VAR_r.current_value <> 1 THEN
-        RAISE EXCEPTION 'failed - % (Wrong planned documents count)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(Wrong planned documents count)', VAR_testName;
     END IF;
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
@@ -40,7 +40,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_push_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_push_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -50,37 +50,37 @@ DECLARE
 BEGIN
 
     -- initialize test
-    PERFORM fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_test.fetchq_test_init();
+    PERFORM fetchq.queue_create('foo');
     PERFORM fetchq_queue_enable_notify('foo');
 
     -- should be able to queue a document with past schedule
-    SELECT * INTO VAR_queuedDocs FROM fetchq_doc_push('foo', 'a100', 0, 0, NOW() - INTERVAL '1m', '{}');
+    SELECT * INTO VAR_queuedDocs FROM fetchq.doc_push('foo', 'a100', 0, 0, NOW() - INTERVAL '1m', '{}');
     IF VAR_queuedDocs <> 1 THEN
-        RAISE EXCEPTION 'failed - % (expected: 1, received: %)', VAR_testName, VAR_queuedDocs;
+        RAISE EXCEPTION 'failed - %(expected: 1, received: %)', VAR_testName, VAR_queuedDocs;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq__foo__documents WHERE subject = 'a1';
+    SELECT * INTO VAR_r FROM fetchq_data.foo__docs WHERE subject = 'a1';
     IF VAR_r.status <> 1 THEN
-        RAISE EXCEPTION 'failed - % (Wrong status was computed for the document)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(Wrong status was computed for the document)', VAR_testName;
     END IF;
 
     -- checkout logs
-    PERFORM fetchq_metric_log_pack();
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'pnd');
+    PERFORM fetchq.metric_log_pack();
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pnd');
     IF VAR_r.current_value <> 1 THEN
-        RAISE EXCEPTION 'failed - % (Wrong planned documents count)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(Wrong planned documents count)', VAR_testName;
     END IF;
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test__doc_push_03 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_push_03(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -90,24 +90,24 @@ DECLARE
 BEGIN
 
     -- initialize test
-    PERFORM fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_test.fetchq_test_init();
+    PERFORM fetchq.queue_create('foo');
     PERFORM fetchq_queue_enable_notify('foo');
 
-    SELECT * INTO VAR_queuedDocs FROM fetchq_doc_push( 'foo', 0, NOW(), '( ''a1'', 0, ''{"a":1}'', {DATA}), (''a2'', 1, ''{"a":2}'', {DATA} )');
+    SELECT * INTO VAR_queuedDocs FROM fetchq.doc_push( 'foo', 0, NOW(), '( ''a1'', 0, ''{"a":1}'', {DATA}),(''a2'', 1, ''{"a":2}'', {DATA} )');
     IF VAR_queuedDocs <> 2 THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
 
     -- checkout logs
-    PERFORM fetchq_metric_log_pack();
-    SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'pnd');
+    PERFORM fetchq.metric_log_pack();
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pnd');
     IF VAR_r.current_value <> 2 THEN
-        RAISE EXCEPTION 'failed - % (Wrong pending documents count when adding multiple documents)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(Wrong pending documents count when adding multiple documents)', VAR_testName;
     END IF;
 
     -- cleanup test
-    PERFORM fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$

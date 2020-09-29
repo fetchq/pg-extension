@@ -2,8 +2,8 @@
 -- DROP A QUEUE ERRORS WITH A RETENTION INTERVAL
 -- returns:
 -- { affected_rows: INTEGER }
-DROP FUNCTION IF EXISTS fetchq_queue_drop_metrics(CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics (
+DROP FUNCTION IF EXISTS fetchq.queue_drop_metrics(CHARACTER VARYING, JSONB);
+CREATE OR REPLACE FUNCTION fetchq.queue_drop_metrics(
 	PAR_queue VARCHAR,
     PAR_config JSONB,
 	OUT removed_rows INTEGER
@@ -27,7 +27,7 @@ BEGIN
         select * INTO VAR_rowCfg from jsonb_to_record(VAR_rowSrc::jsonb) as x(a text, b text, c text);
         -- RAISE NOTICE 'from: %, to: %, retain: %', VAR_rowCfg.a, VAR_rowCfg.b, VAR_rowCfg.c;
 
-        VAR_q = 'SELECT * FROM fetchq_utils_ts_retain(''fetchq__%s__metrics'', ''created_at'', ''%s'', NOW() - INTERVAL ''%s'', NOW() - INTERVAL ''%s'')';
+        VAR_q = 'SELECT * FROM fetchq.utils_ts_retain(''fetchq__%s__metrics'', ''created_at'', ''%s'', NOW() - INTERVAL ''%s'', NOW() - INTERVAL ''%s'')';
         VAR_q = FORMAT(VAR_q, PAR_queue, VAR_rowCfg.c, VAR_rowCfg.a, VAR_rowCfg.b);
         -- RAISE NOTICE '%', VAR_q;
         EXECUTE VAR_q INTO VAR_rowRes;
@@ -43,8 +43,8 @@ END; $$
 LANGUAGE plpgsql;
 
 
-DROP FUNCTION IF EXISTS fetchq_queue_drop_metrics(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics (
+DROP FUNCTION IF EXISTS fetchq.queue_drop_metrics(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.queue_drop_metrics(
 	PAR_queue VARCHAR,
 	OUT removed_rows INTEGER
 ) AS $$
@@ -54,7 +54,7 @@ DECLARE
     VAR_retention VARCHAR = '[]';
 BEGIN
     
-    VAR_q = 'SELECT metrics_retention FROM fetchq_catalog.fetchq_sys_queues WHERE name = ''%s'';';
+    VAR_q = 'SELECT metrics_retention FROM fetchq.queues WHERE name = ''%s'';';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q INTO VAR_r;
 
@@ -66,7 +66,7 @@ BEGIN
     RAISE NOTICE 'retention %', VAR_retention;
 
     -- run the operation
-    SELECT * INTO VAR_r FROM fetchq_queue_drop_metrics(PAR_queue, VAR_retention::jsonb);
+    SELECT * INTO VAR_r FROM fetchq.queue_drop_metrics(PAR_queue, VAR_retention::jsonb);
     removed_rows = VAR_r.removed_rows;
 
     -- RAISE NOTICE 'removed roes %', removed_rows;

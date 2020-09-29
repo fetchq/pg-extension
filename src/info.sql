@@ -1,10 +1,13 @@
 
+CREATE SCHEMA IF NOT EXISTS fetchq_data;
+CREATE SCHEMA IF NOT EXISTS fetchq;
+
 -- EXTENSION INFO
-DROP FUNCTION IF EXISTS fetchq_info();
-CREATE OR REPLACE FUNCTION fetchq_info (
+DROP FUNCTION IF EXISTS fetchq.info();
+CREATE OR REPLACE FUNCTION fetchq.info(
     OUT version VARCHAR
 ) AS $$
 BEGIN
-	version='2.2.0';
+	version='3.0.0';
 END; $$
 LANGUAGE plpgsql;
