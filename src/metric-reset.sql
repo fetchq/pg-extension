@@ -17,12 +17,12 @@ DECLARE
 BEGIN
 	SELECT * INTO VAR_res FROM fetchq_catalog.fetchq_metric_compute(PAR_queue);
 	
-	PERFORM fetchq_metric_set(PAR_queue, 'cnt', VAR_res.cnt);
-	PERFORM fetchq_metric_set(PAR_queue, 'pln', VAR_res.pln);
-	PERFORM fetchq_metric_set(PAR_queue, 'pnd', VAR_res.pnd);
-	PERFORM fetchq_metric_set(PAR_queue, 'act', VAR_res.act);
-    PERFORM fetchq_metric_set(PAR_queue, 'cpl', VAR_res.cpl);
-	PERFORM fetchq_metric_set(PAR_queue, 'kll', VAR_res.kll);
+	PERFORM fetchq_catalog.fetchq_metric_set(PAR_queue, 'cnt', VAR_res.cnt);
+	PERFORM fetchq_catalog.fetchq_metric_set(PAR_queue, 'pln', VAR_res.pln);
+	PERFORM fetchq_catalog.fetchq_metric_set(PAR_queue, 'pnd', VAR_res.pnd);
+	PERFORM fetchq_catalog.fetchq_metric_set(PAR_queue, 'act', VAR_res.act);
+    PERFORM fetchq_catalog.fetchq_metric_set(PAR_queue, 'cpl', VAR_res.cpl);
+	PERFORM fetchq_catalog.fetchq_metric_set(PAR_queue, 'kll', VAR_res.kll);
 	
 	-- forward data out
 	cnt = VAR_res.cnt;

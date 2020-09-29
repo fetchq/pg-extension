@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_mnt_job_pick(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_job_pick(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_mnt_job_pick(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_mnt_job_pick(
 	PAR_lockDuration VARCHAR,
     PAR_limit INTEGER
 ) RETURNS TABLE(

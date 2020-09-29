@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_metric_snap(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_snap(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_metric_snap(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_snap(
 	PAR_queue VARCHAR,
 	PAR_metric VARCHAR,
 	OUT success BOOLEAN,
@@ -28,8 +28,8 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq_metric_snap(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_snap(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_metric_snap(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_snap(
 	PAR_queue VARCHAR,
 	OUT success BOOLEAN,
     OUT inserts INTEGER
@@ -53,8 +53,8 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq_metric_snap(CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_metric_snap(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_metric_snap(CHARACTER VARYING, JSONB);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_snap(
 	PAR_queue VARCHAR,
     PAR_whiteList JSONB,
 	OUT success BOOLEAN,

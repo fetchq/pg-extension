@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_mnt_job_reschedule(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_mnt_job_reschedule(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_mnt_job_reschedule(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_mnt_job_reschedule(
 	PAR_id INTEGER,
     PAR_delay VARCHAR,
     OUT success BOOLEAN

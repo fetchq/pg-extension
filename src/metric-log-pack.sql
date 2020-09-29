@@ -18,7 +18,7 @@ BEGIN
 		WHERE reset IS NOT NULL
 		ORDER BY queue, metric, created_at DESC
 	LOOP
-		PERFORM fetchq_metric_set(VAR_r.queue, VAR_r.metric, VAR_r.reset::integer);
+		PERFORM fetchq_catalog.fetchq_metric_set(VAR_r.queue, VAR_r.metric, VAR_r.reset::integer);
 	END LOOP;
 
 	-- aggregate the rest of increments

@@ -15,7 +15,7 @@ BEGIN
 
     -- run all the available jobs
     GET DIAGNOSTICS VAR_countJobs := ROW_COUNT;
-    SELECT * INTO VAR_r FROM fetchq_mnt_job_run(PAR_lockDuration, VAR_countJobs);
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_mnt_job_run(PAR_lockDuration, VAR_countJobs);
 	processed = VAR_r.processed;
 
     -- pack the generated metrics

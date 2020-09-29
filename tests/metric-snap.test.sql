@@ -20,7 +20,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run tests
-    SELECT * INTO VAR_r from fetchq_metric_snap('foo', 'cnt');
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_snap('foo', 'cnt');
     IF VAR_r.success IS NULL THEN
         RAISE EXCEPTION 'failed - %(success, got null value)', VAR_testName;
     END IF;
@@ -57,7 +57,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run tests
-    SELECT * INTO VAR_r from fetchq_metric_snap('foo');
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_snap('foo');
     IF VAR_r.success IS NULL THEN
         RAISE EXCEPTION 'failed - %(success, got null value)', VAR_testName;
     END IF;
@@ -97,7 +97,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run tests
-    SELECT * INTO VAR_r from fetchq_metric_snap('foo', '[ "cnt", "act" ]'::jsonb);
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_snap('foo', '[ "cnt", "act" ]'::jsonb);
     IF VAR_r.success IS NULL THEN
         RAISE EXCEPTION 'failed - %(success, got null value)', VAR_testName;
     END IF;

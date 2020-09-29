@@ -11,8 +11,8 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- set counters
-    PERFORM fetchq_metric_set('a', 'tot', 1);
-    PERFORM fetchq_metric_set('b', 'tot', 3);
+    PERFORM fetchq_catalog.fetchq_metric_set('a', 'tot', 1);
+    PERFORM fetchq_catalog.fetchq_metric_set('b', 'tot', 3);
     PERFORM fetchq_catalog.fetchq_metric_log_increment('a', 'tot', 1);
     PERFORM fetchq_catalog.fetchq_metric_log_decrement('b', 'tot', 1);
     PERFORM fetchq_catalog.fetchq_metric_log_pack();

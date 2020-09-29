@@ -12,8 +12,8 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- test set counters
-    PERFORM fetchq_metric_set('a', 'b', 4);
-    PERFORM fetchq_metric_set('a', 'b', 5);
+    PERFORM fetchq_catalog.fetchq_metric_set('a', 'b', 4);
+    PERFORM fetchq_catalog.fetchq_metric_set('a', 'b', 5);
     PERFORM fetchq_catalog.fetchq_metric_increment('a', 'b', 5);
     PERFORM fetchq_catalog.fetchq_metric_increment('a', 'b', -3);
 
@@ -59,8 +59,8 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- test set counters
-    PERFORM fetchq_metric_set(VAR_qA, 'b', 4);
-    PERFORM fetchq_metric_set(VAR_qA, 'b', 5);
+    PERFORM fetchq_catalog.fetchq_metric_set(VAR_qA, 'b', 4);
+    PERFORM fetchq_catalog.fetchq_metric_set(VAR_qA, 'b', 5);
     PERFORM fetchq_catalog.fetchq_metric_increment(VAR_qA, 'b', 5);
     PERFORM fetchq_catalog.fetchq_metric_increment(VAR_qA, 'b', -3);
 
@@ -107,8 +107,8 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- set counters
-    PERFORM fetchq_metric_set(VAR_qA, 'a', 2);
-    PERFORM fetchq_metric_set(VAR_qA, 'b', 3);
+    PERFORM fetchq_catalog.fetchq_metric_set(VAR_qA, 'a', 2);
+    PERFORM fetchq_catalog.fetchq_metric_set(VAR_qA, 'b', 3);
     PERFORM fetchq_catalog.fetchq_metric_increment(VAR_qA, 'c', 3);
     PERFORM fetchq_catalog.fetchq_metric_increment(VAR_qA, 'd', 4);
     PERFORM fetchq_catalog.fetchq_metric_log_decrement(VAR_qA, 'a', 1);
