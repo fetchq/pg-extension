@@ -190,7 +190,7 @@ BEGIN
     StartTime := clock_timestamp();
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick(PAR_queue, 0, PAR_limit, '5m');
     RAISE NOTICE '%', VAR_r;
-    -- PERFORM fetchq_doc_reschedule(PAR_queue, VAR_r.id, NOW() + INTERVAL '1y');
+    -- PERFORM fetchq_catalog.fetchq_doc_reschedule(PAR_queue, VAR_r.id, NOW() + INTERVAL '1y');
     EndTime := clock_timestamp();
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
     duration = ROUND(Delta);

@@ -37,7 +37,7 @@ BEGIN
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q;
 
-	-- index for: fetchq_doc_upsert() -- edit query
+	-- index for: fetchq_catalog.fetchq_doc_upsert() -- edit query
 	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_ups_idx;';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q;

@@ -17,7 +17,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
-    PERFORM fetchq_doc_reschedule('foo', 'a1', NOW() + INTERVAL '1y');
+    PERFORM fetchq_catalog.fetchq_doc_reschedule('foo', 'a1', NOW() + INTERVAL '1y');
 
     -- get first document
     SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents WHERE subject = 'a1';
@@ -51,7 +51,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
-    PERFORM fetchq_doc_reschedule('foo', 'a1', NOW() + INTERVAL '1y', '{"a":1}');
+    PERFORM fetchq_catalog.fetchq_doc_reschedule('foo', 'a1', NOW() + INTERVAL '1y', '{"a":1}');
 
     -- get first document
     SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents 
