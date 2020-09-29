@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_queue_set_current_version(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_queue_set_current_version(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_set_current_version(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_set_current_version(
 	PAR_queue VARCHAR,
 	PAR_newVersion INTEGER,
 	OUT affected_rows INTEGER,

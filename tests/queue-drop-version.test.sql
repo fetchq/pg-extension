@@ -12,7 +12,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- perform the operation
-    PERFORM fetchq_queue_set_current_version('foo', 1);
+    PERFORM fetchq_catalog.fetchq_queue_set_current_version('foo', 1);
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop_version('foo', 0);
 
     IF VAR_r.was_dropped <> true THEN
