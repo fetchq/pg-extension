@@ -19,7 +19,7 @@ BEGIN
     FOR VAR_r IN
 		SELECT generate_series(1, PAR_limit) AS id, md5(random()::text) AS descr
 	LOOP
-        PERFORM fetchq_doc_push('foo', VAR_r.descr, 0, 0, NOW() +(random() *(NOW() + '60 days' - NOW())) + '-30 days', '{}');
+        PERFORM fetchq_catalog.fetchq_doc_push('foo', VAR_r.descr, 0, 0, NOW() +(random() *(NOW() + '60 days' - NOW())) + '-30 days', '{}');
 	END LOOP;
     EndTime := clock_timestamp();
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
@@ -63,7 +63,7 @@ BEGIN
 
     -- Generate the push command with multiple documents
     StartTime := clock_timestamp();
-    VAR_q = 'select * from fetchq_doc_push(''foo'', 0, %s, ''';
+    VAR_q = 'select * from fetchq_catalog.fetchq_doc_push(''foo'', 0, %s, ''';
     FOR VAR_r IN
 		SELECT generate_series(1, PAR_limit - 1) AS id, md5(random()::text) AS descr
 	LOOP
@@ -118,7 +118,7 @@ BEGIN
 
     -- Generate the push command with multiple documents
     StartTime := clock_timestamp();
-    VAR_q = 'select * from fetchq_doc_push(''foo'', 0, ''%s'', ''';
+    VAR_q = 'select * from fetchq_catalog.fetchq_doc_push(''foo'', 0, ''%s'', ''';
     FOR VAR_r IN
 		SELECT generate_series(1, PAR_limit - 1) AS id, md5(random()::text) AS descr
 	LOOP
@@ -188,7 +188,7 @@ DECLARE
     Delta double precision;
 BEGIN
     StartTime := clock_timestamp();
-    SELECT * INTO VAR_r FROM fetchq_doc_pick(PAR_queue, 0, PAR_limit, '5m');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick(PAR_queue, 0, PAR_limit, '5m');
     RAISE NOTICE '%', VAR_r;
     -- PERFORM fetchq_doc_reschedule(PAR_queue, VAR_r.id, NOW() + INTERVAL '1y');
     EndTime := clock_timestamp();
@@ -247,7 +247,7 @@ BEGIN
     --     RAISE NOTICE 'pick & resolve: % docs/s', docsPerSecond;
 	-- END LOOP;
 
-    -- SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '1m');
+    -- SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '1m');
     -- RAISE NOTICE '%', VAR_r;
 
     -- cleanup

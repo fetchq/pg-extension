@@ -13,8 +13,8 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
     PERFORM fetchq_doc_reject('foo', 'a1', 'foo', '{"a":1}');
@@ -63,8 +63,8 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
     PERFORM fetchq_doc_reject('foo', 'a1', 'foo', '{"a":1}', 'xxx');
@@ -113,8 +113,8 @@ BEGIN
     PERFORM fetchq_queue_set_max_attempts('foo', 1);
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
     PERFORM fetchq_doc_reject('foo', 'a1', 'foo', '{"a":1}', 'xxx');

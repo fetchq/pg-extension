@@ -18,7 +18,7 @@ BEGIN
     queued_docs = 0;
     updated_docs = 0;
 
-    SELECT * INTO VAR_r FROM fetchq_doc_push(PAR_queue, PAR_subject, PAR_version, PAR_priority, PAR_nextIteration, PAR_payload);
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_push(PAR_queue, PAR_subject, PAR_version, PAR_priority, PAR_nextIteration, PAR_payload);
     queued_docs = VAR_r.queued_docs;
 
     RAISE NOTICE '>>>>>>>>> QUEUED DOCS %', queued_docs;

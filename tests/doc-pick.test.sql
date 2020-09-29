@@ -14,11 +14,11 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '2s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '2s', '{}');
 
     -- get first document
-    SELECT * INTO VAR_r from fetchq_doc_pick('foo', 0, 1, '5m');
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     IF VAR_r.subject IS NULL THEN
         RAISE EXCEPTION 'failed(null value) - %', VAR_testName;
     END IF;
@@ -49,11 +49,11 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '1s', '{}');
 
     -- get first document
-    SELECT * INTO VAR_r from fetchq_doc_pick('foo', 0, 1, '5m');
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     IF VAR_r.subject IS NULL THEN
         RAISE EXCEPTION 'failed(null value) - %', VAR_testName;
     END IF;
@@ -84,12 +84,12 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '1s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a3', 0, 0, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 0, NOW() - INTERVAL '1s', '{}');
 
     -- get first document
-    PERFORM fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 2, '5m');
     GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
     IF VAR_affectedRows <> 2 THEN
         RAISE EXCEPTION 'failed - %(returned % rows instead of 2)', VAR_testName, VAR_affectedRows;
@@ -118,13 +118,13 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '1s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a3', 0, 0, NOW() - INTERVAL '1s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a4', 0, 0, NOW() + INTERVAL '1s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 0, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a4', 0, 0, NOW() + INTERVAL '1s', '{}');
 
     -- get first document
-    PERFORM fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 2, '5m');
     PERFORM fetchq_metric_log_pack();
     
     -- test CNT
@@ -174,11 +174,11 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '50s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '40s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '50s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '40s', '{}');
 
     -- get first document
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '5m');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
     IF VAR_r.subject IS NULL THEN
         RAISE EXCEPTION 'failed(null value) - %', VAR_testName;
@@ -191,7 +191,7 @@ BEGIN
     END IF;
 
     -- get second document
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '5m');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
     IF VAR_r.subject IS NULL THEN
         RAISE EXCEPTION 'failed(null value) - %', VAR_testName;

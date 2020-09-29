@@ -12,7 +12,7 @@ DECLARE
 BEGIN
 	was_created = TRUE;
 
-    -- index for: fetchq_doc_pick()
+    -- index for: fetchq_catalog.fetchq_doc_pick()
     VAR_q = 'CREATE INDEX IF NOT EXISTS fetchq_%s_for_pick_%s_idx ON fetchq_catalog.fetchq__%s__documents ';
 	VAR_q = VAR_q || '( priority DESC, next_iteration ASC, attempts ASC ) ';
     VAR_q = VAR_q || 'WHERE( lock_upgrade IS NULL AND status = 1 AND version = %s); ';

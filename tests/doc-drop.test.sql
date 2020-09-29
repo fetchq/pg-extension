@@ -12,8 +12,8 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
-    PERFORM fetchq_doc_pick('foo', 0, 2, '5m');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 2, '5m');
 
     -- perform reschedule
     PERFORM fetchq_catalog.fetchq_doc_drop('foo', 'a1');

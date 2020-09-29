@@ -12,10 +12,10 @@ BEGIN
     
     -- insert dummy data - queue foo
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
-    PERFORM fetchq_doc_pick('foo', 0, 1, '5m');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_mnt_run_all(100);
     PERFORM fetchq_metric_log_pack();
 
@@ -49,10 +49,10 @@ BEGIN
     
     -- insert dummy data - queue foo
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
-    PERFORM fetchq_doc_pick('foo', 0, 1, '5m');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_mnt_run_all(100);
     PERFORM fetchq_metric_log_pack();
 
@@ -89,10 +89,10 @@ BEGIN
     
     -- insert dummy data - queue foo
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
-    PERFORM fetchq_doc_pick('foo', 0, 1, '5m');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_mnt_run_all(100);
     PERFORM fetchq_metric_log_pack();
 

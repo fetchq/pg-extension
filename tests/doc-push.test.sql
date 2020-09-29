@@ -14,7 +14,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- should be able to queue a document with future schedule
-    SELECT * INTO VAR_queuedDocs FROM fetchq_doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
+    SELECT * INTO VAR_queuedDocs FROM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
     IF VAR_queuedDocs <> 1 THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
@@ -55,7 +55,7 @@ BEGIN
     PERFORM fetchq_queue_enable_notify('foo');
 
     -- should be able to queue a document with past schedule
-    SELECT * INTO VAR_queuedDocs FROM fetchq_doc_push('foo', 'a100', 0, 0, NOW() - INTERVAL '1m', '{}');
+    SELECT * INTO VAR_queuedDocs FROM fetchq_catalog.fetchq_doc_push('foo', 'a100', 0, 0, NOW() - INTERVAL '1m', '{}');
     IF VAR_queuedDocs <> 1 THEN
         RAISE EXCEPTION 'failed - %(expected: 1, received: %)', VAR_testName, VAR_queuedDocs;
     END IF;
@@ -94,7 +94,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
     PERFORM fetchq_queue_enable_notify('foo');
 
-    SELECT * INTO VAR_queuedDocs FROM fetchq_doc_push( 'foo', 0, NOW(), '( ''a1'', 0, ''{"a":1}'', {DATA}),(''a2'', 1, ''{"a":2}'', {DATA} )');
+    SELECT * INTO VAR_queuedDocs FROM fetchq_catalog.fetchq_doc_push( 'foo', 0, NOW(), '( ''a1'', 0, ''{"a":1}'', {DATA}),(''a2'', 1, ''{"a":2}'', {DATA} )');
     IF VAR_queuedDocs <> 2 THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;

@@ -12,20 +12,20 @@ BEGIN
     
     -- insert dummy data - queue foo
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a4', 0, 1, NOW() - INTERVAL '7s', '{}');
-    PERFORM fetchq_doc_push('foo', 'a5', 0, 1, NOW() - INTERVAL '6s', '{}');
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '5m');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a4', 0, 1, NOW() - INTERVAL '7s', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a5', 0, 1, NOW() - INTERVAL '6s', '{}');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_doc_reschedule('foo', VAR_r.subject, NOW() + INTERVAL '1y');
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '5m');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_doc_reject('foo', VAR_r.subject, 'foo', '{"a":1}');
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '5m');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_catalog.fetchq_doc_complete('foo', VAR_r.subject);
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '5m');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_catalog.fetchq_doc_kill('foo', VAR_r.subject);
-    SELECT * INTO VAR_r FROM fetchq_doc_pick('foo', 0, 1, '5m');
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_catalog.fetchq_doc_drop('foo', VAR_r.subject);
 
     -- run maintenance

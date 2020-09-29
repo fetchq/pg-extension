@@ -12,12 +12,12 @@ BEGIN
 
     -- create & drop the queue
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
-    PERFORM fetchq_doc_push('foo', 'a2', 0, 0, NOW() + INTERVAL '1m', '{}');
-    PERFORM fetchq_doc_push('foo', 'a3', 0, 0, NOW() + INTERVAL '1m', '{}');
-    PERFORM fetchq_doc_push('foo', 'a4', 1, 0, NOW() + INTERVAL '1m', '{}');
-    PERFORM fetchq_doc_push('foo', 'a5', 1, 0, NOW() + INTERVAL '1m', '{}');
-    PERFORM fetchq_doc_push('foo', 'a6', 1, 0, NOW() + INTERVAL '1m', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 0, NOW() + INTERVAL '1m', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 0, NOW() + INTERVAL '1m', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a4', 1, 0, NOW() + INTERVAL '1m', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a5', 1, 0, NOW() + INTERVAL '1m', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a6', 1, 0, NOW() + INTERVAL '1m', '{}');
     
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_catalog.fetchq_queue_top('foo', 0, 3, 0);
     IF VAR_numDocs != 3 THEN

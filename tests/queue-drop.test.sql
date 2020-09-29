@@ -11,9 +11,9 @@ BEGIN
 
     -- create & drop the queue
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
     PERFORM fetchq_metric_log_pack();
-    PERFORM fetchq_doc_push('foo', 'a2', 0, 0, NOW() + INTERVAL '1m', '{}');
+    PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a2', 0, 0, NOW() + INTERVAL '1m', '{}');
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_drop('foo');
     IF VAR_r.was_dropped IS NOT true THEN
         RAISE EXCEPTION 'could not drop the queue';
