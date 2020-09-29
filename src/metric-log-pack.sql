@@ -1,5 +1,5 @@
-DROP FUNCTION IF EXISTS fetchq_metric_log_pack();
-CREATE OR REPLACE FUNCTION fetchq_metric_log_pack(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_metric_log_pack();
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_log_pack(
 	OUT affected_rows INTEGER
 ) AS $$
 DECLARE

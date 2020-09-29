@@ -1,8 +1,8 @@
 
 -- SLOW QUERY!
 -- compute and resets all the basic counters for a queue metrics
-DROP FUNCTION IF EXISTS fetchq_metric_reset(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_reset(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_metric_reset(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_metric_reset(
 	PAR_queue VARCHAR,
 	OUT cnt INTEGER,
 	OUT pln INTEGER,

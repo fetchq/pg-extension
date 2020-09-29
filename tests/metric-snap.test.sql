@@ -17,7 +17,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
     PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run tests
     SELECT * INTO VAR_r from fetchq_metric_snap('foo', 'cnt');
@@ -54,7 +54,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
     PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run tests
     SELECT * INTO VAR_r from fetchq_metric_snap('foo');
@@ -94,7 +94,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');
     PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 1, '5m');
     PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run tests
     SELECT * INTO VAR_r from fetchq_metric_snap('foo', '[ "cnt", "act" ]'::jsonb);

@@ -49,14 +49,14 @@ BEGIN
 
     -- run maintenance
     PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- empty stats so to force recreate
     TRUNCATE fetchq_sys_metrics;
     TRUNCATE fetchq_sys_metrics_writes;
 
     -- get all computed metrics
-    PERFORM fetchq_metric_reset_all();
+    PERFORM fetchq_catalog.fetchq_metric_reset_all();
     GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
     IF VAR_affectedRows <> 2 THEN
         RAISE EXCEPTION 'failed - %(count, expected 2, received %)', VAR_testName, VAR_affectedRows;

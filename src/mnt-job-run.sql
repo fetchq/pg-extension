@@ -43,7 +43,7 @@ BEGIN
         -- run the specific task logic
         CASE
         WHEN VAR_r.task = 'lgp' THEN
-            PERFORM fetchq_metric_log_pack();
+            PERFORM fetchq_catalog.fetchq_metric_log_pack();
         WHEN VAR_r.task = 'mnt' THEN
             PERFORM fetchq_mnt_run(VAR_r.queue, VAR_limit);
         WHEN VAR_r.task = 'drp' THEN

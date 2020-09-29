@@ -25,7 +25,7 @@ BEGIN
     PERFORM fetchq_metric_set('a', 'rej', 12);
     PERFORM fetchq_metric_set('a', 'orp', 13);
     PERFORM fetchq_metric_set('a', 'err', 14);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run the test
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get_common('a');

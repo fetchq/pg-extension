@@ -30,7 +30,7 @@ BEGIN
     -- run maintenance
     StartTime := clock_timestamp();
     PERFORM fetchq_mnt_run_all(100000);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
     EndTime := clock_timestamp();
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
     RAISE NOTICE 'Maintenance Duration in millisecs=%', ROUND(Delta);
@@ -89,7 +89,7 @@ BEGIN
     -- run maintenance
     StartTime := clock_timestamp();
     PERFORM fetchq_mnt_run_all(100000);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
     EndTime := clock_timestamp();
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
     RAISE NOTICE 'Maintenance Duration in millisecs=%', ROUND(Delta);
@@ -169,7 +169,7 @@ DECLARE
 BEGIN
     StartTime := clock_timestamp();
     PERFORM fetchq_mnt_run_all(PAR_limit);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
     EndTime := clock_timestamp();
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
     duration = ROUND(Delta);

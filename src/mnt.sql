@@ -19,7 +19,7 @@ BEGIN
 	processed = VAR_r.processed;
 
     -- pack the generated metrics
-    SELECT affected_rows INTO packed FROM fetchq_metric_log_pack();
+    SELECT affected_rows INTO packed FROM fetchq_catalog.fetchq_metric_log_pack();
     -- RAISE NOTICE 'packed = %', packed;
 END; $$
 LANGUAGE plpgsql;

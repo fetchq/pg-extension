@@ -49,7 +49,7 @@ BEGIN
 
     -- compute maintenance
     PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- get all computed metrics
     PERFORM fetchq_catalog.fetchq_metric_compute_all();

@@ -125,7 +125,7 @@ BEGIN
 
     -- get first document
     PERFORM fetchq_catalog.fetchq_doc_pick('foo', 0, 2, '5m');
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
     
     -- test CNT
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'cnt');

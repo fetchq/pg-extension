@@ -34,7 +34,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_drop('foo', VAR_r.subject);
 
     PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- get computed metrics
     SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_compute('foo');

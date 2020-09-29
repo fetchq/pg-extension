@@ -30,14 +30,14 @@ BEGIN
 
     -- run maintenance
     PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- empty stats so to force recreate
     TRUNCATE fetchq_sys_metrics;
     TRUNCATE fetchq_sys_metrics_writes;
 
     -- get computed metrics
-    SELECT * INTO VAR_r from fetchq_metric_reset('foo');
+    SELECT * INTO VAR_r from fetchq_catalog.fetchq_metric_reset('foo');
     IF VAR_r.cnt IS NULL THEN
         RAISE EXCEPTION 'failed - %(cnt, got null value)', VAR_testName;
     END IF;

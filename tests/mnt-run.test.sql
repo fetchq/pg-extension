@@ -36,7 +36,7 @@ BEGIN
     WHERE subject = 'a2';
 
     PERFORM fetchq_mnt_run('foo', 100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run the test
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'act');
@@ -83,7 +83,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_push('faa', 'a3', 0, 0, NOW() - INTERVAL '1s', '{}');
 
     PERFORM fetchq_mnt_run_all(100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run the test
     -- SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'act');

@@ -19,7 +19,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_doc_push('faa', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_doc_pick('faa', 0, 2, '5m');
     PERFORM fetchq_catalog.fetchq_doc_reschedule('faa', VAR_r.subject, NOW() + INTERVAL '1y', '{"a":1}');
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run the test
     PERFORM fetchq_catalog.fetchq_metric_get_all();

@@ -17,7 +17,7 @@ BEGIN
     UPDATE fetchq_catalog.fetchq__foo__documents SET attempts = 5, next_iteration = NOW() - INTERVAL '1 milliseconds';
     
     PERFORM fetchq_mnt_mark_dead('foo', 100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run the test
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'kll');
@@ -54,7 +54,7 @@ BEGIN
     UPDATE fetchq_catalog.fetchq__foo__documents SET next_iteration = NOW() - INTERVAL '1 milliseconds';
     
     PERFORM fetchq_mnt_mark_dead('foo', 100);
-    PERFORM fetchq_metric_log_pack();
+    PERFORM fetchq_catalog.fetchq_metric_log_pack();
 
     -- run the test
     SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_metric_get('foo', 'kll');
