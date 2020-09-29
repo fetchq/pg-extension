@@ -18,9 +18,14 @@ BEGIN
     DROP EXTENSION IF EXISTS "uuid-ossp";
 
     -- Cleanup soft
+    CREATE SCHEMA IF NOT EXISTS fetchq_catalog;
     CREATE EXTENSION IF NOT EXISTS fetchq;
     PERFORM fetchq_destroy_with_terrible_consequences();
-    DROP EXTENSION fetchq CASCADE;
+
+    DROP EXTENSION IF EXISTS fetchq CASCADE;
+    DROP SCHEMA IF EXISTS fetchq_catalog CASCADE;
+    CREATE SCHEMA IF NOT EXISTS fetchq_catalog;
+
     CREATE EXTENSION fetchq;
     PERFORM fetchq_init();
     done = TRUE;

@@ -22,7 +22,7 @@ BEGIN
     PERFORM * from fetchq_catalog.fetchq_sys_jobs;
 
     -- cleanup test
-    -- PERFORM fetchq_test.fetchq_test_clean();
+    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
