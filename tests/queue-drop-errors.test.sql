@@ -74,7 +74,7 @@ BEGIN
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_queue_set_errors_retention('foo', '1h');
+    PERFORM fetchq_catalog.fetchq_queue_set_errors_retention('foo', '1h');
 
     INSERT INTO fetchq_catalog.fetchq__foo__errors( created_at, subject, message ) VALUES
    ( NOW(), 'a', 'b' ),
