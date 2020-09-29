@@ -12,7 +12,7 @@ BEGIN
     -- FOR VAR_q IN
 	-- 	SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
 	-- LOOP
-    --     PERFORM fetchq_queue_drop(VAR_q.name);
+    --     PERFORM fetchq_catalog.fetchq_queue_drop(VAR_q.name);
 	-- END LOOP;
 
     -- Queues Index
