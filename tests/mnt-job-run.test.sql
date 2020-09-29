@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_job_run_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_job_run_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -20,7 +20,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
     IF VAR_r.processed != 1 THEN
-        RAISE EXCEPTION 'failed (expected 1 processed) - %', VAR_testName;
+        RAISE EXCEPTION 'failed(expected 1 processed) - %', VAR_testName;
     END IF;
 
     -- cleanup

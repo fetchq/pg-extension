@@ -1,6 +1,6 @@
 
 DROP FUNCTION IF EXISTS fetchq_mnt_job_run(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_job_run (
+CREATE OR REPLACE FUNCTION fetchq_mnt_job_run(
     PAR_lockDuration VARCHAR,
 	PAR_limit INTEGER,
     OUT success BOOLEAN,
@@ -67,7 +67,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_mnt_job_run(INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_job_run (
+CREATE OR REPLACE FUNCTION fetchq_mnt_job_run(
 	PAR_limit INTEGER,
     OUT success BOOLEAN,
     OUT processed INTEGER
@@ -85,7 +85,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_mnt_job_run();
-CREATE OR REPLACE FUNCTION fetchq_mnt_job_run (
+CREATE OR REPLACE FUNCTION fetchq_mnt_job_run(
     OUT success BOOLEAN,
     OUT processed INTEGER
 ) AS $$

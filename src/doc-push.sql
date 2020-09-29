@@ -1,7 +1,7 @@
 
 -- PUSH A SINGLE DOCUMENT
 DROP FUNCTION IF EXISTS fetchq_doc_push(CHARACTER VARYING, CHARACTER VARYING, INTEGER, INTEGER, TIMESTAMP WITH TIME ZONE, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_doc_push (
+CREATE OR REPLACE FUNCTION fetchq_doc_push(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_version INTEGER,
@@ -20,8 +20,8 @@ BEGIN
 	END IF;
 
     -- push the document into the data table
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__documents (';
-	VAR_q = VAR_q || 'subject, version, priority, status, next_iteration, payload, created_at) VALUES (';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__documents(';
+	VAR_q = VAR_q || 'subject, version, priority, status, next_iteration, payload, created_at) VALUES(';
     VAR_q = VAR_q || '''%s'', ';
     VAR_q = VAR_q || '%s, ';
     VAR_q = VAR_q || '%s, ';

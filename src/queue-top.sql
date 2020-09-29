@@ -1,11 +1,11 @@
 
 DROP FUNCTION IF EXISTS fetchq_queue_top(CHARACTER VARYING, INTEGER, INTEGER, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_queue_top (
+CREATE OR REPLACE FUNCTION fetchq_queue_top(
 	PAR_queue VARCHAR,
     PAR_version INTEGER,
     PAR_limit INTEGER,
     PAR_offset INTEGER
-) RETURNS TABLE (
+) RETURNS TABLE(
 	subject VARCHAR,
 	payload JSONB,
 	version INTEGER,

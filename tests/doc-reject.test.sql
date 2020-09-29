@@ -1,6 +1,6 @@
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -28,7 +28,7 @@ BEGIN
     AND iterations = 1
     AND next_iteration >= NOW() + INTERVAL '300s';
     IF VAR_r.subject IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find the document after reject)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find the document after reject)', VAR_testName;
     END IF;
 
     -- get the logged error message
@@ -37,7 +37,7 @@ BEGIN
     AND message = 'foo'
     AND ref_id IS NULL;
     IF VAR_r.id IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find error log)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find error log)', VAR_testName;
     END IF;
 
     -- cleanup
@@ -50,7 +50,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -78,7 +78,7 @@ BEGIN
     AND iterations = 1
     AND next_iteration >= NOW() + INTERVAL '300s';
     IF VAR_r.subject IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find the document after reject)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find the document after reject)', VAR_testName;
     END IF;
 
     -- get the logged error message
@@ -87,7 +87,7 @@ BEGIN
     AND message = 'foo'
     AND ref_id = 'xxx';
     IF VAR_r.id IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find error log)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find error log)', VAR_testName;
     END IF;
 
     -- cleanup
@@ -99,7 +99,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_03 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reject_03(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -126,7 +126,7 @@ BEGIN
     WHERE subject = 'a1'
     AND status = -1;
     IF VAR_r.subject IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to kill a document after reject)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to kill a document after reject)', VAR_testName;
     END IF;
 
     -- cleanup

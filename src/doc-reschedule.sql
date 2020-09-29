@@ -3,7 +3,7 @@
 -- returns:
 -- { affected_rows: 1 }
 DROP FUNCTION IF EXISTS fetchq_doc_reschedule(CHARACTER VARYING, CHARACTER VARYING, TIMESTAMP WITH TIME ZONE);
-CREATE OR REPLACE FUNCTION fetchq_doc_reschedule (
+CREATE OR REPLACE FUNCTION fetchq_doc_reschedule(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_nextIteration TIMESTAMP WITH TIME ZONE,
@@ -18,10 +18,10 @@ BEGIN
 	VAR_tableName = FORMAT('fetchq_catalog.fetchq__%s__documents', PAR_queue);
 	VAR_lockName = FORMAT('fetchq_lock_queue_%s', PAR_queue);
 
-	VAR_q = 'WITH %s AS ( ';
+	VAR_q = 'WITH %s AS( ';
 	VAR_q = VAR_q || 'UPDATE %s AS lc SET ';
 	VAR_q = VAR_q || 'status = 0, next_iteration = ''%s'', attempts = 0, iterations = lc.iterations + 1, last_iteration = NOW() ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM %s WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM %s WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
 	VAR_q = VAR_q || 'SELECT version FROM %s LIMIT 1;';
 	VAR_q = FORMAT(VAR_q, VAR_lockName, VAR_tableName, PAR_nextIteration, VAR_tableName, PAR_subject, VAR_lockName);
 
@@ -48,7 +48,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { affected_rows: 1 }
 DROP FUNCTION IF EXISTS fetchq_doc_reschedule(CHARACTER VARYING, CHARACTER VARYING, TIMESTAMP WITH TIME ZONE, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_doc_reschedule (
+CREATE OR REPLACE FUNCTION fetchq_doc_reschedule(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_nextIteration TIMESTAMP WITH TIME ZONE,
@@ -64,10 +64,10 @@ BEGIN
 	VAR_tableName = FORMAT('fetchq_catalog.fetchq__%s__documents', PAR_queue);
 	VAR_lockName = FORMAT('fetchq_lock_queue_%s', PAR_queue);
 
-	VAR_q = 'WITH %s AS ( ';
+	VAR_q = 'WITH %s AS( ';
 	VAR_q = VAR_q || 'UPDATE %s AS lc SET ';
 	VAR_q = VAR_q || 'payload = ''%s'', status = 0, next_iteration = ''%s'', attempts = 0, iterations = lc.iterations + 1, last_iteration = NOW() ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM %s WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM %s WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
 	VAR_q = VAR_q || 'SELECT version FROM %s LIMIT 1;';
 	VAR_q = FORMAT(VAR_q, VAR_lockName, VAR_tableName, PAR_payload, PAR_nextIteration, VAR_tableName, PAR_subject, VAR_lockName);
 

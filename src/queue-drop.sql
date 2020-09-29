@@ -3,7 +3,7 @@
 -- returns:
 -- { was_dropped: TRUE }
 DROP FUNCTION IF EXISTS fetchq_queue_drop(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop(
 	PAR_queue VARCHAR,
 	OUT was_dropped BOOLEAN,
 	OUT queue_id INTEGER

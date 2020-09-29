@@ -3,7 +3,7 @@
 -- returns:
 -- { domain_id: '1' }
 DROP FUNCTION IF EXISTS fetchq_queue_get_id(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_get_id (
+CREATE OR REPLACE FUNCTION fetchq_queue_get_id(
 	PAR_queue VARCHAR(15),
 	OUT queue_id BIGINT
 ) AS
@@ -14,7 +14,7 @@ BEGIN
 	LIMIT 1;
 
 	IF queue_id IS NULL THEN
-		INSERT INTO fetchq_catalog.fetchq_sys_queues (name, created_at ) VALUES (PAR_queue, now())
+		INSERT INTO fetchq_catalog.fetchq_sys_queues(name, created_at ) VALUES(PAR_queue, now())
 		ON CONFLICT DO NOTHING
 		RETURNING id INTO queue_id;
 	END IF;

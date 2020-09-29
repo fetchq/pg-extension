@@ -1,5 +1,5 @@
 DROP FUNCTION IF EXISTS fetchq_metric_log_pack();
-CREATE OR REPLACE FUNCTION fetchq_metric_log_pack (
+CREATE OR REPLACE FUNCTION fetchq_metric_log_pack(
 	OUT affected_rows INTEGER
 ) AS $$
 DECLARE
@@ -13,7 +13,7 @@ BEGIN
 
 	-- reset counters to current value
 	FOR VAR_r IN
-		SELECT DISTINCT ON (queue, metric) id, queue, metric, reset
+		SELECT DISTINCT ON(queue, metric) id, queue, metric, reset
 		FROM fetchq_sys_metrics_writes_pack
 		WHERE reset IS NOT NULL
 		ORDER BY queue, metric, created_at DESC
@@ -23,7 +23,7 @@ BEGIN
 
 	-- aggregate the rest of increments
 	FOR VAR_r IN
-		SELECT DISTINCT ON (queue, metric) id, queue, metric, increment
+		SELECT DISTINCT ON(queue, metric) id, queue, metric, increment
 		FROM fetchq_sys_metrics_writes_pack
 		WHERE increment IS NOT NULL
 		ORDER BY queue, metric, created_at ASC

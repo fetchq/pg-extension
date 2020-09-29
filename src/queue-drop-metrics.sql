@@ -3,7 +3,7 @@
 -- returns:
 -- { affected_rows: INTEGER }
 DROP FUNCTION IF EXISTS fetchq_queue_drop_metrics(CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics(
 	PAR_queue VARCHAR,
     PAR_config JSONB,
 	OUT removed_rows INTEGER
@@ -44,7 +44,7 @@ LANGUAGE plpgsql;
 
 
 DROP FUNCTION IF EXISTS fetchq_queue_drop_metrics(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics(
 	PAR_queue VARCHAR,
 	OUT removed_rows INTEGER
 ) AS $$

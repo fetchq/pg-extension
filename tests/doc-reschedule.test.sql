@@ -1,6 +1,6 @@
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reschedule_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reschedule_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -22,7 +22,7 @@ BEGIN
     -- get first document
     SELECT * INTO VAR_r from fetchq_catalog.fetchq__foo__documents WHERE subject = 'a1';
     IF VAR_r.iterations IS NULL THEN
-        RAISE EXCEPTION 'failed - % (unespected number of iterations)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(unespected number of iterations)', VAR_testName;
     END IF;
 
     -- cleanup
@@ -34,7 +34,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reschedule_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_reschedule_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -59,7 +59,7 @@ BEGIN
     AND payload @> '{"a": 1}';
 
     IF VAR_r.iterations IS NULL THEN
-        RAISE EXCEPTION 'failed - % (unespected number of iterations)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(unespected number of iterations)', VAR_testName;
     END IF;
 
     -- cleanup

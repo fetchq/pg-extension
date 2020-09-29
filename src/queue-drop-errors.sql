@@ -3,7 +3,7 @@
 -- returns:
 -- { affected_rows: INTEGER }
 DROP FUNCTION IF EXISTS fetchq_queue_drop_errors(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors(
 	PAR_queue VARCHAR,
     PAR_retention VARCHAR,
 	OUT affected_rows INTEGER
@@ -28,7 +28,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { affected_rows: INTEGER }
 DROP FUNCTION IF EXISTS fetchq_queue_drop_errors(CHARACTER VARYING, TIMESTAMP WITH TIME ZONE);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors(
 	PAR_queue VARCHAR,
     PAR_retention TIMESTAMP WITH TIME ZONE,
 	OUT affected_rows INTEGER
@@ -53,7 +53,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { affected_rows: INTEGER }
 DROP FUNCTION IF EXISTS fetchq_queue_drop_errors(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors(
 	PAR_queue VARCHAR,
 	OUT affected_rows INTEGER
 ) AS $$

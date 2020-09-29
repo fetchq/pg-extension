@@ -5,7 +5,7 @@
 --
 
 
-CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_insert () RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_insert() RETURNS TRIGGER AS $$
 DECLARE
 	VAR_event VARCHAR = 'pnd';
     VAR_notify VARCHAR;
@@ -24,7 +24,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_update () RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_update() RETURNS TRIGGER AS $$
 DECLARE
 	VAR_event VARCHAR = 'null';
     VAR_notify VARCHAR;
@@ -58,7 +58,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_queue_disable_notify (
+CREATE OR REPLACE FUNCTION fetchq_queue_disable_notify(
     PAR_queue VARCHAR,
     OUT success BOOLEAN
 ) AS $$
@@ -79,7 +79,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_queue_enable_notify (
+CREATE OR REPLACE FUNCTION fetchq_queue_enable_notify(
     PAR_queue VARCHAR,
     OUT success BOOLEAN
 ) AS $$

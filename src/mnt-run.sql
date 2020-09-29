@@ -2,7 +2,7 @@
 -- returns:
 -- { activated_count: 1, rescheduled_count: 1, killed_count: 1 }
 DROP FUNCTION IF EXISTS fetchq_mnt_run(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_run (
+CREATE OR REPLACE FUNCTION fetchq_mnt_run(
 	PAR_queue VARCHAR,
 	PAR_limit INTEGER,
 	OUT activated_count INTEGER,
@@ -23,7 +23,7 @@ DROP FUNCTION IF EXISTS fetchq_mnt_run_all(INTEGER);
 CREATE OR REPLACE FUNCTION fetchq_mnt_run_all(
 	PAR_limit INTEGER
 ) 
-RETURNS TABLE (
+RETURNS TABLE(
 	queue VARCHAR,
 	activated_count INTEGER,
 	rescheduled_count INTEGER,
@@ -35,7 +35,7 @@ DECLARE
 	VAR_c RECORD;
 BEGIN
 	FOR VAR_q IN
-		SELECT (name) FROM fetchq_catalog.fetchq_sys_queues
+		SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
 	LOOP
 		SELECT * FROM fetchq_mnt_run(VAR_q.name, PAR_limit) INTO VAR_c;
 		queue = VAR_q.name;

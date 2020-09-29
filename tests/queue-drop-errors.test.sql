@@ -1,5 +1,5 @@
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_errors_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_errors_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -11,17 +11,17 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
 
-    INSERT INTO fetchq_catalog.fetchq__foo__errors ( created_at, subject, message ) VALUES
-    ( NOW(), 'a', 'b' ),
-    ( NOW() - INTERVAL '1d', 'a', 'b' ),
-    ( NOW() - INTERVAL '2d', 'a', 'b' );
+    INSERT INTO fetchq_catalog.fetchq__foo__errors( created_at, subject, message ) VALUES
+   ( NOW(), 'a', 'b' ),
+   ( NOW() - INTERVAL '1d', 'a', 'b' ),
+   ( NOW() - INTERVAL '2d', 'a', 'b' );
 
     SELECT * INTO VAR_r FROM fetchq_queue_drop_errors('foo', '24 hours');
     IF VAR_r.affected_rows IS NULL THEN
-        RAISE EXCEPTION 'failed - (null value) %', VAR_testName;
+        RAISE EXCEPTION 'failed -(null value) %', VAR_testName;
     END IF;
     IF VAR_r.affected_rows != 1 THEN
-        RAISE EXCEPTION 'failed - (expected: 1, got: %) %', VAR_r.affected_rows, VAR_testName;
+        RAISE EXCEPTION 'failed -(expected: 1, got: %) %', VAR_r.affected_rows, VAR_testName;
     END IF;
 
     -- cleanup
@@ -32,7 +32,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_errors_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_errors_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -44,17 +44,17 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_queue_create('foo');
 
-    INSERT INTO fetchq_catalog.fetchq__foo__errors ( created_at, subject, message ) VALUES
-    ( NOW(), 'a', 'b' ),
-    ( NOW() - INTERVAL '1d', 'a', 'b' ),
-    ( NOW() - INTERVAL '2d', 'a', 'b' );
+    INSERT INTO fetchq_catalog.fetchq__foo__errors( created_at, subject, message ) VALUES
+   ( NOW(), 'a', 'b' ),
+   ( NOW() - INTERVAL '1d', 'a', 'b' ),
+   ( NOW() - INTERVAL '2d', 'a', 'b' );
 
     SELECT * INTO VAR_r FROM fetchq_queue_drop_errors('foo', NOW() - INTERVAL '24h');
     IF VAR_r.affected_rows IS NULL THEN
-        RAISE EXCEPTION 'failed - (null value) %', VAR_testName;
+        RAISE EXCEPTION 'failed -(null value) %', VAR_testName;
     END IF;
     IF VAR_r.affected_rows != 1 THEN
-        RAISE EXCEPTION 'failed - (expected: 1, got: %) %', VAR_r.affected_rows, VAR_testName;
+        RAISE EXCEPTION 'failed -(expected: 1, got: %) %', VAR_r.affected_rows, VAR_testName;
     END IF;
 
     -- cleanup
@@ -63,7 +63,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_errors_03 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_errors_03(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -76,17 +76,17 @@ BEGIN
     PERFORM fetchq_queue_create('foo');
     PERFORM fetchq_queue_set_errors_retention('foo', '1h');
 
-    INSERT INTO fetchq_catalog.fetchq__foo__errors ( created_at, subject, message ) VALUES
-    ( NOW(), 'a', 'b' ),
-    ( NOW() - INTERVAL '1d', 'a', 'b' ),
-    ( NOW() - INTERVAL '2d', 'a', 'b' );
+    INSERT INTO fetchq_catalog.fetchq__foo__errors( created_at, subject, message ) VALUES
+   ( NOW(), 'a', 'b' ),
+   ( NOW() - INTERVAL '1d', 'a', 'b' ),
+   ( NOW() - INTERVAL '2d', 'a', 'b' );
 
     SELECT * INTO VAR_r FROM fetchq_queue_drop_errors('foo');
     IF VAR_r.affected_rows IS NULL THEN
-        RAISE EXCEPTION 'failed - (null value) %', VAR_testName;
+        RAISE EXCEPTION 'failed -(null value) %', VAR_testName;
     END IF;
     IF VAR_r.affected_rows != 2 THEN
-        RAISE EXCEPTION 'failed - (expected: 2, got: %) %', VAR_r.affected_rows, VAR_testName;
+        RAISE EXCEPTION 'failed -(expected: 2, got: %) %', VAR_r.affected_rows, VAR_testName;
     END IF;
 
     -- cleanup

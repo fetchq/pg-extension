@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_set_max_attempts_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_set_max_attempts_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -15,7 +15,7 @@ BEGIN
     SELECT * INTO VAR_r FROM fetchq_queue_set_max_attempts('foo', 1);
 
     IF VAR_r.affected_rows <> 1 THEN
-        RAISE EXCEPTION 'failed - % (affected_rows, expected "1", got "%")', VAR_testName, VAR_r.affected_rows;
+        RAISE EXCEPTION 'failed - %(affected_rows, expected "1", got "%")', VAR_testName, VAR_r.affected_rows;
     END IF;
 
     -- test in the table

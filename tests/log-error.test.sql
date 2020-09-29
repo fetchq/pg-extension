@@ -1,6 +1,6 @@
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__log_error_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__log_error_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -28,7 +28,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__log_error_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__log_error_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE

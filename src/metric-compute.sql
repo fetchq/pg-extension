@@ -6,7 +6,7 @@
 -- NOTE: this is real slow query!
 -- better put the entire system in pause before you run this one
 DROP FUNCTION IF EXISTS fetchq_metric_compute(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_compute (
+CREATE OR REPLACE FUNCTION fetchq_metric_compute(
 	PAR_queue VARCHAR,
 	OUT cnt INTEGER,
 	OUT pln INTEGER,

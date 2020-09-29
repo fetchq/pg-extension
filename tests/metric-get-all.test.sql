@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_all_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_all_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -27,7 +27,7 @@ BEGIN
     
     -- test result rows
     IF VAR_affectedRows <> 2 THEN
-        RAISE EXCEPTION 'failed - % (affected_rows, expected "2", got "%")', VAR_testName, VAR_affectedRows;
+        RAISE EXCEPTION 'failed - %(affected_rows, expected "2", got "%")', VAR_testName, VAR_affectedRows;
     END IF;
 
     -- cleanup test

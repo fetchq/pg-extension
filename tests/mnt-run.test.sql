@@ -1,5 +1,5 @@
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_run_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_run_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -41,12 +41,12 @@ BEGIN
     -- run the test
     SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'act');
     IF VAR_r.current_value != 1 THEN
-        RAISE EXCEPTION 'failed - % (active count)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(active count)', VAR_testName;
     END IF;
 
     SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'kll');
     IF VAR_r.current_value != 1 THEN
-        RAISE EXCEPTION 'failed - % (killed count)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(killed count)', VAR_testName;
     END IF;
 
     -- cleanup
@@ -61,7 +61,7 @@ LANGUAGE plpgsql;
 
 
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_run_all_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_run_all_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -88,12 +88,12 @@ BEGIN
     -- run the test
     -- SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'act');
     -- IF VAR_r.current_value != 1 THEN
-    --     RAISE EXCEPTION 'failed - % (active count)', VAR_testName;
+    --     RAISE EXCEPTION 'failed - %(active count)', VAR_testName;
     -- END IF;
 
     -- SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'kll');
     -- IF VAR_r.current_value != 1 THEN
-    --     RAISE EXCEPTION 'failed - % (killed count)', VAR_testName;
+    --     RAISE EXCEPTION 'failed - %(killed count)', VAR_testName;
     -- END IF;
 
     -- cleanup

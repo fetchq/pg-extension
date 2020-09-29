@@ -1,5 +1,5 @@
 DROP FUNCTION IF EXISTS fetchq_mnt(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_mnt (
+CREATE OR REPLACE FUNCTION fetchq_mnt(
     PAR_lockDuration VARCHAR,
 	OUT processed INTEGER,
 	OUT packed INTEGER
@@ -9,7 +9,7 @@ DECLARE
     VAR_r RECORD;
 BEGIN
     -- set all the jobs to be executed
-    -- (skip generic jobs)
+    --(skip generic jobs)
     UPDATE fetchq_catalog.fetchq_sys_jobs SET next_iteration = NOW() - INTERVAL '1ms'
     WHERE queue != '*';
 
@@ -25,7 +25,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_mnt();
-CREATE OR REPLACE FUNCTION fetchq_mnt (
+CREATE OR REPLACE FUNCTION fetchq_mnt(
 	OUT processed INTEGER,
 	OUT packed INTEGER
 ) AS $$

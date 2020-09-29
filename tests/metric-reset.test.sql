@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_reset_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_reset_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -39,25 +39,25 @@ BEGIN
     -- get computed metrics
     SELECT * INTO VAR_r from fetchq_metric_reset('foo');
     IF VAR_r.cnt IS NULL THEN
-        RAISE EXCEPTION 'failed - % (cnt, got null value)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(cnt, got null value)', VAR_testName;
     END IF;
     IF VAR_r.cnt <> 4 THEN
-        RAISE EXCEPTION 'failed - % (cnt, expected "4", got "%")', VAR_testName, VAR_r.cnt;
+        RAISE EXCEPTION 'failed - %(cnt, expected "4", got "%")', VAR_testName, VAR_r.cnt;
     END IF;
     IF VAR_r.pln <> 1 THEN
-        RAISE EXCEPTION 'failed - % (pln, expected "1", got "%")', VAR_testName, VAR_r.pln;
+        RAISE EXCEPTION 'failed - %(pln, expected "1", got "%")', VAR_testName, VAR_r.pln;
     END IF;
     IF VAR_r.pnd <> 1 THEN
-        RAISE EXCEPTION 'failed - % (pnd, expected "1", got "%")', VAR_testName, VAR_r.pnd;
+        RAISE EXCEPTION 'failed - %(pnd, expected "1", got "%")', VAR_testName, VAR_r.pnd;
     END IF;
     IF VAR_r.kll <> 1 THEN
-        RAISE EXCEPTION 'failed - % (kll, expected "1", got "%")', VAR_testName, VAR_r.kll;
+        RAISE EXCEPTION 'failed - %(kll, expected "1", got "%")', VAR_testName, VAR_r.kll;
     END IF;
     IF VAR_r.cpl <> 1 THEN
-        RAISE EXCEPTION 'failed - % (cpl, expected "1", got "%")', VAR_testName, VAR_r.cpl;
+        RAISE EXCEPTION 'failed - %(cpl, expected "1", got "%")', VAR_testName, VAR_r.cpl;
     END IF;
     IF VAR_r.act <> 0 THEN
-        RAISE EXCEPTION 'failed - % (act, expected "1", got "%")', VAR_testName, VAR_r.act;
+        RAISE EXCEPTION 'failed - %(act, expected "1", got "%")', VAR_testName, VAR_r.act;
     END IF;
 
     -- cleanup

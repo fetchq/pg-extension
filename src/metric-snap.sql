@@ -1,6 +1,6 @@
 
 DROP FUNCTION IF EXISTS fetchq_metric_snap(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_snap (
+CREATE OR REPLACE FUNCTION fetchq_metric_snap(
 	PAR_queue VARCHAR,
 	PAR_metric VARCHAR,
 	OUT success BOOLEAN,
@@ -29,7 +29,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_metric_snap(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_snap (
+CREATE OR REPLACE FUNCTION fetchq_metric_snap(
 	PAR_queue VARCHAR,
 	OUT success BOOLEAN,
     OUT inserts INTEGER
@@ -39,7 +39,7 @@ DECLARE
 BEGIN
 	success = true;
 
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__metrics ( metric,  value)';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__metrics( metric,  value)';
 	VAR_q = VAR_q || 'SELECT metric, current_value AS value ';
 	VAR_q = VAR_q || 'FROM fetchq_metric_get(''%s'')';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
@@ -54,7 +54,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_metric_snap(CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_metric_snap (
+CREATE OR REPLACE FUNCTION fetchq_metric_snap(
 	PAR_queue VARCHAR,
     PAR_whiteList JSONB,
 	OUT success BOOLEAN,
@@ -66,10 +66,10 @@ DECLARE
 BEGIN
 	success = true;
 
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__metrics ( metric,  value)';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__metrics( metric,  value)';
 	VAR_q = VAR_q || 'SELECT metric, current_value AS value ';
 	VAR_q = VAR_q || 'FROM fetchq_metric_get(''%s'') AS metrics ';
-	VAR_q = VAR_q || 'INNER JOIN (SELECT value::varchar FROM jsonb_array_elements_text(''%s'')) ';
+	VAR_q = VAR_q || 'INNER JOIN(SELECT value::varchar FROM jsonb_array_elements_text(''%s'')) ';
 	VAR_q = VAR_q || 'AS filters ON metrics.metric = filters.value;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, PAR_whiteList);
 	EXECUTE VAR_q;

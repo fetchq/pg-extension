@@ -1,8 +1,8 @@
 -- SLOW QUERY!!!
 -- computes and resets fresh counters from all the queries
 DROP FUNCTION IF EXISTS fetchq_metric_reset_all();
-CREATE OR REPLACE FUNCTION fetchq_metric_reset_all () 
-RETURNS TABLE (
+CREATE OR REPLACE FUNCTION fetchq_metric_reset_all() 
+RETURNS TABLE(
 	queue VARCHAR,
 	cnt INTEGER,
 	pln INTEGER,
@@ -17,7 +17,7 @@ DECLARE
 	VAR_c RECORD;
 BEGIN
 	FOR VAR_q IN
-		SELECT (name) FROM fetchq_catalog.fetchq_sys_queues
+		SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
 	LOOP
 		SELECT * FROM fetchq_metric_reset(VAR_q.name) INTO VAR_c;
 		queue = VAR_q.name;

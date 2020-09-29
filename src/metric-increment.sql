@@ -1,5 +1,5 @@
 DROP FUNCTION IF EXISTS fetchq_metric_increment(CHARACTER VARYING, CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_metric_increment (
+CREATE OR REPLACE FUNCTION fetchq_metric_increment(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_value INTEGER,
@@ -14,7 +14,7 @@ BEGIN
 
 	UPDATE fetchq_catalog.fetchq_sys_metrics
 	SET value = value + PAR_value, updated_at = now()
-	WHERE id IN (
+	WHERE id IN(
 		SELECT id FROM fetchq_catalog.fetchq_sys_metrics
 		WHERE queue = PAR_queue
 		AND metric = PAR_subject

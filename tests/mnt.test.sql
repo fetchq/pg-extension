@@ -1,5 +1,5 @@
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -40,21 +40,21 @@ BEGIN
 
     -- test maintenance output
     IF VAR_r.processed != 8 THEN
-        RAISE EXCEPTION 'failed - % (processed jobs should be 8, received %)', VAR_testName, VAR_r.processed;
+        RAISE EXCEPTION 'failed - %(processed jobs should be 8, received %)', VAR_testName, VAR_r.processed;
     END IF;
     IF VAR_r.packed != 35 THEN
-        RAISE EXCEPTION 'failed - % (packed logs should be 35, received %)', VAR_testName, VAR_r.packed;
+        RAISE EXCEPTION 'failed - %(packed logs should be 35, received %)', VAR_testName, VAR_r.packed;
     END IF;
 
     -- run the test
     SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'act');
     IF VAR_r.current_value != 1 THEN
-        RAISE EXCEPTION 'failed - % (active count)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(active count)', VAR_testName;
     END IF;
 
     SELECT * INTO VAR_r FROM fetchq_metric_get('foo', 'kll');
     IF VAR_r.current_value != 1 THEN
-        RAISE EXCEPTION 'failed - % (killed count)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(killed count)', VAR_testName;
     END IF;
 
     -- cleanup

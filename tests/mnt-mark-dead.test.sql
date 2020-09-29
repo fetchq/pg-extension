@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_mark_dead_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_mark_dead_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -34,7 +34,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_mark_dead_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_mark_dead_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE

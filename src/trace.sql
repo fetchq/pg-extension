@@ -5,7 +5,7 @@
 CREATE OR REPLACE FUNCTION fetchq_trace(
 	PAR_subject VARCHAR,
     PAR_order VARCHAR
-) RETURNS TABLE (
+) RETURNS TABLE(
     step INTEGER,
 	created_at TIMESTAMP WITH TIME ZONE,
 	queue VARCHAR,
@@ -24,7 +24,7 @@ DECLARE
     VAR_step INTEGER = 1;
 BEGIN
 
-    VAR_q = 'CREATE TEMP TABLE %s (step INTEGER, created_at TIMESTAMP WITH TIME ZONE, queue VARCHAR, type VARCHAR, info VARCHAR, details JSONB) ON COMMIT DROP';
+    VAR_q = 'CREATE TEMP TABLE %s(step INTEGER, created_at TIMESTAMP WITH TIME ZONE, queue VARCHAR, type VARCHAR, info VARCHAR, details JSONB) ON COMMIT DROP';
     EXECUTE FORMAT(VAR_q, VAR_tableName);
 	
 	FOR VAR_queues IN
@@ -36,7 +36,7 @@ BEGIN
 			EXECUTE FORMAT('SELECT * FROM %s WHERE subject = ''%s''', VAR_queueTableName, PAR_subject)
 		LOOP
 			VAR_info = CONCAT('status: ', VAR_record.status, '; attempts: ', VAR_record.attempts, '; iterations: ', VAR_record.iterations);
-            VAR_q = 'INSERT INTO %s (step, created_at, queue, type, info, details) VALUES (%s, ''%s'', ''%s'', ''%s'', ''%s'', ''%s'')';
+            VAR_q = 'INSERT INTO %s(step, created_at, queue, type, info, details) VALUES(%s, ''%s'', ''%s'', ''%s'', ''%s'', ''%s'')';
             EXECUTE FORMAT(VAR_q, VAR_tableName, VAR_step, VAR_record.created_at, VAR_queues.name, 'document', VAR_info, row_to_json(VAR_record));
             VAR_step = VAR_step + 1;
 		END LOOP;
@@ -46,7 +46,7 @@ BEGIN
 		FOR VAR_record IN
 			EXECUTE FORMAT('SELECT * FROM %s WHERE subject = ''%s''', VAR_queueTableName, PAR_subject)
 		LOOP
-            VAR_q = 'INSERT INTO %s (step, created_at, queue, type, info, details) VALUES (%s, ''%s'', ''%s'', ''%s'', ''%s'', ''%s'')';
+            VAR_q = 'INSERT INTO %s(step, created_at, queue, type, info, details) VALUES(%s, ''%s'', ''%s'', ''%s'', ''%s'', ''%s'')';
             EXECUTE FORMAT(VAR_q, VAR_tableName, VAR_step, VAR_record.created_at, VAR_queues.name, 'error', VAR_record.message, row_to_json(VAR_record));
             VAR_step = VAR_step + 1;
 		END LOOP;
@@ -63,7 +63,7 @@ LANGUAGE plpgsql;
  */
 CREATE OR REPLACE FUNCTION fetchq_trace(
 	PAR_subject VARCHAR
-) RETURNS TABLE (
+) RETURNS TABLE(
     step INTEGER,
 	created_at TIMESTAMP WITH TIME ZONE,
 	queue VARCHAR,

@@ -1,9 +1,9 @@
 
 -- APPEND A SINGLE DOCUMENT WITH A RANDOM GENERATED SUBJECT
 -- DEPENDS ON uuid-ossp EXTENSION
--- (CREATE EXTENSION IF NOT EXISTS "uuid-ossp";)
+--(CREATE EXTENSION IF NOT EXISTS "uuid-ossp";)
 DROP FUNCTION IF EXISTS fetchq_doc_append(CHARACTER VARYING, JSONB, INTEGER, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_doc_append (
+CREATE OR REPLACE FUNCTION fetchq_doc_append(
     PAR_queue VARCHAR,
     PAR_payload JSONB,
     PAR_version INTEGER,
@@ -21,8 +21,8 @@ BEGIN
     subject = VAR_subject;
 
     -- push the document into the data table
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__documents (';
-	VAR_q = VAR_q || 'subject, version, priority, status, next_iteration, payload, created_at) VALUES (';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__documents(';
+	VAR_q = VAR_q || 'subject, version, priority, status, next_iteration, payload, created_at) VALUES(';
     VAR_q = VAR_q || '''%s'', ';
     VAR_q = VAR_q || '%s, ';
     VAR_q = VAR_q || '%s, ';

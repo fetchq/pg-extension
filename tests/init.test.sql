@@ -1,7 +1,7 @@
 
 -- declare test case
 -- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__init();
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__init (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__init(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE

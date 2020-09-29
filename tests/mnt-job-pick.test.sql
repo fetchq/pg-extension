@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_job_pick_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_job_pick_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE

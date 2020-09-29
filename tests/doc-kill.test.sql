@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_kill_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_kill_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -26,7 +26,7 @@ BEGIN
     AND status = -1
     AND iterations = 1;
     IF VAR_r.subject IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find the document after kill)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find the document after kill)', VAR_testName;
     END IF;
 
     -- cleanup
@@ -36,7 +36,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_kill_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_kill_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -63,7 +63,7 @@ BEGIN
     AND status = -1
     AND iterations = 1;
     IF VAR_r.subject IS NULL THEN
-        RAISE EXCEPTION 'failed - % (failed to find the document after kill)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(failed to find the document after kill)', VAR_testName;
     END IF;
 
     -- cleanup

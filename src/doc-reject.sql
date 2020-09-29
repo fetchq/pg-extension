@@ -1,7 +1,7 @@
 -- @TODO: MAX ATTEMTS MUST COME FROM THE QUEUE
 
 DROP FUNCTION IF EXISTS fetchq_doc_reject(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_doc_reject (
+CREATE OR REPLACE FUNCTION fetchq_doc_reject(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_message VARCHAR,
@@ -18,12 +18,12 @@ BEGIN
 	VAR_q = VAR_q || 'WHERE name = ''%s'' LIMIT 1';
 	EXECUTE FORMAT(VAR_q, PAR_queue) INTO VAR_r;
 
-	VAR_q = 'WITH fetchq_doc_reject_lock_%s AS ( UPDATE fetchq_catalog.fetchq__%s__documents AS lq SET ';
+	VAR_q = 'WITH fetchq_doc_reject_lock_%s AS( UPDATE fetchq_catalog.fetchq__%s__documents AS lq SET ';
 	VAR_q = VAR_q || 'status = CASE WHEN lq.attempts >= %s THEN -1 ELSE 1 END,';
 	VAR_q = VAR_q || 'lock_upgrade = CASE WHEN lq.lock_upgrade IS NULL THEN NULL ELSE NOW() END,';
 	VAR_q = VAR_q || 'iterations = lq.iterations + 1,';
 	VAR_q = VAR_q || 'last_iteration = NOW() ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1) ';
     VAR_q = VAR_q || 'RETURNING version, status, subject) ';
 	VAR_q = VAR_q || 'SELECT * FROM fetchq_doc_reject_lock_%s LIMIT 1; ';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, VAR_r.max_attempts, PAR_queue, PAR_subject, PAR_queue);
@@ -54,7 +54,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_doc_reject(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_doc_reject (
+CREATE OR REPLACE FUNCTION fetchq_doc_reject(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_message VARCHAR,
@@ -72,12 +72,12 @@ BEGIN
 	VAR_q = VAR_q || 'WHERE name = ''%s'' LIMIT 1';
 	EXECUTE FORMAT(VAR_q, PAR_queue) INTO VAR_r;
 
-	VAR_q = 'WITH fetchq_doc_reject_lock_%s AS ( UPDATE fetchq_catalog.fetchq__%s__documents AS lq SET ';
+	VAR_q = 'WITH fetchq_doc_reject_lock_%s AS( UPDATE fetchq_catalog.fetchq__%s__documents AS lq SET ';
 	VAR_q = VAR_q || 'status = CASE WHEN lq.attempts >= %s THEN -1 ELSE 1 END,';
 	VAR_q = VAR_q || 'lock_upgrade = CASE WHEN lq.lock_upgrade IS NULL THEN NULL ELSE NOW() END,';
 	VAR_q = VAR_q || 'iterations = lq.iterations + 1,';
 	VAR_q = VAR_q || 'last_iteration = NOW() ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1) ';
     VAR_q = VAR_q || 'RETURNING version, status, subject) ';
 	VAR_q = VAR_q || 'SELECT * FROM fetchq_doc_reject_lock_%s LIMIT 1; ';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, VAR_r.max_attempts, PAR_queue, PAR_subject, PAR_queue);

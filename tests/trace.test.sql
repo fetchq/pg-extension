@@ -1,5 +1,5 @@
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__trace_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__trace_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE

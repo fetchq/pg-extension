@@ -1,6 +1,6 @@
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -46,7 +46,7 @@ END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -93,7 +93,7 @@ END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_03 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_03(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -122,13 +122,13 @@ BEGIN
     
     -- test result rows
     IF VAR_affectedRows <> 4 THEN
-        RAISE EXCEPTION 'failed - % (affected_rows, expected "4", got "%")', VAR_testName, VAR_affectedRows;
+        RAISE EXCEPTION 'failed - %(affected_rows, expected "4", got "%")', VAR_testName, VAR_affectedRows;
     END IF;
 
     -- test result order
     SELECT * INTO VAR_r FROM fetchq_metric_get(VAR_qA);
     IF VAR_r.metric <> 'a' THEN
-        RAISE EXCEPTION 'failed - % (metric, expected "a", got "%")', VAR_testName, VAR_r.metric;
+        RAISE EXCEPTION 'failed - %(metric, expected "a", got "%")', VAR_testName, VAR_r.metric;
     END IF;
 
     -- cleanup test

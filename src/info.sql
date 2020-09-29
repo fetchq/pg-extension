@@ -1,7 +1,7 @@
 
 -- EXTENSION INFO
 DROP FUNCTION IF EXISTS fetchq_info();
-CREATE OR REPLACE FUNCTION fetchq_info (
+CREATE OR REPLACE FUNCTION fetchq_info(
     OUT version VARCHAR
 ) AS $$
 BEGIN

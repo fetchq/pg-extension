@@ -1,5 +1,5 @@
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_reschedule_orphans_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_reschedule_orphans_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -33,7 +33,7 @@ END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_reschedule_orphans_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__mnt_reschedule_orphans_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE

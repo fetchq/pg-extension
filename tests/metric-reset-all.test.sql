@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_reset_all_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_reset_all_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -59,7 +59,7 @@ BEGIN
     PERFORM fetchq_metric_reset_all();
     GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
     IF VAR_affectedRows <> 2 THEN
-        RAISE EXCEPTION 'failed - % (count, expected 2, received %)', VAR_testName, VAR_affectedRows;
+        RAISE EXCEPTION 'failed - %(count, expected 2, received %)', VAR_testName, VAR_affectedRows;
     END IF;
     
     -- cleanup

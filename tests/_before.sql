@@ -8,7 +8,7 @@ DROP SCHEMA IF EXISTS fetchq_test CASCADE;
 CREATE SCHEMA fetchq_test;
 
 -- Called at the beginning of every test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test_init (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test_init(
     OUT done BOOLEAN
 ) AS $$
 BEGIN
@@ -28,7 +28,7 @@ END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test_clean (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test_clean(
     OUT done BOOLEAN
 ) AS $$
 BEGIN

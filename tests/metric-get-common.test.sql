@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_common_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_common_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -45,7 +45,7 @@ BEGIN
     VAR_sum = VAR_sum + VAR_r.err;
     
     IF VAR_sum <> 105 THEN
-        RAISE EXCEPTION 'failed - % (current_value, expected "105", got "%")', VAR_testName, VAR_sum;
+        RAISE EXCEPTION 'failed - %(current_value, expected "105", got "%")', VAR_testName, VAR_sum;
     END IF;
 
     -- cleanup test

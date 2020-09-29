@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_snap_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_snap_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -22,10 +22,10 @@ BEGIN
     -- run tests
     SELECT * INTO VAR_r from fetchq_metric_snap('foo', 'cnt');
     IF VAR_r.success IS NULL THEN
-        RAISE EXCEPTION 'failed - % (success, got null value)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(success, got null value)', VAR_testName;
     END IF;
     IF VAR_r.success != true THEN
-        RAISE EXCEPTION 'failed - % (success, got false)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(success, got false)', VAR_testName;
     END IF;
 
     -- cleanup
@@ -36,7 +36,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_snap_02 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_snap_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -59,13 +59,13 @@ BEGIN
     -- run tests
     SELECT * INTO VAR_r from fetchq_metric_snap('foo');
     IF VAR_r.success IS NULL THEN
-        RAISE EXCEPTION 'failed - % (success, got null value)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(success, got null value)', VAR_testName;
     END IF;
     IF VAR_r.success != true THEN
-        RAISE EXCEPTION 'failed - % (success, got false)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(success, got false)', VAR_testName;
     END IF;
     IF VAR_r.inserts != 10 THEN
-        RAISE EXCEPTION 'failed - % (inserts, expected 10, got %)', VAR_testName, VAR_r.inserts;
+        RAISE EXCEPTION 'failed - %(inserts, expected 10, got %)', VAR_testName, VAR_r.inserts;
     END IF;
 
     -- cleanup
@@ -76,7 +76,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_snap_03 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_snap_03(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -99,13 +99,13 @@ BEGIN
     -- run tests
     SELECT * INTO VAR_r from fetchq_metric_snap('foo', '[ "cnt", "act" ]'::jsonb);
     IF VAR_r.success IS NULL THEN
-        RAISE EXCEPTION 'failed - % (success, got null value)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(success, got null value)', VAR_testName;
     END IF;
     IF VAR_r.success != true THEN
-        RAISE EXCEPTION 'failed - % (success, got false)', VAR_testName;
+        RAISE EXCEPTION 'failed - %(success, got false)', VAR_testName;
     END IF;
     IF VAR_r.inserts != 2 THEN
-        RAISE EXCEPTION 'failed - % (inserts, expected 2, got %)', VAR_testName, VAR_r.inserts;
+        RAISE EXCEPTION 'failed - %(inserts, expected 2, got %)', VAR_testName, VAR_r.inserts;
     END IF;
 
     -- cleanup

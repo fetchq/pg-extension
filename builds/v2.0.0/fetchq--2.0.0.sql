@@ -1,7 +1,7 @@
 
 -- EXTENSION INFO
 DROP FUNCTION IF EXISTS fetchq_info();
-CREATE OR REPLACE FUNCTION fetchq_info (
+CREATE OR REPLACE FUNCTION fetchq_info(
     OUT version VARCHAR
 ) AS $$
 BEGIN
@@ -10,7 +10,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_init();
-CREATE OR REPLACE FUNCTION fetchq_init (
+CREATE OR REPLACE FUNCTION fetchq_init(
     OUT was_initialized BOOLEAN
 ) AS $$
 BEGIN
@@ -18,7 +18,7 @@ BEGIN
     CREATE SCHEMA IF NOT EXISTS fetchq_catalog;
 
     -- Queues Index
-    CREATE TABLE IF NOT EXISTS fetchq_catalog.fetchq_sys_queues (
+    CREATE TABLE IF NOT EXISTS fetchq_catalog.fetchq_sys_queues(
         id SERIAL PRIMARY KEY,
         created_at TIMESTAMP WITH TIME ZONE,
         name CHARACTER VARYING(40) NOT NULL,
@@ -39,11 +39,11 @@ BEGIN
 
     -- ALTER SEQUENCE fetchq_sys_queues_id_seq OWNED BY fetchq_sys_queues.id;
     -- ALTER TABLE ONLY fetchq_sys_queues ALTER COLUMN id SET DEFAULT nextval('fetchq_sys_queues_id_seq'::regclass);
-    -- ALTER TABLE ONLY fetchq_sys_queues ADD CONSTRAINT fetchq_sys_queues_name_key UNIQUE (name);
-    -- ALTER TABLE ONLY fetchq_sys_queues ADD CONSTRAINT fetchq_sys_queues_pkey PRIMARY KEY (id);
+    -- ALTER TABLE ONLY fetchq_sys_queues ADD CONSTRAINT fetchq_sys_queues_name_key UNIQUE(name);
+    -- ALTER TABLE ONLY fetchq_sys_queues ADD CONSTRAINT fetchq_sys_queues_pkey PRIMARY KEY(id);
 
     -- Metrics Overview
-    CREATE TABLE IF NOT EXISTS fetchq_catalog.fetchq_sys_metrics (
+    CREATE TABLE IF NOT EXISTS fetchq_catalog.fetchq_sys_metrics(
         id SERIAL PRIMARY KEY,
         queue CHARACTER VARYING(40) NOT NULL,
         metric CHARACTER VARYING(40) NOT NULL,
@@ -60,11 +60,11 @@ BEGIN
 
     -- ALTER SEQUENCE fetchq_sys_metrics_id_seq OWNED BY fetchq_sys_metrics.id;
     -- ALTER TABLE ONLY fetchq_sys_metrics ALTER COLUMN id SET DEFAULT nextval('fetchq_sys_metrics_id_seq'::regclass);
-    -- ALTER TABLE ONLY fetchq_sys_metrics ADD CONSTRAINT fetchq_sys_metrics_pkey PRIMARY KEY (id, queue, metric);
-    CREATE INDEX IF NOT EXISTS fetchq_sys_metrics_queue_idx ON fetchq_catalog.fetchq_sys_metrics USING btree (queue);
+    -- ALTER TABLE ONLY fetchq_sys_metrics ADD CONSTRAINT fetchq_sys_metrics_pkey PRIMARY KEY(id, queue, metric);
+    CREATE INDEX IF NOT EXISTS fetchq_sys_metrics_queue_idx ON fetchq_catalog.fetchq_sys_metrics USING btree(queue);
 
     -- Metrics Writes
-    CREATE TABLE IF NOT EXISTS fetchq_catalog.fetchq_sys_metrics_writes (
+    CREATE TABLE IF NOT EXISTS fetchq_catalog.fetchq_sys_metrics_writes(
         id SERIAL PRIMARY KEY,
         created_at TIMESTAMP WITH TIME ZONE,
         queue CHARACTER VARYING(40) NOT NULL,
@@ -82,12 +82,12 @@ BEGIN
 
     -- ALTER SEQUENCE fetchq_sys_metrics_writes_id_seq OWNED BY fetchq_sys_metrics_writes.id;
     -- ALTER TABLE ONLY fetchq_sys_metrics_writes ALTER COLUMN id SET DEFAULT nextval('fetchq_sys_metrics_writes_id_seq'::regclass);
-    -- ALTER TABLE ONLY fetchq_sys_metrics_writes ADD CONSTRAINT fetchq_sys_metrics_writes_pkey PRIMARY KEY (id);
-    CREATE INDEX IF NOT EXISTS fetchq_sys_metrics_writes_reset_idx ON fetchq_catalog.fetchq_sys_metrics_writes ( queue, metric ) WHERE ( reset IS NOT NULL );
-    CREATE INDEX IF NOT EXISTS fetchq_sys_metrics_writes_increment_idx ON fetchq_catalog.fetchq_sys_metrics_writes ( queue, metric ) WHERE ( increment IS NOT NULL );
+    -- ALTER TABLE ONLY fetchq_sys_metrics_writes ADD CONSTRAINT fetchq_sys_metrics_writes_pkey PRIMARY KEY(id);
+    CREATE INDEX IF NOT EXISTS fetchq_sys_metrics_writes_reset_idx ON fetchq_catalog.fetchq_sys_metrics_writes( queue, metric ) WHERE( reset IS NOT NULL );
+    CREATE INDEX IF NOT EXISTS fetchq_sys_metrics_writes_increment_idx ON fetchq_catalog.fetchq_sys_metrics_writes( queue, metric ) WHERE( increment IS NOT NULL );
 
     -- Maintenance Jobs
-    CREATE TABLE IF NOT EXISTS fetchq_catalog.fetchq_sys_jobs (
+    CREATE TABLE IF NOT EXISTS fetchq_catalog.fetchq_sys_jobs(
         id SERIAL PRIMARY KEY,
         task character varying(40) NOT NULL,
         queue character varying(40) NOT NULL,
@@ -108,12 +108,12 @@ BEGIN
 
     -- ALTER SEQUENCE fetchq_sys_jobs_id_seq OWNED BY fetchq_sys_jobs.id;
     -- ALTER TABLE ONLY fetchq_sys_jobs ALTER COLUMN id SET DEFAULT nextval('fetchq_sys_jobs_id_seq'::regclass);
-    -- ALTER TABLE ONLY fetchq_sys_jobs ADD CONSTRAINT fetchq_sys_jobs_pkey PRIMARY KEY (id);
-    CREATE UNIQUE INDEX IF NOT EXISTS fetchq_sys_jobs_task_queue_idx ON fetchq_catalog.fetchq_sys_jobs USING btree (task, queue);
-    CREATE INDEX IF NOT EXISTS fetchq_sys_jobs_task_idx ON fetchq_catalog.fetchq_sys_jobs USING btree (task, next_iteration, iterations) WHERE (iterations < 5);
+    -- ALTER TABLE ONLY fetchq_sys_jobs ADD CONSTRAINT fetchq_sys_jobs_pkey PRIMARY KEY(id);
+    CREATE UNIQUE INDEX IF NOT EXISTS fetchq_sys_jobs_task_queue_idx ON fetchq_catalog.fetchq_sys_jobs USING btree(task, queue);
+    CREATE INDEX IF NOT EXISTS fetchq_sys_jobs_task_idx ON fetchq_catalog.fetchq_sys_jobs USING btree(task, next_iteration, iterations) WHERE(iterations < 5);
 
     -- add generic maintenance jobs
-    INSERT INTO fetchq_catalog.fetchq_sys_jobs (task, queue, next_iteration, last_iteration, attempts, iterations, settings, payload) VALUES
+    INSERT INTO fetchq_catalog.fetchq_sys_jobs(task, queue, next_iteration, last_iteration, attempts, iterations, settings, payload) VALUES
 	('lgp', '*', NOW(), NULL, 0, 0, '{"delay":"3s", "duration":"5m"}', '{}')
 	ON CONFLICT DO NOTHING;
     
@@ -127,7 +127,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_destroy_with_terrible_consequences();
-CREATE OR REPLACE FUNCTION fetchq_destroy_with_terrible_consequences (
+CREATE OR REPLACE FUNCTION fetchq_destroy_with_terrible_consequences(
     OUT was_destroyed BOOLEAN
 ) AS $$
 DECLARE
@@ -137,7 +137,7 @@ BEGIN
 
     -- drop all queues
     -- FOR VAR_q IN
-	-- 	SELECT (name) FROM fetchq_catalog.fetchq_sys_queues
+	-- 	SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
 	-- LOOP
     --     PERFORM fetchq_queue_drop(VAR_q.name);
 	-- END LOOP;
@@ -164,7 +164,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_queue_create_indexes(CHARACTER VARYING, INTEGER, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_queue_create_indexes (
+CREATE OR REPLACE FUNCTION fetchq_queue_create_indexes(
 	PAR_queue VARCHAR,
     PAR_version INTEGER,
     PAR_attempts INTEGER,
@@ -179,35 +179,35 @@ BEGIN
     -- index for: fetchq_doc_pick()
     VAR_q = 'CREATE INDEX IF NOT EXISTS fetchq_%s_for_pick_%s_idx ON fetchq_catalog.fetchq__%s__documents ';
 	VAR_q = VAR_q || '( priority DESC, next_iteration ASC, attempts ASC ) ';
-    VAR_q = VAR_q || 'WHERE ( lock_upgrade IS NULL AND status = 1 AND version = %s); ';
+    VAR_q = VAR_q || 'WHERE( lock_upgrade IS NULL AND status = 1 AND version = %s); ';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_version, PAR_queue, PAR_version);
 	EXECUTE VAR_q;
 
 	-- index for: fetchq_mnt_make_pending()
 	VAR_q = 'CREATE INDEX IF NOT EXISTS fetchq_%s_for_pnd_idx ON fetchq_catalog.fetchq__%s__documents ';
 	VAR_q = VAR_q || '( next_iteration ASC, attempts ASC ) ';
-	VAR_q = VAR_q || 'WHERE ( lock_upgrade IS NULL AND status = 0 ); ';
+	VAR_q = VAR_q || 'WHERE( lock_upgrade IS NULL AND status = 0 ); ';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
 	EXECUTE VAR_q;
 
 	-- index for: fetchq_mnt_reschedule_orphans()
 	VAR_q = 'CREATE INDEX IF NOT EXISTS fetchq_%s_for_orp_idx ON fetchq_catalog.fetchq__%s__documents ';
 	VAR_q = VAR_q || '( next_iteration ASC, attempts ASC ) ';
-	VAR_q = VAR_q || 'WHERE ( lock_upgrade IS NULL AND status = 2 AND attempts < %s ); ';
+	VAR_q = VAR_q || 'WHERE( lock_upgrade IS NULL AND status = 2 AND attempts < %s ); ';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, PAR_attempts);
 	EXECUTE VAR_q;
 
 	-- index for: fetchq_mnt_mark_dead()
 	VAR_q = 'CREATE INDEX IF NOT EXISTS fetchq_%s_for_dod_idx ON fetchq_catalog.fetchq__%s__documents ';
 	VAR_q = VAR_q || '( next_iteration ASC, attempts ASC ) ';
-	VAR_q = VAR_q || 'WHERE ( lock_upgrade IS NULL AND status = 2 AND attempts >= %s ); ';
+	VAR_q = VAR_q || 'WHERE( lock_upgrade IS NULL AND status = 2 AND attempts >= %s ); ';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, PAR_attempts);
 	EXECUTE VAR_q;
 
 	-- index for: fetchq_doc_upsert() -- edit query
 	VAR_q = 'CREATE INDEX IF NOT EXISTS fetchq_%s_for_ups_idx ON fetchq_catalog.fetchq__%s__documents ';
 	VAR_q = VAR_q || '( subject ) ';
-	VAR_q = VAR_q || 'WHERE ( lock_upgrade IS NULL AND status <> 2 ); ';
+	VAR_q = VAR_q || 'WHERE( lock_upgrade IS NULL AND status <> 2 ); ';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, PAR_attempts);
 	EXECUTE VAR_q;
 
@@ -218,7 +218,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_metric_set(CHARACTER VARYING, CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_metric_set (
+CREATE OR REPLACE FUNCTION fetchq_metric_set(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_value INTEGER,
@@ -233,7 +233,7 @@ BEGIN
 
 	UPDATE fetchq_catalog.fetchq_sys_metrics
 	SET value = PAR_value, updated_at = now()
-	WHERE id IN (
+	WHERE id IN(
 		SELECT id FROM fetchq_catalog.fetchq_sys_metrics
 		WHERE queue = PAR_queue
 		AND metric = PAR_subject
@@ -254,7 +254,7 @@ BEGIN
 	END IF;
 END; $$
 LANGUAGE plpgsql;DROP FUNCTION IF EXISTS fetchq_metric_increment(CHARACTER VARYING, CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_metric_increment (
+CREATE OR REPLACE FUNCTION fetchq_metric_increment(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_value INTEGER,
@@ -269,7 +269,7 @@ BEGIN
 
 	UPDATE fetchq_catalog.fetchq_sys_metrics
 	SET value = value + PAR_value, updated_at = now()
-	WHERE id IN (
+	WHERE id IN(
 		SELECT id FROM fetchq_catalog.fetchq_sys_metrics
 		WHERE queue = PAR_queue
 		AND metric = PAR_subject
@@ -290,7 +290,7 @@ BEGIN
 	END IF;
 END; $$
 LANGUAGE plpgsql;DROP FUNCTION IF EXISTS fetchq_metric_log_set(CHARACTER VARYING, CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_metric_log_set (
+CREATE OR REPLACE FUNCTION fetchq_metric_log_set(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_value INTEGER,
@@ -305,7 +305,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 DROP FUNCTION IF EXISTS fetchq_metric_log_increment(CHARACTER VARYING, CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_metric_log_increment (
+CREATE OR REPLACE FUNCTION fetchq_metric_log_increment(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_value INTEGER,
@@ -319,7 +319,7 @@ BEGIN
 	GET DIAGNOSTICS affected_rows := ROW_COUNT;
 END; $$
 LANGUAGE plpgsql;DROP FUNCTION IF EXISTS fetchq_metric_log_decrement(CHARACTER VARYING, CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_metric_log_decrement (
+CREATE OR REPLACE FUNCTION fetchq_metric_log_decrement(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_value INTEGER,
@@ -333,7 +333,7 @@ BEGIN
 	GET DIAGNOSTICS affected_rows := ROW_COUNT;
 END; $$
 LANGUAGE plpgsql;DROP FUNCTION IF EXISTS fetchq_metric_log_pack();
-CREATE OR REPLACE FUNCTION fetchq_metric_log_pack (
+CREATE OR REPLACE FUNCTION fetchq_metric_log_pack(
 	OUT affected_rows INTEGER
 ) AS $$
 DECLARE
@@ -347,7 +347,7 @@ BEGIN
 
 	-- reset counters to current value
 	FOR VAR_r IN
-		SELECT DISTINCT ON (queue, metric) id, queue, metric, reset
+		SELECT DISTINCT ON(queue, metric) id, queue, metric, reset
 		FROM fetchq_sys_metrics_writes_pack
 		WHERE reset IS NOT NULL
 		ORDER BY queue, metric, created_at DESC
@@ -357,7 +357,7 @@ BEGIN
 
 	-- aggregate the rest of increments
 	FOR VAR_r IN
-		SELECT DISTINCT ON (queue, metric) id, queue, metric, increment
+		SELECT DISTINCT ON(queue, metric) id, queue, metric, increment
 		FROM fetchq_sys_metrics_writes_pack
 		WHERE increment IS NOT NULL
 		ORDER BY queue, metric, created_at ASC
@@ -383,7 +383,7 @@ END; $$
 LANGUAGE plpgsql;
 -- READS A SPECIFIC METRIC FOR A SPECIFIC QUEUE
 DROP FUNCTION IF EXISTS fetchq_metric_get(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_get (
+CREATE OR REPLACE FUNCTION fetchq_metric_get(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	OUT current_value INTEGER,
@@ -419,9 +419,9 @@ LANGUAGE plpgsql;
 
 -- READS ALL AVAILABLE METRIC FOR A QUEUE
 DROP FUNCTION IF EXISTS fetchq_metric_get(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_get (
+CREATE OR REPLACE FUNCTION fetchq_metric_get(
 	PAR_queue VARCHAR
-) RETURNS TABLE (
+) RETURNS TABLE(
 	metric VARCHAR,
 	current_value BIGINT,
 	last_update TIMESTAMP WITH TIME ZONE
@@ -437,7 +437,7 @@ LANGUAGE plpgsql;
 
 -- READS THE TOTAL OF A METRIC ACROSS ALL THE QUEUES
 DROP FUNCTION IF EXISTS fetchq_metric_get_total(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_get_total (
+CREATE OR REPLACE FUNCTION fetchq_metric_get_total(
 	PAR_metric VARCHAR,
 	OUT current_value INTEGER,
 	OUT does_exists BOOLEAN
@@ -502,7 +502,7 @@ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_metric_get_all();
 CREATE OR REPLACE FUNCTION fetchq_metric_get_all() 
-RETURNS TABLE (
+RETURNS TABLE(
 	queue VARCHAR,
 	cnt INTEGER,
 	pnd INTEGER,
@@ -525,7 +525,7 @@ DECLARE
 	VAR_c RECORD;
 BEGIN
 	FOR VAR_q IN
-		SELECT (name) FROM fetchq_catalog.fetchq_sys_queues
+		SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
 	LOOP
 		SELECT * FROM fetchq_metric_get_common(VAR_q.name) INTO VAR_c;
 		queue = VAR_q.name;
@@ -555,7 +555,7 @@ LANGUAGE plpgsql;
 -- NOTE: this is real slow query!
 -- better put the entire system in pause before you run this one
 DROP FUNCTION IF EXISTS fetchq_metric_compute(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_compute (
+CREATE OR REPLACE FUNCTION fetchq_metric_compute(
 	PAR_queue VARCHAR,
 	OUT cnt INTEGER,
 	OUT pln INTEGER,
@@ -587,8 +587,8 @@ LANGUAGE plpgsql;
 -- SLOW QUERY!!!
 -- computes and shows fresh counters from all the queues
 DROP FUNCTION IF EXISTS fetchq_metric_compute_all();
-CREATE OR REPLACE FUNCTION fetchq_metric_compute_all () 
-RETURNS TABLE (
+CREATE OR REPLACE FUNCTION fetchq_metric_compute_all() 
+RETURNS TABLE(
 	queue VARCHAR,
 	cnt INTEGER,
 	pln INTEGER,
@@ -604,7 +604,7 @@ DECLARE
 BEGIN
 	
 	FOR VAR_q IN
-		SELECT (name) FROM fetchq_catalog.fetchq_sys_queues
+		SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
 	LOOP
 		SELECT * FROM fetchq_metric_compute(VAR_q.name) INTO VAR_c;
 		queue = VAR_q.name;
@@ -624,7 +624,7 @@ LANGUAGE plpgsql;
 -- SLOW QUERY!
 -- compute and resets all the basic counters for a queue metrics
 DROP FUNCTION IF EXISTS fetchq_metric_reset(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_reset (
+CREATE OR REPLACE FUNCTION fetchq_metric_reset(
 	PAR_queue VARCHAR,
 	OUT cnt INTEGER,
 	OUT pln INTEGER,
@@ -661,8 +661,8 @@ LANGUAGE plpgsql;
 -- SLOW QUERY!!!
 -- computes and resets fresh counters from all the queries
 DROP FUNCTION IF EXISTS fetchq_metric_reset_all();
-CREATE OR REPLACE FUNCTION fetchq_metric_reset_all () 
-RETURNS TABLE (
+CREATE OR REPLACE FUNCTION fetchq_metric_reset_all() 
+RETURNS TABLE(
 	queue VARCHAR,
 	cnt INTEGER,
 	pln INTEGER,
@@ -677,7 +677,7 @@ DECLARE
 	VAR_c RECORD;
 BEGIN
 	FOR VAR_q IN
-		SELECT (name) FROM fetchq_catalog.fetchq_sys_queues
+		SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
 	LOOP
 		SELECT * FROM fetchq_metric_reset(VAR_q.name) INTO VAR_c;
 		queue = VAR_q.name;
@@ -694,7 +694,7 @@ $BODY$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_metric_snap(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_snap (
+CREATE OR REPLACE FUNCTION fetchq_metric_snap(
 	PAR_queue VARCHAR,
 	PAR_metric VARCHAR,
 	OUT success BOOLEAN,
@@ -723,7 +723,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_metric_snap(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_metric_snap (
+CREATE OR REPLACE FUNCTION fetchq_metric_snap(
 	PAR_queue VARCHAR,
 	OUT success BOOLEAN,
     OUT inserts INTEGER
@@ -733,7 +733,7 @@ DECLARE
 BEGIN
 	success = true;
 
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__metrics ( metric,  value)';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__metrics( metric,  value)';
 	VAR_q = VAR_q || 'SELECT metric, current_value AS value ';
 	VAR_q = VAR_q || 'FROM fetchq_metric_get(''%s'')';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
@@ -748,7 +748,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_metric_snap(CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_metric_snap (
+CREATE OR REPLACE FUNCTION fetchq_metric_snap(
 	PAR_queue VARCHAR,
     PAR_whiteList JSONB,
 	OUT success BOOLEAN,
@@ -760,10 +760,10 @@ DECLARE
 BEGIN
 	success = true;
 
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__metrics ( metric,  value)';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__metrics( metric,  value)';
 	VAR_q = VAR_q || 'SELECT metric, current_value AS value ';
 	VAR_q = VAR_q || 'FROM fetchq_metric_get(''%s'') AS metrics ';
-	VAR_q = VAR_q || 'INNER JOIN (SELECT value::varchar FROM jsonb_array_elements_text(''%s'')) ';
+	VAR_q = VAR_q || 'INNER JOIN(SELECT value::varchar FROM jsonb_array_elements_text(''%s'')) ';
 	VAR_q = VAR_q || 'AS filters ON metrics.metric = filters.value;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, PAR_whiteList);
 	EXECUTE VAR_q;
@@ -776,7 +776,7 @@ END; $$
 LANGUAGE plpgsql;
 -- PUSH A SINGLE DOCUMENT
 DROP FUNCTION IF EXISTS fetchq_doc_push(CHARACTER VARYING, CHARACTER VARYING, INTEGER, INTEGER, TIMESTAMP WITH TIME ZONE, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_doc_push (
+CREATE OR REPLACE FUNCTION fetchq_doc_push(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_version INTEGER,
@@ -795,8 +795,8 @@ BEGIN
 	END IF;
 
     -- push the document into the data table
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__documents (';
-	VAR_q = VAR_q || 'subject, version, priority, status, next_iteration, payload, created_at) VALUES (';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__documents(';
+	VAR_q = VAR_q || 'subject, version, priority, status, next_iteration, payload, created_at) VALUES(';
     VAR_q = VAR_q || '''%s'', ';
     VAR_q = VAR_q || '%s, ';
     VAR_q = VAR_q || '%s, ';
@@ -843,7 +843,7 @@ LANGUAGE plpgsql;
 
 -- PUSH MANY DOCUMENTS
 DROP FUNCTION IF EXISTS fetchq_doc_push(CHARACTER VARYING, INTEGER, TIMESTAMP WITH TIME ZONE, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_doc_push (
+CREATE OR REPLACE FUNCTION fetchq_doc_push(
 	PAR_queue VARCHAR,
 	PAR_version INTEGER,
 	PAR_nextIteration TIMESTAMP WITH TIME ZONE,
@@ -860,8 +860,8 @@ BEGIN
 	END IF;
 
     -- push the documents into the data table
-	SELECT replace INTO PAR_data (PAR_data, '{DATA}', VAR_status::text || ', ' || PAR_version::text || ', ' || '''' || PAR_nextIteration::text || '''' || ', NULL, NOW()');
-	VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__documents (subject, priority, payload, status, version, next_iteration, lock_upgrade, created_at) VALUES %s ON CONFLICT DO NOTHING;';
+	SELECT replace INTO PAR_data(PAR_data, '{DATA}', VAR_status::text || ', ' || PAR_version::text || ', ' || '''' || PAR_nextIteration::text || '''' || ', NULL, NOW()');
+	VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__documents(subject, priority, payload, status, version, next_iteration, lock_upgrade, created_at) VALUES %s ON CONFLICT DO NOTHING;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_data);
 	-- RAISE INFO '%', VAR_q;
 	EXECUTE VAR_q;
@@ -901,9 +901,9 @@ LANGUAGE plpgsql;
 
 -- APPEND A SINGLE DOCUMENT WITH A RANDOM GENERATED SUBJECT
 -- DEPENDS ON uuid-ossp EXTENSION
--- (CREATE EXTENSION IF NOT EXISTS "uuid-ossp";)
+--(CREATE EXTENSION IF NOT EXISTS "uuid-ossp";)
 DROP FUNCTION IF EXISTS fetchq_doc_append(CHARACTER VARYING, JSONB, INTEGER, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_doc_append (
+CREATE OR REPLACE FUNCTION fetchq_doc_append(
     PAR_queue VARCHAR,
     PAR_payload JSONB,
     PAR_version INTEGER,
@@ -921,8 +921,8 @@ BEGIN
     subject = VAR_subject;
 
     -- push the document into the data table
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__documents (';
-	VAR_q = VAR_q || 'subject, version, priority, status, next_iteration, payload, created_at) VALUES (';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__documents(';
+	VAR_q = VAR_q || 'subject, version, priority, status, next_iteration, payload, created_at) VALUES(';
     VAR_q = VAR_q || '''%s'', ';
     VAR_q = VAR_q || '%s, ';
     VAR_q = VAR_q || '%s, ';
@@ -969,7 +969,7 @@ END; $$
 LANGUAGE plpgsql;
 -- PUSH A SINGLE DOCUMENT
 DROP FUNCTION IF EXISTS fetchq_doc_upsert(CHARACTER VARYING, CHARACTER VARYING, INTEGER, INTEGER, TIMESTAMP WITH TIME ZONE, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_doc_upsert (
+CREATE OR REPLACE FUNCTION fetchq_doc_upsert(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_version INTEGER,
@@ -1015,12 +1015,12 @@ LANGUAGE plpgsql;-- PICK AND LOCK A DOCUMENT THAT NEEDS TO BE EXECUTED NEXT
 -- returns:
 -- { document_structure }
 DROP FUNCTION IF EXISTS fetchq_doc_pick(CHARACTER VARYING, INTEGER, INTEGER, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_doc_pick (
+CREATE OR REPLACE FUNCTION fetchq_doc_pick(
 	PAR_queue VARCHAR,
 	PAR_version INTEGER,
 	PAR_limit INTEGER,
 	PAR_duration VARCHAR
-) RETURNS TABLE (
+) RETURNS TABLE(
 	subject VARCHAR,
 	payload JSONB,
 	version INTEGER,
@@ -1045,18 +1045,18 @@ BEGIN
 	VAR_updateCtx = FORMAT('fetchq__%s__pick_ctx', PAR_queue);
 
 	-- create temporary table
-	VAR_q = FORMAT('CREATE TEMP TABLE %s (subject VARCHAR(50)) ON COMMIT DROP;', VAR_tempTable);
+	VAR_q = FORMAT('CREATE TEMP TABLE %s(subject VARCHAR(50)) ON COMMIT DROP;', VAR_tempTable);
 	EXECUTE VAR_q;
 
 	-- perform lock on the rows
-	VAR_q = 'WITH %s AS ( ';
+	VAR_q = 'WITH %s AS( ';
 	VAR_q = VAR_q || 'UPDATE %s ';
 	VAR_q = VAR_q || 'SET status = 2, next_iteration = NOW() + ''%s'', attempts = attempts + 1 ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM %s ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM %s ';
     VAR_q = VAR_q || 'WHERE lock_upgrade IS NULL AND status = 1 AND version = %s AND next_iteration < NOW() ';
 	VAR_q = VAR_q || 'ORDER BY priority DESC, next_iteration ASC, attempts ASC ';
 	VAR_q = VAR_q || 'LIMIT %s FOR UPDATE SKIP LOCKED) RETURNING subject) ';
-	VAR_q = VAR_q || 'INSERT INTO %s (subject) ';
+	VAR_q = VAR_q || 'INSERT INTO %s(subject) ';
 	VAR_q = VAR_q || 'SELECT subject FROM %s; ';
 	VAR_q = FORMAT(VAR_q, VAR_updateCtx, VAR_tableName, PAR_duration, VAR_tableName, PAR_version, PAR_limit, VAR_tempTable, VAR_updateCtx);
 	EXECUTE VAR_q;
@@ -1072,7 +1072,7 @@ BEGIN
 
 	-- return documents
 	VAR_q = 'SELECT subject, payload, version, priority, attempts, iterations, created_at, last_iteration, next_iteration, lock_upgrade ';
-	VAR_q = VAR_q || 'FROM %s WHERE subject IN ( SELECT subject ';
+	VAR_q = VAR_q || 'FROM %s WHERE subject IN( SELECT subject ';
 	VAR_q = VAR_q || 'FROM %s); ';
 	VAR_q = FORMAT(VAR_q, VAR_tableName, VAR_tempTable);
 	RETURN QUERY EXECUTE VAR_q;
@@ -1089,7 +1089,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { affected_rows: 1 }
 DROP FUNCTION IF EXISTS fetchq_doc_reschedule(CHARACTER VARYING, CHARACTER VARYING, TIMESTAMP WITH TIME ZONE);
-CREATE OR REPLACE FUNCTION fetchq_doc_reschedule (
+CREATE OR REPLACE FUNCTION fetchq_doc_reschedule(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_nextIteration TIMESTAMP WITH TIME ZONE,
@@ -1104,10 +1104,10 @@ BEGIN
 	VAR_tableName = FORMAT('fetchq_catalog.fetchq__%s__documents', PAR_queue);
 	VAR_lockName = FORMAT('fetchq_lock_queue_%s', PAR_queue);
 
-	VAR_q = 'WITH %s AS ( ';
+	VAR_q = 'WITH %s AS( ';
 	VAR_q = VAR_q || 'UPDATE %s AS lc SET ';
 	VAR_q = VAR_q || 'status = 0, next_iteration = ''%s'', attempts = 0, iterations = lc.iterations + 1, last_iteration = NOW() ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM %s WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM %s WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
 	VAR_q = VAR_q || 'SELECT version FROM %s LIMIT 1;';
 	VAR_q = FORMAT(VAR_q, VAR_lockName, VAR_tableName, PAR_nextIteration, VAR_tableName, PAR_subject, VAR_lockName);
 
@@ -1134,7 +1134,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { affected_rows: 1 }
 DROP FUNCTION IF EXISTS fetchq_doc_reschedule(CHARACTER VARYING, CHARACTER VARYING, TIMESTAMP WITH TIME ZONE, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_doc_reschedule (
+CREATE OR REPLACE FUNCTION fetchq_doc_reschedule(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_nextIteration TIMESTAMP WITH TIME ZONE,
@@ -1150,10 +1150,10 @@ BEGIN
 	VAR_tableName = FORMAT('fetchq_catalog.fetchq__%s__documents', PAR_queue);
 	VAR_lockName = FORMAT('fetchq_lock_queue_%s', PAR_queue);
 
-	VAR_q = 'WITH %s AS ( ';
+	VAR_q = 'WITH %s AS( ';
 	VAR_q = VAR_q || 'UPDATE %s AS lc SET ';
 	VAR_q = VAR_q || 'payload = ''%s'', status = 0, next_iteration = ''%s'', attempts = 0, iterations = lc.iterations + 1, last_iteration = NOW() ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM %s WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM %s WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
 	VAR_q = VAR_q || 'SELECT version FROM %s LIMIT 1;';
 	VAR_q = FORMAT(VAR_q, VAR_lockName, VAR_tableName, PAR_payload, PAR_nextIteration, VAR_tableName, PAR_subject, VAR_lockName);
 
@@ -1178,7 +1178,7 @@ LANGUAGE plpgsql;
 -- @TODO: MAX ATTEMTS MUST COME FROM THE QUEUE
 
 DROP FUNCTION IF EXISTS fetchq_doc_reject(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_doc_reject (
+CREATE OR REPLACE FUNCTION fetchq_doc_reject(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_message VARCHAR,
@@ -1195,12 +1195,12 @@ BEGIN
 	VAR_q = VAR_q || 'WHERE name = ''%s'' LIMIT 1';
 	EXECUTE FORMAT(VAR_q, PAR_queue) INTO VAR_r;
 
-	VAR_q = 'WITH fetchq_doc_reject_lock_%s AS ( UPDATE fetchq_catalog.fetchq__%s__documents AS lq SET ';
+	VAR_q = 'WITH fetchq_doc_reject_lock_%s AS( UPDATE fetchq_catalog.fetchq__%s__documents AS lq SET ';
 	VAR_q = VAR_q || 'status = CASE WHEN lq.attempts >= %s THEN -1 ELSE 1 END,';
 	VAR_q = VAR_q || 'lock_upgrade = CASE WHEN lq.lock_upgrade IS NULL THEN NULL ELSE NOW() END,';
 	VAR_q = VAR_q || 'iterations = lq.iterations + 1,';
 	VAR_q = VAR_q || 'last_iteration = NOW() ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1) ';
     VAR_q = VAR_q || 'RETURNING version, status, subject) ';
 	VAR_q = VAR_q || 'SELECT * FROM fetchq_doc_reject_lock_%s LIMIT 1; ';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, VAR_r.max_attempts, PAR_queue, PAR_subject, PAR_queue);
@@ -1231,7 +1231,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_doc_reject(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_doc_reject (
+CREATE OR REPLACE FUNCTION fetchq_doc_reject(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_message VARCHAR,
@@ -1249,12 +1249,12 @@ BEGIN
 	VAR_q = VAR_q || 'WHERE name = ''%s'' LIMIT 1';
 	EXECUTE FORMAT(VAR_q, PAR_queue) INTO VAR_r;
 
-	VAR_q = 'WITH fetchq_doc_reject_lock_%s AS ( UPDATE fetchq_catalog.fetchq__%s__documents AS lq SET ';
+	VAR_q = 'WITH fetchq_doc_reject_lock_%s AS( UPDATE fetchq_catalog.fetchq__%s__documents AS lq SET ';
 	VAR_q = VAR_q || 'status = CASE WHEN lq.attempts >= %s THEN -1 ELSE 1 END,';
 	VAR_q = VAR_q || 'lock_upgrade = CASE WHEN lq.lock_upgrade IS NULL THEN NULL ELSE NOW() END,';
 	VAR_q = VAR_q || 'iterations = lq.iterations + 1,';
 	VAR_q = VAR_q || 'last_iteration = NOW() ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1) ';
     VAR_q = VAR_q || 'RETURNING version, status, subject) ';
 	VAR_q = VAR_q || 'SELECT * FROM fetchq_doc_reject_lock_%s LIMIT 1; ';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, VAR_r.max_attempts, PAR_queue, PAR_subject, PAR_queue);
@@ -1285,7 +1285,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_doc_complete(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_doc_complete (
+CREATE OR REPLACE FUNCTION fetchq_doc_complete(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	OUT affected_rows INTEGER
@@ -1294,14 +1294,14 @@ DECLARE
 	VAR_table_name VARCHAR = 'fetchq_';
 	VAR_q VARCHAR;
 BEGIN
-	VAR_q = 'WITH fetchq_doc_complete_lock_%s AS ( ';
+	VAR_q = 'WITH fetchq_doc_complete_lock_%s AS( ';
 	VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq__%s__documents AS lc SET ';
     VAR_q = VAR_q || 'status = 3,';
     VAR_q = VAR_q || 'attempts = 0,';
     VAR_q = VAR_q || 'iterations = lc.iterations + 1,';
     VAR_q = VAR_q || 'last_iteration = NOW(),';
     VAR_q = VAR_q || 'next_iteration = ''2970-01-01 00:00:00+00'' ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
 	VAR_q = VAR_q || 'SELECT version FROM fetchq_doc_complete_lock_%s LIMIT 1;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, PAR_queue, PAR_subject, PAR_queue);
 
@@ -1320,7 +1320,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_doc_complete(CHARACTER VARYING, CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_doc_complete (
+CREATE OR REPLACE FUNCTION fetchq_doc_complete(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_payload JSONB,
@@ -1330,7 +1330,7 @@ DECLARE
 	VAR_table_name VARCHAR = 'fetchq_';
 	VAR_q VARCHAR;
 BEGIN
-	VAR_q = 'WITH fetchq_doc_complete_lock_%s AS ( ';
+	VAR_q = 'WITH fetchq_doc_complete_lock_%s AS( ';
 	VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq__%s__documents AS lc SET ';
 	VAR_q = VAR_q || 'payload = ''%s'',';
     VAR_q = VAR_q || 'status = 3,';
@@ -1338,7 +1338,7 @@ BEGIN
     VAR_q = VAR_q || 'iterations = lc.iterations + 1,';
     VAR_q = VAR_q || 'last_iteration = NOW(),';
     VAR_q = VAR_q || 'next_iteration = ''2970-01-01 00:00:00+00'' ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
 	VAR_q = VAR_q || 'SELECT version FROM fetchq_doc_complete_lock_%s LIMIT 1;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, PAR_payload, PAR_queue, PAR_subject, PAR_queue);
 
@@ -1356,7 +1356,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 DROP FUNCTION IF EXISTS fetchq_doc_kill(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_doc_kill (
+CREATE OR REPLACE FUNCTION fetchq_doc_kill(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	OUT affected_rows INTEGER
@@ -1365,13 +1365,13 @@ DECLARE
 	VAR_table_name VARCHAR = 'fetchq_';
 	VAR_q VARCHAR;
 BEGIN
-	VAR_q = 'WITH fetchq_doc_kill_lock_%s AS ( ';
+	VAR_q = 'WITH fetchq_doc_kill_lock_%s AS( ';
 	VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq__%s__documents AS lc SET ';
     VAR_q = VAR_q || 'status = -1,';
     VAR_q = VAR_q || 'attempts = 0,';
     VAR_q = VAR_q || 'iterations = lc.iterations + 1,';
     VAR_q = VAR_q || 'last_iteration = NOW()';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
 	VAR_q = VAR_q || 'SELECT version FROM fetchq_doc_kill_lock_%s LIMIT 1;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, PAR_queue, PAR_subject, PAR_queue);
 
@@ -1390,7 +1390,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_doc_kill(CHARACTER VARYING, CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_doc_kill (
+CREATE OR REPLACE FUNCTION fetchq_doc_kill(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	PAR_payload JSONB,
@@ -1400,14 +1400,14 @@ DECLARE
 	VAR_table_name VARCHAR = 'fetchq_';
 	VAR_q VARCHAR;
 BEGIN
-	VAR_q = 'WITH fetchq_doc_kill_lock_%s AS ( ';
+	VAR_q = 'WITH fetchq_doc_kill_lock_%s AS( ';
 	VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq__%s__documents AS lc SET ';
 	VAR_q = VAR_q || 'payload = ''%s'',';
     VAR_q = VAR_q || 'status = -1,';
     VAR_q = VAR_q || 'attempts = 0,';
     VAR_q = VAR_q || 'iterations = lc.iterations + 1,';
     VAR_q = VAR_q || 'last_iteration = NOW()';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.fetchq__%s__documents WHERE subject = ''%s'' AND status = 2 LIMIT 1 ) RETURNING version) ';
 	VAR_q = VAR_q || 'SELECT version FROM fetchq_doc_kill_lock_%s LIMIT 1;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue, PAR_payload, PAR_queue, PAR_subject, PAR_queue);
 
@@ -1426,7 +1426,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_doc_drop(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_doc_drop (
+CREATE OR REPLACE FUNCTION fetchq_doc_drop(
 	PAR_queue VARCHAR,
 	PAR_subject VARCHAR,
 	OUT affected_rows INTEGER
@@ -1459,7 +1459,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { affected_rows: 1 }
 DROP FUNCTION IF EXISTS fetchq_mnt_make_pending(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_make_pending (
+CREATE OR REPLACE FUNCTION fetchq_mnt_make_pending(
 	PAR_queue VARCHAR,
 	PAR_limit INTEGER,
 	OUT affected_rows INTEGER
@@ -1469,7 +1469,7 @@ DECLARE
 BEGIN
     VAR_q = '';
 	VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq__%s__documents SET status = 1 ';
-	VAR_q = VAR_q || 'WHERE subject IN ( ';
+	VAR_q = VAR_q || 'WHERE subject IN( ';
 	VAR_q = VAR_q || 'SELECT subject FROM fetchq_catalog.fetchq__%s__documents ';
 	VAR_q = VAR_q || 'WHERE lock_upgrade IS NULL AND status = 0 AND next_iteration < NOW() ';
 	VAR_q = VAR_q || 'ORDER BY next_iteration ASC, attempts ASC ';
@@ -1501,7 +1501,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { affected_rows: 1 }
 DROP FUNCTION IF EXISTS fetchq_mnt_reschedule_orphans(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_reschedule_orphans (
+CREATE OR REPLACE FUNCTION fetchq_mnt_reschedule_orphans(
 	PAR_queue VARCHAR,
 	PAR_limit INTEGER,
 	OUT affected_rows INTEGER
@@ -1518,7 +1518,7 @@ BEGIN
 
 	VAR_q = '';
 	VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq__%s__documents SET status = 1 ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM fetchq_catalog.fetchq__%s__documents ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.fetchq__%s__documents ';
 	VAR_q = VAR_q || 'WHERE lock_upgrade IS NULL AND status = 2 AND attempts < %s AND next_iteration < NOW() ';
 	VAR_q = VAR_q || 'LIMIT %s FOR UPDATE );';
 	EXECUTE FORMAT(VAR_q, PAR_queue, PAR_queue, VAR_r.max_attempts, PAR_limit);
@@ -1539,7 +1539,7 @@ BEGIN
 	END;
 END; $$
 LANGUAGE plpgsql;DROP FUNCTION IF EXISTS fetchq_mnt_mark_dead(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_mark_dead (
+CREATE OR REPLACE FUNCTION fetchq_mnt_mark_dead(
 	PAR_queue VARCHAR,
 	PAR_limit INTEGER,
 	OUT affected_rows INTEGER
@@ -1556,7 +1556,7 @@ BEGIN
 
 	VAR_q = '';
 	VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq__%s__documents SET status = -1 ';
-	VAR_q = VAR_q || 'WHERE subject IN ( SELECT subject FROM fetchq_catalog.fetchq__%s__documents ';
+	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM fetchq_catalog.fetchq__%s__documents ';
 	VAR_q = VAR_q || 'WHERE lock_upgrade IS NULL AND status = 2 AND attempts >= %s AND next_iteration < NOW() ';
 	VAR_q = VAR_q || 'LIMIT %s FOR UPDATE );';
 	EXECUTE FORMAT(VAR_q, PAR_queue, PAR_queue, VAR_r.max_attempts, PAR_limit);
@@ -1575,7 +1575,7 @@ LANGUAGE plpgsql;-- MAINTENANCE // WRAPPER FUNCTION
 -- returns:
 -- { activated_count: 1, rescheduled_count: 1, killed_count: 1 }
 DROP FUNCTION IF EXISTS fetchq_mnt_run(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_run (
+CREATE OR REPLACE FUNCTION fetchq_mnt_run(
 	PAR_queue VARCHAR,
 	PAR_limit INTEGER,
 	OUT activated_count INTEGER,
@@ -1596,7 +1596,7 @@ DROP FUNCTION IF EXISTS fetchq_mnt_run_all(INTEGER);
 CREATE OR REPLACE FUNCTION fetchq_mnt_run_all(
 	PAR_limit INTEGER
 ) 
-RETURNS TABLE (
+RETURNS TABLE(
 	queue VARCHAR,
 	activated_count INTEGER,
 	rescheduled_count INTEGER,
@@ -1608,7 +1608,7 @@ DECLARE
 	VAR_c RECORD;
 BEGIN
 	FOR VAR_q IN
-		SELECT (name) FROM fetchq_catalog.fetchq_sys_queues
+		SELECT(name) FROM fetchq_catalog.fetchq_sys_queues
 	LOOP
 		SELECT * FROM fetchq_mnt_run(VAR_q.name, PAR_limit) INTO VAR_c;
 		queue = VAR_q.name;
@@ -1622,10 +1622,10 @@ $BODY$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_mnt_job_pick(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_job_pick (
+CREATE OR REPLACE FUNCTION fetchq_mnt_job_pick(
 	PAR_lockDuration VARCHAR,
     PAR_limit INTEGER
-) RETURNS TABLE (
+) RETURNS TABLE(
 	id INTEGER,
     task VARCHAR,
     queue VARCHAR,
@@ -1643,7 +1643,7 @@ BEGIN
     VAR_q = VAR_q || 'UPDATE fetchq_catalog.fetchq_sys_jobs SET ';
     VAR_q = VAR_q || 'next_iteration = NOW() + ''%s'', ';
     VAR_q = VAR_q || 'attempts = attempts + 1 ';
-    VAR_q = VAR_q || 'WHERE id IN (SELECT id FROM fetchq_catalog.fetchq_sys_jobs WHERE attempts < 5 AND next_iteration < NOW() ORDER BY next_iteration ASC, attempts ASC LIMIT %s FOR UPDATE SKIP LOCKED) ';
+    VAR_q = VAR_q || 'WHERE id IN(SELECT id FROM fetchq_catalog.fetchq_sys_jobs WHERE attempts < 5 AND next_iteration < NOW() ORDER BY next_iteration ASC, attempts ASC LIMIT %s FOR UPDATE SKIP LOCKED) ';
     VAR_q = VAR_q || 'RETURNING *;';
     VAR_q = FORMAT(VAR_q, PAR_lockDuration, PAR_limit);
     -- RAISE NOTICE '%', VAR_q;
@@ -1652,7 +1652,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_mnt_job_reschedule(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_mnt_job_reschedule (
+CREATE OR REPLACE FUNCTION fetchq_mnt_job_reschedule(
 	PAR_id INTEGER,
     PAR_delay VARCHAR,
     OUT success BOOLEAN
@@ -1678,7 +1678,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_mnt_job_run(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_job_run (
+CREATE OR REPLACE FUNCTION fetchq_mnt_job_run(
     PAR_lockDuration VARCHAR,
 	PAR_limit INTEGER,
     OUT success BOOLEAN,
@@ -1745,7 +1745,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_mnt_job_run(INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_mnt_job_run (
+CREATE OR REPLACE FUNCTION fetchq_mnt_job_run(
 	PAR_limit INTEGER,
     OUT success BOOLEAN,
     OUT processed INTEGER
@@ -1763,7 +1763,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_mnt_job_run();
-CREATE OR REPLACE FUNCTION fetchq_mnt_job_run (
+CREATE OR REPLACE FUNCTION fetchq_mnt_job_run(
     OUT success BOOLEAN,
     OUT processed INTEGER
 ) AS $$
@@ -1779,7 +1779,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 DROP FUNCTION IF EXISTS fetchq_mnt(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_mnt (
+CREATE OR REPLACE FUNCTION fetchq_mnt(
     PAR_lockDuration VARCHAR,
 	OUT processed INTEGER,
 	OUT packed INTEGER
@@ -1789,7 +1789,7 @@ DECLARE
     VAR_r RECORD;
 BEGIN
     -- set all the jobs to be executed
-    -- (skip generic jobs)
+    --(skip generic jobs)
     UPDATE fetchq_catalog.fetchq_sys_jobs SET next_iteration = NOW() - INTERVAL '1ms'
     WHERE queue != '*';
 
@@ -1805,7 +1805,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_mnt();
-CREATE OR REPLACE FUNCTION fetchq_mnt (
+CREATE OR REPLACE FUNCTION fetchq_mnt(
 	OUT processed INTEGER,
 	OUT packed INTEGER
 ) AS $$
@@ -1818,7 +1818,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 DROP FUNCTION IF EXISTS fetchq_log_error(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_log_error (
+CREATE OR REPLACE FUNCTION fetchq_log_error(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_message VARCHAR,
@@ -1829,9 +1829,9 @@ DECLARE
     VAR_q VARCHAR;
 BEGIN
 
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__errors (';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__errors(';
 	VAR_q = VAR_q || 'created_at, subject, message, details';
-    VAR_q = VAR_q || ') VALUES (';
+    VAR_q = VAR_q || ') VALUES(';
     VAR_q = VAR_q || 'NOW(), ';
     VAR_q = VAR_q || '''%s'', ';
     VAR_q = VAR_q || '''%s'', ';
@@ -1851,7 +1851,7 @@ LANGUAGE plpgsql;
 
 
 DROP FUNCTION IF EXISTS fetchq_log_error(CHARACTER VARYING, CHARACTER VARYING, CHARACTER VARYING, JSONB, VARCHAR);
-CREATE OR REPLACE FUNCTION fetchq_log_error (
+CREATE OR REPLACE FUNCTION fetchq_log_error(
     PAR_queue VARCHAR,
     PAR_subject VARCHAR,
     PAR_message VARCHAR,
@@ -1863,9 +1863,9 @@ DECLARE
     VAR_q VARCHAR;
 BEGIN
 
-    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__errors (';
+    VAR_q = 'INSERT INTO fetchq_catalog.fetchq__%s__errors(';
 	VAR_q = VAR_q || 'created_at, subject, message, details, ref_id';
-    VAR_q = VAR_q || ') VALUES (';
+    VAR_q = VAR_q || ') VALUES(';
     VAR_q = VAR_q || 'NOW(), ';
     VAR_q = VAR_q || '''%s'', ';
     VAR_q = VAR_q || '''%s'', ';
@@ -1888,7 +1888,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { domain_id: '1' }
 DROP FUNCTION IF EXISTS fetchq_queue_get_id(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_get_id (
+CREATE OR REPLACE FUNCTION fetchq_queue_get_id(
 	PAR_queue VARCHAR(15),
 	OUT queue_id BIGINT
 ) AS
@@ -1899,7 +1899,7 @@ BEGIN
 	LIMIT 1;
 
 	IF queue_id IS NULL THEN
-		INSERT INTO fetchq_catalog.fetchq_sys_queues (name, created_at ) VALUES (PAR_queue, now())
+		INSERT INTO fetchq_catalog.fetchq_sys_queues(name, created_at ) VALUES(PAR_queue, now())
 		ON CONFLICT DO NOTHING
 		RETURNING id INTO queue_id;
 	END IF;
@@ -1907,7 +1907,7 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_insert () RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_insert() RETURNS TRIGGER AS $$
 DECLARE
 	VAR_event VARCHAR = 'pnd';
     VAR_notify VARCHAR;
@@ -1926,7 +1926,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_update () RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_update() RETURNS TRIGGER AS $$
 DECLARE
 	VAR_event VARCHAR = 'null';
     VAR_notify VARCHAR;
@@ -1960,7 +1960,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_queue_disable_notify (
+CREATE OR REPLACE FUNCTION fetchq_queue_disable_notify(
     PAR_queue VARCHAR,
     OUT success BOOLEAN
 ) AS $$
@@ -1980,7 +1980,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_queue_enable_notify (
+CREATE OR REPLACE FUNCTION fetchq_queue_enable_notify(
     PAR_queue VARCHAR,
     OUT success BOOLEAN
 ) AS $$
@@ -2013,7 +2013,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { was_created: TRUE }
 DROP FUNCTION IF EXISTS fetchq_queue_create(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_create (
+CREATE OR REPLACE FUNCTION fetchq_queue_create(
 	PAR_queue VARCHAR,
 	OUT was_created BOOLEAN,
 	OUT queue_id INTEGER
@@ -2026,7 +2026,7 @@ BEGIN
 	-- pick the queue id
 	SELECT t.queue_id INTO queue_id FROM fetchq_queue_get_id(PAR_queue) AS t;
 
-	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__documents (';
+	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__documents(';
 	VAR_q = VAR_q || 'subject CHARACTER VARYING(50) NOT NULL PRIMARY KEY,';
 	VAR_q = VAR_q || 'version INTEGER DEFAULT 0,';
 	VAR_q = VAR_q || 'priority INTEGER DEFAULT 0,';
@@ -2044,7 +2044,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- errors table
-	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__errors (';
+	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__errors(';
 	VAR_q = VAR_q || 'id SERIAL PRIMARY KEY,';
 	VAR_q = VAR_q || 'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),';
 	VAR_q = VAR_q || 'subject CHARACTER VARYING(50) NOT NULL,';
@@ -2056,7 +2056,7 @@ BEGIN
 	EXECUTE VAR_q;
 
 	-- stats history
-	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__metrics (';
+	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__metrics(';
 	VAR_q = VAR_q || 'id SERIAL PRIMARY KEY,';
 	VAR_q = VAR_q || 'created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),';
 	VAR_q = VAR_q || 'metric CHARACTER VARYING(50) NOT NULL,';
@@ -2069,11 +2069,11 @@ BEGIN
 	PERFORM fetchq_queue_create_indexes(PAR_queue, 0, 5);
 	
 	-- enable notifications
-	-- (slows down by half insert performance!)
+	--(slows down by half insert performance!)
 	-- PERFORM fetchq_queue_enable_notify(PAR_queue);
 
 	-- add new maintenance tasks
-	INSERT INTO fetchq_catalog.fetchq_sys_jobs (task, queue, next_iteration, last_iteration, attempts, iterations, settings, payload) VALUES
+	INSERT INTO fetchq_catalog.fetchq_sys_jobs(task, queue, next_iteration, last_iteration, attempts, iterations, settings, payload) VALUES
 	('mnt', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"1m", "duration":"5m", "limit":500}', '{}'),
 	('sts', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"3s", "duration":"5m"}', '{}'),
 	('cmp', PAR_queue, NOW(), NULL, 0, 0, '{"delay":"10m", "duration":"5m"}', '{}'),
@@ -2093,7 +2093,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { was_dropped: TRUE }
 DROP FUNCTION IF EXISTS fetchq_queue_drop(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop(
 	PAR_queue VARCHAR,
 	OUT was_dropped BOOLEAN,
 	OUT queue_id INTEGER
@@ -2150,7 +2150,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_queue_set_max_attempts(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_queue_set_max_attempts (
+CREATE OR REPLACE FUNCTION fetchq_queue_set_max_attempts(
 	PAR_queue VARCHAR,
 	PAR_maxAttempts INTEGER,
 	OUT affected_rows INTEGER,
@@ -2190,7 +2190,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_queue_set_current_version(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_queue_set_current_version (
+CREATE OR REPLACE FUNCTION fetchq_queue_set_current_version(
 	PAR_queue VARCHAR,
 	PAR_newVersion INTEGER,
 	OUT affected_rows INTEGER,
@@ -2229,7 +2229,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_queue_set_errors_retention(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_set_errors_retention (
+CREATE OR REPLACE FUNCTION fetchq_queue_set_errors_retention(
 	PAR_queue VARCHAR,
 	PAR_retention VARCHAR,
 	OUT affected_rows INTEGER
@@ -2256,7 +2256,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_queue_set_metrics_retention(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_set_metrics_retention (
+CREATE OR REPLACE FUNCTION fetchq_queue_set_metrics_retention(
 	PAR_queue VARCHAR,
 	PAR_retention VARCHAR,
 	OUT affected_rows INTEGER
@@ -2283,7 +2283,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_queue_drop_version(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_version (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_version(
 	PAR_queue VARCHAR,
 	PAR_oldVersion INTEGER,
 	OUT was_dropped BOOLEAN
@@ -2320,7 +2320,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { affected_rows: INTEGER }
 DROP FUNCTION IF EXISTS fetchq_queue_drop_errors(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors(
 	PAR_queue VARCHAR,
     PAR_retention VARCHAR,
 	OUT affected_rows INTEGER
@@ -2345,7 +2345,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { affected_rows: INTEGER }
 DROP FUNCTION IF EXISTS fetchq_queue_drop_errors(CHARACTER VARYING, TIMESTAMP WITH TIME ZONE);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors(
 	PAR_queue VARCHAR,
     PAR_retention TIMESTAMP WITH TIME ZONE,
 	OUT affected_rows INTEGER
@@ -2370,7 +2370,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { affected_rows: INTEGER }
 DROP FUNCTION IF EXISTS fetchq_queue_drop_errors(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_errors(
 	PAR_queue VARCHAR,
 	OUT affected_rows INTEGER
 ) AS $$
@@ -2401,7 +2401,7 @@ LANGUAGE plpgsql;
 -- returns:
 -- { affected_rows: INTEGER }
 DROP FUNCTION IF EXISTS fetchq_queue_drop_metrics(CHARACTER VARYING, JSONB);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics(
 	PAR_queue VARCHAR,
     PAR_config JSONB,
 	OUT removed_rows INTEGER
@@ -2442,7 +2442,7 @@ LANGUAGE plpgsql;
 
 
 DROP FUNCTION IF EXISTS fetchq_queue_drop_metrics(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_metrics(
 	PAR_queue VARCHAR,
 	OUT removed_rows INTEGER
 ) AS $$
@@ -2475,12 +2475,12 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_queue_top(CHARACTER VARYING, INTEGER, INTEGER, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_queue_top (
+CREATE OR REPLACE FUNCTION fetchq_queue_top(
 	PAR_queue VARCHAR,
     PAR_version INTEGER,
     PAR_limit INTEGER,
     PAR_offset INTEGER
-) RETURNS TABLE (
+) RETURNS TABLE(
 	subject VARCHAR,
 	payload JSONB,
 	version INTEGER,
@@ -2510,7 +2510,7 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_queue_status();
-CREATE OR REPLACE FUNCTION fetchq_queue_status () RETURNS TABLE (
+CREATE OR REPLACE FUNCTION fetchq_queue_status() RETURNS TABLE(
     id INTEGER,
 	name VARCHAR,
 	is_active BOOLEAN
@@ -2528,9 +2528,9 @@ END; $$
 LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS fetchq_queue_status(VARCHAR);
-CREATE OR REPLACE FUNCTION fetchq_queue_status (
+CREATE OR REPLACE FUNCTION fetchq_queue_status(
     PAR_queue VARCHAR
-) RETURNS TABLE (
+) RETURNS TABLE(
     id INTEGER,
 	name VARCHAR,
 	is_active BOOLEAN
@@ -2549,10 +2549,10 @@ END; $$
 LANGUAGE plpgsql;
 
 -- DROP RECORDS FROM A GENERIC TIMESERIE TABLE
--- select (*) from lock_queue_drop_time( 'targetTable', 'timeField', 'retainAmount', 'older date', 'newer date')
+-- select(*) from lock_queue_drop_time( 'targetTable', 'timeField', 'retainAmount', 'older date', 'newer date')
 -- retainAmount: microseconds | milliseconds | second | minute | hour | day | week | month | quarter | year | decade | century | millennium
 DROP FUNCTION IF EXISTS fetchq_utils_ts_retain(character varying, character varying, character varying, timestamp with time zone, timestamp with time zone);
-CREATE OR REPLACE FUNCTION fetchq_utils_ts_retain (
+CREATE OR REPLACE FUNCTION fetchq_utils_ts_retain(
 	tableName VARCHAR,
 	fieldName VARCHAR,
 	retainStr VARCHAR,
@@ -2565,11 +2565,11 @@ DECLARE
 BEGIN
 
 	q = 'DELETE FROM %s ';
-	q = q || 'WHERE %s BETWEEN (''%s'') AND (''%s'') ';
-	q = q || 'AND id NOT IN ( ';
-	q = q || 'SELECT id FROM ( ';
-	q = q || 'SELECT DISTINCT ON (lq_retention_fld) id, date_trunc(''%s'', %s) lq_retention_fld FROM %s ';
-	q = q || 'WHERE %s BETWEEN (''%s'') AND (''%s'') ';
+	q = q || 'WHERE %s BETWEEN(''%s'') AND(''%s'') ';
+	q = q || 'AND id NOT IN( ';
+	q = q || 'SELECT id FROM( ';
+	q = q || 'SELECT DISTINCT ON(lq_retention_fld) id, date_trunc(''%s'', %s) lq_retention_fld FROM %s ';
+	q = q || 'WHERE %s BETWEEN(''%s'') AND(''%s'') ';
 	q = q || 'ORDER BY lq_retention_fld, %s DESC ';
 	q = q || ') AS lock_queue_drop_time_get_retained_ids';
 	q = q || ') RETURNING id;';

@@ -1,6 +1,6 @@
 
 DROP FUNCTION IF EXISTS fetchq_queue_set_metrics_retention(CHARACTER VARYING, CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_set_metrics_retention (
+CREATE OR REPLACE FUNCTION fetchq_queue_set_metrics_retention(
 	PAR_queue VARCHAR,
 	PAR_retention VARCHAR,
 	OUT affected_rows INTEGER

@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_total_01 (
+CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_total_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -22,7 +22,7 @@ BEGIN
     
     -- test result rows
     IF VAR_r.current_value <> 4 THEN
-        RAISE EXCEPTION 'failed - % (current_value, expected "4", got "%")', VAR_testName, VAR_r.current_value;
+        RAISE EXCEPTION 'failed - %(current_value, expected "4", got "%")', VAR_testName, VAR_r.current_value;
     END IF;
 
     -- cleanup test

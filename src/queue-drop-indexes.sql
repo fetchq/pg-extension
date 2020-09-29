@@ -1,6 +1,6 @@
 
 DROP FUNCTION IF EXISTS fetchq_queue_drop_indexes(CHARACTER VARYING);
-CREATE OR REPLACE FUNCTION fetchq_queue_drop_indexes (
+CREATE OR REPLACE FUNCTION fetchq_queue_drop_indexes(
 	PAR_queue VARCHAR,
 	OUT was_dropped BOOLEAN
 ) AS $$
@@ -11,7 +11,7 @@ DECLARE
 BEGIN
 	was_dropped = TRUE;
 
-    -- (select 'foo' as name)
+    --(select 'foo' as name)
     SELECT current_version INTO VAR_r FROM fetchq_catalog.fetchq_sys_queues WHERE name = PAR_queue;
     -- -- index for: fetchq_doc_pick()
     -- VAR_q = 'SELECT current_version INTO VAR_r FROM fetchq_catalog.fetchq_sys_queues WHERE name = ''%s'';';
