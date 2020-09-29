@@ -9,7 +9,7 @@ DECLARE
 BEGIN
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
     PERFORM fetchq_queue_enable_notify('foo');
 
     -- create & drop the queue

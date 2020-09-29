@@ -9,8 +9,8 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
-    PERFORM fetchq_queue_create('faa');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('faa');
 
     -- insert dummy data & force the date in the past
     PERFORM fetchq_doc_push('foo', 'a1', 0, 0, NOW(), '{}');

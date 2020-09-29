@@ -12,10 +12,10 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- set counters
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
     PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
     PERFORM fetchq_doc_pick('foo', 0, 2, '5m');
-    PERFORM fetchq_queue_create('faa');
+    PERFORM fetchq_catalog.fetchq_queue_create('faa');
     PERFORM fetchq_doc_push('faa', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
     SELECT * INTO VAR_r FROM fetchq_doc_pick('faa', 0, 2, '5m');
     PERFORM fetchq_doc_reschedule('faa', VAR_r.subject, NOW() + INTERVAL '1y', '{"a":1}');

@@ -11,7 +11,7 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
     
     -- insert dummy data - queue foo
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
     PERFORM fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');
     PERFORM fetchq_doc_push('foo', 'a2', 0, 1, NOW() - INTERVAL '9s', '{}');
     PERFORM fetchq_doc_push('foo', 'a3', 0, 1, NOW() - INTERVAL '8s', '{}');

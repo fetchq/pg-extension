@@ -9,7 +9,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- perform the operation
     SELECT * INTO VAR_r FROM fetchq_queue_set_max_attempts('foo', 1);

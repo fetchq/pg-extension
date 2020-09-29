@@ -12,7 +12,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert documents one by one
     StartTime := clock_timestamp();
@@ -59,7 +59,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- Generate the push command with multiple documents
     StartTime := clock_timestamp();
@@ -215,7 +215,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- populate documents
     FOR VAR_r IN

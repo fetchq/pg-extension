@@ -9,7 +9,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- perform the operation
     PERFORM fetchq_queue_set_current_version('foo', 1);
@@ -38,7 +38,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- perform the operation
     SELECT * INTO VAR_r FROM fetchq_queue_drop_version('foo', 0);

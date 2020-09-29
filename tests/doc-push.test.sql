@@ -11,7 +11,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- should be able to queue a document with future schedule
     SELECT * INTO VAR_queuedDocs FROM fetchq_doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
@@ -51,7 +51,7 @@ BEGIN
 
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
     PERFORM fetchq_queue_enable_notify('foo');
 
     -- should be able to queue a document with past schedule
@@ -91,7 +91,7 @@ BEGIN
 
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
     PERFORM fetchq_queue_enable_notify('foo');
 
     SELECT * INTO VAR_queuedDocs FROM fetchq_doc_push( 'foo', 0, NOW(), '( ''a1'', 0, ''{"a":1}'', {DATA}),(''a2'', 1, ''{"a":2}'', {DATA} )');

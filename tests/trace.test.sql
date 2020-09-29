@@ -12,11 +12,11 @@ BEGIN
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
     -- prepare some queues
-    PERFORM fetchq_queue_create('q1');
-    PERFORM fetchq_queue_create('q2');
-    PERFORM fetchq_queue_create('q3');
-    PERFORM fetchq_queue_create('a1');
-    PERFORM fetchq_queue_create('a2');
+    PERFORM fetchq_catalog.fetchq_queue_create('q1');
+    PERFORM fetchq_catalog.fetchq_queue_create('q2');
+    PERFORM fetchq_catalog.fetchq_queue_create('q3');
+    PERFORM fetchq_catalog.fetchq_queue_create('a1');
+    PERFORM fetchq_catalog.fetchq_queue_create('a2');
 
     -- push documents witht he same subject so to be traceable
     PERFORM fetchq_doc_push('q1', 'd1', 0, 0, NOW() - INTERVAL '1ms', '{"a":1}');

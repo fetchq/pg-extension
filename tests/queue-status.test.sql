@@ -11,8 +11,8 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
 
     -- create & drop the queue
-    PERFORM fetchq_queue_create('foo');
-    PERFORM fetchq_queue_create('faa');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('faa');
     
     SELECT COUNT(*) INTO VAR_numQueues FROM fetchq_queue_status();
     IF VAR_numQueues != 2 THEN

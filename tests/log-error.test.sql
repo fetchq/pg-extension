@@ -10,7 +10,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
     PERFORM fetchq_log_error('foo', 'a1', 'some error', '{"a":1}');
@@ -38,7 +38,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- insert dummy data
     PERFORM fetchq_log_error('foo', 'a1', 'some error', '{"a":1}', 'ax22');

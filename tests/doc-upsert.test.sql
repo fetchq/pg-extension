@@ -10,7 +10,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- should be able to queue a document
     SELECT * INTO VAR_r FROM fetchq_doc_upsert('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
@@ -47,7 +47,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- should be able to queue a document
     SELECT * INTO VAR_r FROM fetchq_doc_upsert('foo', 'a1', 0, 0, NOW() - INTERVAL '1m', '{}');

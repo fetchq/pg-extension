@@ -11,7 +11,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
     -- should be able to queue a document with future schedule
@@ -49,7 +49,7 @@ BEGIN
     
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
-    PERFORM fetchq_queue_create('foo');
+    PERFORM fetchq_catalog.fetchq_queue_create('foo');
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
     FOR VAR_i IN 1..VAR_expected LOOP
