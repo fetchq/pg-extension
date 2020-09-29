@@ -10,7 +10,7 @@ BEGIN
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq.queue_create('foo');
-    PERFORM fetchq_queue_enable_notify('foo');
+    PERFORM fetchq_queue.enable_notify('foo');
 
     -- create & drop the queue
     PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');

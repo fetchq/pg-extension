@@ -1894,12 +1894,12 @@ BEGIN
     -- RAISE EXCEPTION '>>>>>>>>>>>>>>>>> % -- %', VAR_notify, FORMAT('__%s', VAR_event);
 
     -- -- PERFORM pg_notify('fetchq_debug', VAR_notify);
-	PERFORM pg_notify(VAR_notify, NEW.subject);
+	PERFORM pg_notify('fetchq__' || VAR_notify, NEW.subject);
 	RETURN NEW;
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_trigger_docs_notify_update() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION fetchq.trigger_docs_notify_update() RETURNS TRIGGER AS $$
 DECLARE
 	VAR_event VARCHAR = 'null';
     VAR_notify VARCHAR;
@@ -1926,14 +1926,14 @@ BEGIN
 	
     VAR_notify = REPLACE(TG_TABLE_NAME, '__docs', FORMAT('__%s', VAR_event));
     -- PERFORM pg_notify('fetchq_debug', VAR_notify);
-	PERFORM pg_notify(VAR_notify, NEW.subject);
+	PERFORM pg_notify(V'fetchq__' || AR_notify, NEW.subject);
 	RETURN NEW;
 END; $$
 LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_queue_disable_notify(
+CREATE OR REPLACE FUNCTION fetchq.queue_disable_notify(
     PAR_queue VARCHAR,
     OUT success BOOLEAN
 ) AS $$
@@ -1954,7 +1954,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_queue_enable_notify(
+CREATE OR REPLACE FUNCTION fetchq.queue_enable_notify(
     PAR_queue VARCHAR,
     OUT success BOOLEAN
 ) AS $$
@@ -1962,7 +1962,7 @@ DECLARE
 	VAR_q VARCHAR;
 BEGIN
 	-- drop existing
-    PERFORM fetchq_queue_disable_notify(PAR_queue);
+    PERFORM fetchq.queue_disable_notify(PAR_queue);
     
     -- after insert
     VAR_q = 'CREATE TRIGGER fetchq__%s__trg_notify_insert AFTER INSERT ';
