@@ -14,7 +14,7 @@ BEGIN
     -- insert dummy data & force the date in the past
     PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1 milliseconds', '{}');
     PERFORM fetchq.doc_pick('foo', 0, 1, '5m');
-    UPDATE fetchq_data.foo__documents SET attempts = 5, next_iteration = NOW() - INTERVAL '1 milliseconds';
+    UPDATE fetchq_data.foo__docs SET attempts = 5, next_iteration = NOW() - INTERVAL '1 milliseconds';
     
     PERFORM fetchq.mnt_mark_dead('foo', 100);
     PERFORM fetchq.metric_log_pack();
@@ -51,7 +51,7 @@ BEGIN
     -- insert dummy data & force the date in the past
     PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1 milliseconds', '{}');
     PERFORM fetchq.doc_pick('foo', 0, 1, '5m');
-    UPDATE fetchq_data.foo__documents SET next_iteration = NOW() - INTERVAL '1 milliseconds';
+    UPDATE fetchq_data.foo__docs SET next_iteration = NOW() - INTERVAL '1 milliseconds';
     
     PERFORM fetchq.mnt_mark_dead('foo', 100);
     PERFORM fetchq.metric_log_pack();

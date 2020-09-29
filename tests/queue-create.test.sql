@@ -16,7 +16,7 @@ BEGIN
     END IF;
 
     -- check basic tables
-    PERFORM * FROM fetchq_data.foo__documents;
+    PERFORM * FROM fetchq_data.foo__docs;
     PERFORM * FROM fetchq_data.foo__metrics;
     PERFORM * FROM fetchq_data.foo__logs;
 

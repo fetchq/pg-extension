@@ -20,7 +20,7 @@ BEGIN
 	-- PERFORM fetchq.queue_drop_indexes(PAR_queue);
 
 	-- drop queue table
-	VAR_q = 'DROP TABLE %s__documents CASCADE;';
+	VAR_q = 'DROP TABLE %s__docs CASCADE;';
 	VAR_q = FORMAT(VAR_q, VAR_tableName);
 	EXECUTE VAR_q;
 
