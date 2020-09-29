@@ -20,7 +20,7 @@ BEGIN
     -- Cleanup soft
     CREATE SCHEMA IF NOT EXISTS fetchq_catalog;
     CREATE EXTENSION IF NOT EXISTS fetchq;
-    PERFORM fetchq_destroy_with_terrible_consequences();
+    PERFORM fetchq_catalog.fetchq_destroy_with_terrible_consequences();
 
     DROP EXTENSION IF EXISTS fetchq CASCADE;
     DROP SCHEMA IF EXISTS fetchq_catalog CASCADE;
@@ -38,7 +38,7 @@ CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test_clean(
 ) AS $$
 BEGIN
     -- CREATE EXTENSION IF NOT EXISTS fetchq;
-    -- PERFORM fetchq_destroy_with_terrible_consequences();
+    -- PERFORM fetchq_catalog.fetchq_destroy_with_terrible_consequences();
     -- DROP EXTENSION fetchq;
     done = TRUE;
 END; $$
