@@ -26,7 +26,7 @@ BEGIN
 	-- drop max_attempts related indexes
 	VAR_q = 'DROP INDEX IF EXISTS fetchq.%s_for_pick_idx';
 	EXECUTE FORMAT(VAR_q, PAR_queue);
-	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.etchq_%s_for_pnd_idx';
+	VAR_q = 'DROP INDEX IF EXISTS fetchq_data.etchq_%s_for_pnd_idx';
 	EXECUTE FORMAT(VAR_q, PAR_queue);
 
 	-- re-index the table

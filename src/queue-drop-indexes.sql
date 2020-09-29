@@ -18,27 +18,27 @@ BEGIN
     -- VAR_q = FORMAT(VAR_q, PAR_queue);
     -- EXECUTE VAR_q;
 
-    VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_pick_%s_idx;';
+    VAR_q = 'DROP INDEX IF EXISTS fetchq_data.fetchq_%s_for_pick_%s_idx;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, VAR_r.current_version);
 	EXECUTE VAR_q;
 
 	-- index for: fetchq.mnt_make_pending()
-	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_pnd_idx;';
+	VAR_q = 'DROP INDEX IF EXISTS fetchq_data.fetchq_%s_for_pnd_idx;';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q;
 
 	-- index for: fetchq.mnt_reschedule_orphans()
-	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_orp_idx;';
+	VAR_q = 'DROP INDEX IF EXISTS fetchq_data.fetchq_%s_for_orp_idx;';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q;
 
 	-- index for: fetchq.mnt_mark_dead()
-	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_dod_idx;';
+	VAR_q = 'DROP INDEX IF EXISTS fetchq_data.fetchq_%s_for_dod_idx;';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q;
 
 	-- index for: fetchq.doc_upsert() -- edit query
-	VAR_q = 'DROP INDEX IF EXISTS fetchq_catalog.fetchq_%s_for_ups_idx;';
+	VAR_q = 'DROP INDEX IF EXISTS fetchq_data.fetchq_%s_for_ups_idx;';
 	VAR_q = FORMAT(VAR_q, PAR_queue);
 	EXECUTE VAR_q;
 

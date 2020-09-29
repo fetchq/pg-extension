@@ -31,7 +31,7 @@ BEGIN
 		SELECT * FROM fetchq.queues
 	LOOP
 		-- ingest documents
-        VAR_queueTableName = CONCAT('fetchq_catalog.', VAR_queues.name, '__documents');
+        VAR_queueTableName = CONCAT('fetchq_data.', VAR_queues.name, '__documents');
 		FOR VAR_record IN
 			EXECUTE FORMAT('SELECT * FROM %s WHERE subject = ''%s''', VAR_queueTableName, PAR_subject)
 		LOOP
@@ -42,7 +42,7 @@ BEGIN
 		END LOOP;
 		
 		-- ingest errors
-		VAR_queueTableName = CONCAT('fetchq_catalog.', VAR_queues.name, '__errors');
+		VAR_queueTableName = CONCAT('fetchq_data.', VAR_queues.name, '__errors');
 		FOR VAR_record IN
 			EXECUTE FORMAT('SELECT * FROM %s WHERE subject = ''%s''', VAR_queueTableName, PAR_subject)
 		LOOP

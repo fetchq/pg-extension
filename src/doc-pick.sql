@@ -27,7 +27,7 @@ DECLARE
 	VAR_affectedRows INTEGER;
 BEGIN
 	-- get temporary table name
-	VAR_tableName = FORMAT('fetchq_catalog.%s__documents', PAR_queue);
+	VAR_tableName = FORMAT('fetchq_data.%s__documents', PAR_queue);
 	VAR_tempTable = FORMAT('fetchq__%s__pick_table', PAR_queue);
 	VAR_updateCtx = FORMAT('fetchq__%s__pick_ctx', PAR_queue);
 

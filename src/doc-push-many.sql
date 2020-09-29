@@ -18,7 +18,7 @@ BEGIN
 
     -- push the documents into the data table
 	SELECT replace INTO PAR_data(PAR_data, '{DATA}', VAR_status::text || ', ' || PAR_version::text || ', ' || '''' || PAR_nextIteration::text || '''' || ', NULL, NOW()');
-	VAR_q = 'INSERT INTO fetchq_catalog.%s__documents(subject, priority, payload, status, version, next_iteration, lock_upgrade, created_at) VALUES %s ON CONFLICT DO NOTHING;';
+	VAR_q = 'INSERT INTO fetchq_data.%s__documents(subject, priority, payload, status, version, next_iteration, lock_upgrade, created_at) VALUES %s ON CONFLICT DO NOTHING;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_data);
 	-- RAISE INFO '%', VAR_q;
 	EXECUTE VAR_q;

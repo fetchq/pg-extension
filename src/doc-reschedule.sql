@@ -15,7 +15,7 @@ DECLARE
 	VAR_q VARCHAR;
 	VAR_iterations INTEGER;
 BEGIN
-	VAR_tableName = FORMAT('fetchq_catalog.%s__documents', PAR_queue);
+	VAR_tableName = FORMAT('fetchq_data.%s__documents', PAR_queue);
 	VAR_lockName = FORMAT('fetchq_lock_queue_%s', PAR_queue);
 
 	VAR_q = 'WITH %s AS( ';
@@ -61,7 +61,7 @@ DECLARE
 	VAR_q VARCHAR;
 	VAR_iterations INTEGER;
 BEGIN
-	VAR_tableName = FORMAT('fetchq_catalog.%s__documents', PAR_queue);
+	VAR_tableName = FORMAT('fetchq_data.%s__documents', PAR_queue);
 	VAR_lockName = FORMAT('fetchq_lock_queue_%s', PAR_queue);
 
 	VAR_q = 'WITH %s AS( ';

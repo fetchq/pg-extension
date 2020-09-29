@@ -22,7 +22,7 @@ BEGIN
     PERFORM fetchq.metric_log_pack();
 
     -- get first document
-    SELECT * INTO VAR_r from fetchq_catalog.foo__documents
+    SELECT * INTO VAR_r from fetchq_data.foo__documents
     WHERE subject = 'a1'
     AND status = 1
     AND iterations = 1
@@ -32,7 +32,7 @@ BEGIN
     END IF;
 
     -- get the logged error message
-    SELECT * INTO VAR_r from fetchq_catalog.foo__errors
+    SELECT * INTO VAR_r from fetchq_data.foo__errors
     WHERE subject = VAR_r.subject
     AND message = 'foo'
     AND ref_id IS NULL;
@@ -72,7 +72,7 @@ BEGIN
     PERFORM fetchq.metric_log_pack();
 
     -- get first document
-    SELECT * INTO VAR_r from fetchq_catalog.foo__documents
+    SELECT * INTO VAR_r from fetchq_data.foo__documents
     WHERE subject = 'a1'
     AND status = 1
     AND iterations = 1
@@ -82,7 +82,7 @@ BEGIN
     END IF;
 
     -- get the logged error message
-    SELECT * INTO VAR_r from fetchq_catalog.foo__errors
+    SELECT * INTO VAR_r from fetchq_data.foo__errors
     WHERE subject = VAR_r.subject
     AND message = 'foo'
     AND ref_id = 'xxx';
@@ -122,7 +122,7 @@ BEGIN
     PERFORM fetchq.metric_log_pack();
 
     -- get first document
-    SELECT * INTO VAR_r from fetchq_catalog.foo__documents
+    SELECT * INTO VAR_r from fetchq_data.foo__documents
     WHERE subject = 'a1'
     AND status = -1;
     IF VAR_r.subject IS NULL THEN

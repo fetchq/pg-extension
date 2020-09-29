@@ -16,9 +16,9 @@ BEGIN
     END IF;
 
     -- check basic tables
-    PERFORM * FROM fetchq_catalog.foo__documents;
-    PERFORM * FROM fetchq_catalog.foo__metrics;
-    PERFORM * FROM fetchq_catalog.foo__errors;
+    PERFORM * FROM fetchq_data.foo__documents;
+    PERFORM * FROM fetchq_data.foo__metrics;
+    PERFORM * FROM fetchq_data.foo__errors;
 
     -- check jobs table
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq.jobs WHERE queue = 'foo';

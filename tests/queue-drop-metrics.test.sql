@@ -12,7 +12,7 @@ BEGIN
     PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq.queue_create('foo');
 
-    INSERT INTO fetchq_catalog.foo__metrics( created_at, metric, value ) VALUES
+    INSERT INTO fetchq_data.foo__metrics( created_at, metric, value ) VALUES
     -- within the hour
    ( NOW() - INTERVAL '10 seconds', 'a', 1 ),
    ( NOW() - INTERVAL '20 seconds', 'a', 2 ),
@@ -60,7 +60,7 @@ BEGIN
     PERFORM fetchq.queue_create('foo');
     PERFORM fetchq.queue_set_metrics_retention('foo', '[{"to": "0s", "from": "1h", "retain": "minute"}, {"to": "1h", "from": "100y", "retain": "hour"}]');
 
-    INSERT INTO fetchq_catalog.foo__metrics( created_at, metric, value ) VALUES
+    INSERT INTO fetchq_data.foo__metrics( created_at, metric, value ) VALUES
     -- within the hour
    ( NOW(), 'a', 1 ),
    ( NOW() - INTERVAL '10 seconds', 'a', 2 ),

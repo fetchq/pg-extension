@@ -6,7 +6,7 @@ BEGIN
     was_initialized = TRUE;
 
     -- Create the FetchQ Schema
-    CREATE SCHEMA IF NOT EXISTS fetchq_catalog;
+    CREATE SCHEMA IF NOT EXISTS fetchq_data;
 
     -- Queues Register
     CREATE TABLE IF NOT EXISTS fetchq.queues(

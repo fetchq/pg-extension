@@ -21,7 +21,7 @@ BEGIN
     PERFORM fetchq.metric_log_pack();
 
     -- get no docs
-    SELECT * INTO VAR_r from fetchq_catalog.foo__documents
+    SELECT * INTO VAR_r from fetchq_data.foo__documents
     WHERE subject = 'a1';
     IF VAR_r.subject IS NOT NULL THEN
         RAISE EXCEPTION 'failed - %', VAR_testName;

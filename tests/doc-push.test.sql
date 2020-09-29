@@ -19,7 +19,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq_catalog.foo__documents WHERE subject = 'a1';
+    SELECT * INTO VAR_r FROM fetchq_data.foo__documents WHERE subject = 'a1';
     IF VAR_r.status <> 0 THEN
         RAISE EXCEPTION 'failed - %(Wrong status was computed for the document)', VAR_testName;
     END IF;
@@ -60,7 +60,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %(expected: 1, received: %)', VAR_testName, VAR_queuedDocs;
     END IF;
 
-    SELECT * INTO VAR_r FROM fetchq_catalog.foo__documents WHERE subject = 'a1';
+    SELECT * INTO VAR_r FROM fetchq_data.foo__documents WHERE subject = 'a1';
     IF VAR_r.status <> 1 THEN
         RAISE EXCEPTION 'failed - %(Wrong status was computed for the document)', VAR_testName;
     END IF;

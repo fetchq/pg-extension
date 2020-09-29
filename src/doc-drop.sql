@@ -10,7 +10,7 @@ DECLARE
 	VAR_version INTEGER;
 BEGIN
 
-	VAR_q = 'DELETE FROM fetchq_catalog.%s__documents WHERE subject = ''%s'' AND status = 2 RETURNING version;';
+	VAR_q = 'DELETE FROM fetchq_data.%s__documents WHERE subject = ''%s'' AND status = 2 RETURNING version;';
 	VAR_q = FORMAT(VAR_q, PAR_queue, PAR_subject);
 
 	EXECUTE VAR_q INTO VAR_version;

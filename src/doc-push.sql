@@ -20,7 +20,7 @@ BEGIN
 	END IF;
 
     -- push the document into the data table
-    VAR_q = 'INSERT INTO fetchq_catalog.%s__documents(';
+    VAR_q = 'INSERT INTO fetchq_data.%s__documents(';
 	VAR_q = VAR_q || 'subject, version, priority, status, next_iteration, payload, created_at) VALUES(';
     VAR_q = VAR_q || '''%s'', ';
     VAR_q = VAR_q || '%s, ';
