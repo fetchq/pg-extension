@@ -13,6 +13,11 @@ pg_version ?= 9.6
 pg_extension_folder ?= 9.6
 
 reset:
+	# Cleanup current db
+	docker stop fetchq || true
+	docker rm -f fetchq || true
+
+	# Cleanup data folders
 	rm -rf $(CURDIR)/data
 	rm -rf $(CURDIR)/extension
 	mkdir $(CURDIR)/data
@@ -178,6 +183,7 @@ start-pg:
 	docker run --rm -d \
 		--name fetchq \
 		-p 5432:5432 \
+		-e POSTGRES_PASSWORD=postgres \
 		-v $(CURDIR)/data/pg:/var/lib/postgresql/data \
 		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq.control \
 		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq--${version}.sql \
