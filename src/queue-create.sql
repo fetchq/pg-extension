@@ -14,7 +14,7 @@ BEGIN
 	was_created = TRUE;
 
 	-- pick the queue id, it creates the queue's index entry if doesn't exists already
-	SELECT t.queue_id INTO queue_id FROM fetchq_queue_get_id(PAR_queue) AS t;
+	SELECT t.queue_id INTO queue_id FROM fetchq_catalog.fetchq_queue_get_id(PAR_queue) AS t;
 
 	VAR_q = 'CREATE TABLE fetchq_catalog.fetchq__%s__documents (';
 	VAR_q = VAR_q || 'subject CHARACTER VARYING(50) NOT NULL PRIMARY KEY,';
