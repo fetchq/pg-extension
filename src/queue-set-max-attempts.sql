@@ -1,6 +1,6 @@
 
-DROP FUNCTION IF EXISTS fetchq_queue_set_max_attempts(CHARACTER VARYING, INTEGER);
-CREATE OR REPLACE FUNCTION fetchq_queue_set_max_attempts(
+DROP FUNCTION IF EXISTS fetchq_catalog.fetchq_queue_set_max_attempts(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq_catalog.fetchq_queue_set_max_attempts(
 	PAR_queue VARCHAR,
 	PAR_maxAttempts INTEGER,
 	OUT affected_rows INTEGER,

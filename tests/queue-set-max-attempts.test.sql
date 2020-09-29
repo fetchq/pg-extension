@@ -12,7 +12,7 @@ BEGIN
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
 
     -- perform the operation
-    SELECT * INTO VAR_r FROM fetchq_queue_set_max_attempts('foo', 1);
+    SELECT * INTO VAR_r FROM fetchq_catalog.fetchq_queue_set_max_attempts('foo', 1);
 
     IF VAR_r.affected_rows <> 1 THEN
         RAISE EXCEPTION 'failed - %(affected_rows, expected "1", got "%")', VAR_testName, VAR_r.affected_rows;

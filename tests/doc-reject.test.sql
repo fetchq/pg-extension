@@ -110,7 +110,7 @@ BEGIN
     -- initialize test
     PERFORM fetchq_test.fetchq_test_init();
     PERFORM fetchq_catalog.fetchq_queue_create('foo');
-    PERFORM fetchq_queue_set_max_attempts('foo', 1);
+    PERFORM fetchq_catalog.fetchq_queue_set_max_attempts('foo', 1);
 
     -- insert dummy data
     PERFORM fetchq_catalog.fetchq_doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '1s', '{}');
