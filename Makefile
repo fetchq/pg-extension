@@ -190,7 +190,7 @@ start-pg:
 		-v $(CURDIR)/data/fetchq--${version}.test.sql:/tests/fetchq--${version}.test.sql \
 		postgres:$(pg_version)
 
-start-pg-prod:
+start-pg-prod: build-image
 	docker run --rm -d \
 		--name fetchq \
 		-p 5432:5432 \
