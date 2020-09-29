@@ -1975,7 +1975,7 @@ BEGIN
     -- after update
     VAR_q = 'CREATE TRIGGER fetchq__%s__trg_notify_update AFTER UPDATE ';
 	VAR_q = VAR_q || 'ON fetchq_data.%s__docs ';
-    VAR_q = VAR_q || 'FOR EACH ROW EXECUTE PROCEDURE fetchq_trigger_docs_notify_update();';
+    VAR_q = VAR_q || 'FOR EACH ROW EXECUTE PROCEDURE fetchq.trigger_docs_notify_update();';
     VAR_q = FORMAT(VAR_q, PAR_queue, PAR_queue);
     EXECUTE VAR_q;
 
