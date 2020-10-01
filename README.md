@@ -9,6 +9,7 @@ Postgres extension that enables FetchQ capabilities.
 - [Consuming a Queue](#consuming-a-queue)
 - [Handling a Document](#handling-a-document)
 - [Data Structure](#data-structure)
+- [Fail-safe Mechanism](#fail-safe-mechanism)
 - [Quick Start (local)](#quick-start-local)
 - [Development](#development)
 
@@ -137,7 +138,7 @@ The reason behind the "fetch" in "Fetchq" is that basic clients implement a simp
 > easy to answer from the db point of view. 
 > [Partial indexes](https://www.postgresql.org/docs/current/indexes-partial.html) were the key to success.
 
-
+Here is the query that yelds documents due for execution:
 
 ```sql
 SELECT * FROM fetchq.doc_pick('q1', 0, 1, '5s');
@@ -156,15 +157,17 @@ fetchq.doc_pick(
 
 ### version
 
-[[ TO BE COMPLETED ]]
+When you pick a document you can target a spefici version of the payload. This is just a filter on the queue that make sure that you get documents of a particular type that you expect.
+
+> A document's payload is stored in JSONB format, you can manipulate it, add indexes to it and use it for very complex things... but you can't enforce its structure. It's JSON! The version is a small tool to circumvent this issue.
 
 ### limit
 
-[[ TO BE COMPLETED ]]
+Set the maximum amount of documents that you plan to pick for execution.
 
 ### lockDuration
 
-[[ TO BE COMPLETED ]]
+It's the maximum expected execution time. It's expressed as PostgreSQL interval like `5s` or `1 minute`.
 
 ---
 
@@ -210,14 +213,48 @@ SELECT * FROM fetchq.doc_kill('q1', 'doc1');
 
 [[ TO BE COMPLETED ]]
 
-
-
 ---
 
 ## The Maintenance Job
 
+Fetchq at its core is just a clever data structure and a bunch of indexes. It doent's "live" inside PostgreSQL. 
+
+> In order to update document's statuses and prepare them for execution, there is the need to run some maintenance jobs periodically.
+
+The following command will execute the maintenance job on every queue in the database, for a maximum of 100 documents in each queue:
+
 ```sql
 SELECT * FROM fetchq.mnt_run_all(100);
+```
+
+**NOTE:** A document that is scheduled for future execution must go through a maintenance iteration before it becomes available for processing.
+
+> 👉 A classic [Fetchq client](https://github.com/fetchq/node-client) runs this job in the background. 
+>
+> The more often you run this job, the more responsive the queue. It means that documents that becomes "due for execution" are made "available for execution" quickly. 
+>
+> That comes with a cost in terms of memory and, mostly, CPU. When running Fetchq in production we suggest to monitor its server's memory and CPU so to find a good balance between performances and resources consumption.
+
+---
+
+## Fail-safe Mechanism
+
+Fetchq ships with a fail-safe mechanism that makes sure that a document gets re-executed in case of failure. It's based on a clever usage of the document's `status` and `nextExecution`.
+
+When a document [gets picked](#consuming-a-queue) its `status` is set to "active" and its `nextIteration` is **set in the future** for the amount of time specified by the `lockDuration`.
+
+The [maintenance job](#the-maintenance-job) monitor the queue's data for active documents who's `nextIteration` is overdue. Those documents are considered "orphans", that is, documents that were left pending without an explicit [handling action](#handling-a-document).
+
+When this condition presents, Fetchq re-instate those documents as "pending" and they will get processed once again.
+
+### Max Attempts
+
+Fetchq will try to re-iterate an orphan document for a maximum of 5 times, then will mark that document's `status` as "killed" and stop trying.
+
+You can change this threshold for a specific queue:
+
+```sql
+SELECT * FROM fetchq.queue_set_max_attempts('q1', 3);
 ```
 
 ---
