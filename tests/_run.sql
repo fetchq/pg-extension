@@ -8,7 +8,7 @@ BEGIN
     BEGIN
 
         -- >>> Run tests
-        PERFORM fetchq_test.__runWIP('queue_truncate_all_02', 'It should truncate a queue by name');
+        PERFORM fetchq_test.__runWIP('queue_triggers_01', 'It should run triggers on documents');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
@@ -34,7 +34,7 @@ BEGIN
         PERFORM fetchq_test.__run('queue_create_indexes_01', '');
         PERFORM fetchq_test.__run('queue_drop_01', '');
         PERFORM fetchq_test.__run('queue_top_01', '');
-        PERFORM fetchq_test.__run('queue_triggers_01', '');
+        PERFORM fetchq_test.__run('queue_triggers_01', 'It should run triggers on documents');
         PERFORM fetchq_test.__run('queue_truncate_01', 'It should truncate a queue by name');
         PERFORM fetchq_test.__run('doc_push_01', '');
         PERFORM fetchq_test.__run('doc_append_01', '');

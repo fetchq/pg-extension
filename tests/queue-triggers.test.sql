@@ -8,9 +8,15 @@ DECLARE
     VAR_r RECORD;
 BEGIN
     -- initialize test
-
     PERFORM fetchq.queue_create('foo');
     PERFORM fetchq.queue_enable_notify('foo');
+
+    PERFORM fetchq.doc_push('foo', 'doc1', 0, 0, NOW() - INTERVAL '1s', '{"foo": 123}');
+
+    SELECT * INTO VAR_r FROM fetchq.doc_pick('foo', 0, 1, '1ms');
+    IF VAR_r.subject IS NULL THEN
+        RAISE EXCEPTION 'failed pick document (null value)';
+    END IF;
 
     -- create & drop the queue
     PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
