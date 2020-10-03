@@ -1925,8 +1925,8 @@ BEGIN
 	END IF;
 	
     VAR_notify = REPLACE(TG_TABLE_NAME, '__docs', FORMAT('__%s', VAR_event));
-    -- PERFORM pg_notify('fetchq_debug', VAR_notify);
-	PERFORM pg_notify(V'fetchq__' || AR_notify, NEW.subject);
+    -- PERFORM pg_notify('fetchq_debug', '**' || VAR_notify);
+	PERFORM pg_notify('fetchq__' || VAR_notify, NEW.subject);
 	RETURN NEW;
 END; $$
 LANGUAGE plpgsql;
