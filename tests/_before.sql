@@ -109,3 +109,62 @@ DETAILS:
     done = TRUE;
 END; $$
 LANGUAGE plpgsql;
+
+
+
+
+CREATE OR REPLACE FUNCTION fetchq_test.__runWIP(
+    PAR_testName VARCHAR,
+    PAR_testAssert VARCHAR,
+    OUT done BOOLEAN
+) AS $$
+DECLARE
+	VAR_q VARCHAR;
+    VAR_errMessage TEXT;
+    VAR_errDetails TEXT;
+    VAR_errHint TEXT;
+BEGIN
+
+    -- Cleanup BEFORE test execution
+    PERFORM fetchq_test.__beforeEach();
+
+    -- Prepare test statement
+    VAR_q = 'SELECT * FROM fetchq_test.';
+	VAR_q = VAR_q || PAR_testName;
+	VAR_q = VAR_q || '();';
+	VAR_q = FORMAT(VAR_q, PAR_testName);
+
+    -- Try/catch the test and present a nice error message
+    BEGIN
+        EXECUTE VAR_q;
+    EXCEPTION WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS VAR_errMessage = MESSAGE_TEXT,
+                                VAR_errDetails = PG_EXCEPTION_DETAIL,
+                                VAR_errHint = PG_EXCEPTION_HINT;
+        RAISE EXCEPTION E'
+
+
+
+##########################
+### FETCHQ TEST FAILED ###
+##########################
+
+TEST:
+> fetchq_test.%()
+%
+
+ERROR:
+%
+%
+
+DETAILS:
+%
+
+
+
+'
+, PAR_testName, PAR_testAssert, VAR_errMessage, VAR_errHint, VAR_errDetails;
+    END;
+    done = TRUE;
+END; $$
+LANGUAGE plpgsql;

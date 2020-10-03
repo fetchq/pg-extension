@@ -1,5 +1,12 @@
 # FetchQ Changelog
 
+## v3.1.0
+
+- Adds `fetchq.queue_truncate('queue_name')` to drop current documents in a queue
+- Adds `fetchq.queue_truncate('queue_name', true)` to completely void a queue
+- Adds `fetchq.queue_truncate_all()` to drop all the documents in the existing queues
+- Adds `fetchq.queue_truncate_all(true)` to remove all data from the system
+
 ## v2.2.0
 
 - Adds `fetchq_trace(subject)` api.

@@ -8,7 +8,7 @@ BEGIN
     BEGIN
 
         -- >>> Run tests
-        PERFORM fetchq_test.__run('init', 'It should initialize Fetchq');
+        PERFORM fetchq_test.__runWIP('queue_truncate_all_02', 'It should truncate a queue by name');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
@@ -35,6 +35,7 @@ BEGIN
         PERFORM fetchq_test.__run('queue_drop_01', '');
         PERFORM fetchq_test.__run('queue_top_01', '');
         PERFORM fetchq_test.__run('queue_triggers_01', '');
+        PERFORM fetchq_test.__run('queue_truncate_01', 'It should truncate a queue by name');
         PERFORM fetchq_test.__run('doc_push_01', '');
         PERFORM fetchq_test.__run('doc_append_01', '');
         PERFORM fetchq_test.__run('doc_upsert_01', '');
@@ -67,6 +68,9 @@ BEGIN
         PERFORM fetchq_test.__run('queue_create_03', '');
         PERFORM fetchq_test.__run('queue_status_01', '');
         PERFORM fetchq_test.__run('queue_drop_02', '');
+        PERFORM fetchq_test.__run('queue_truncate_02', 'It should truncate a queue by name and empty it');
+        PERFORM fetchq_test.__run('queue_truncate_all_01', 'It should truncate all the queues in the db');
+        PERFORM fetchq_test.__run('queue_truncate_all_02', 'It should truncate and empty all the queues in the db');
         
         PERFORM fetchq_test.__run('doc_push_02', '');
         PERFORM fetchq_test.__run('doc_push_03', '');
@@ -130,7 +134,7 @@ LANGUAGE plpgsql;
 
 
 -- Define which groups to run
-select * from fetchq_test.__runWIP();
+-- select * from fetchq_test.__runWIP();
 select * from fetchq_test.__runBasics();
 select * from fetchq_test.__runOptionals();
 

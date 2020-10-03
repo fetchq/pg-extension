@@ -12,6 +12,8 @@ Postgres extension that enables FetchQ capabilities.
 - [Fail-safe Mechanism](#fail-safe-mechanism)
 - [Quick Start (local)](#quick-start-local)
 - [Development](#development)
+- API
+  - [queue_truncate(name, [extended])](./docs/api/queue_truncate.md)
 
 ---
 

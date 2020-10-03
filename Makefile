@@ -1,7 +1,7 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 3.0.0
+version ?= 3.1.0
 
 ## Testing with Postgres Versions
 ## It's a good idea to always test with all the versions
@@ -80,6 +80,7 @@ build:
 		$(CURDIR)/src/queue-drop-indexes.sql \
 		$(CURDIR)/src/queue-top.sql \
 		$(CURDIR)/src/queue-status.sql \
+		$(CURDIR)/src/queue-truncate.sql \
 		$(CURDIR)/src/utils-ts-retain.sql \
 		$(CURDIR)/src/trace.sql \
 		> $(CURDIR)/extension/fetchq--${version}.sql
@@ -129,6 +130,7 @@ build-test:
 		$(CURDIR)/tests/queue-drop-metrics.test.sql \
 		$(CURDIR)/tests/queue-drop-indexes.test.sql \
 		$(CURDIR)/tests/queue-status.test.sql \
+		$(CURDIR)/tests/queue-truncate.test.sql \
 		$(CURDIR)/tests/utils-ts-retain.test.sql \
 		$(CURDIR)/tests/trace.test.sql \
 		$(CURDIR)/tests/load.test.sql \
