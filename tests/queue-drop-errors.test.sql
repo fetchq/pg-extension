@@ -1,5 +1,5 @@
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_logs_01(
+CREATE OR REPLACE FUNCTION fetchq_test.queue_drop_logs_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
 
     INSERT INTO fetchq_data.foo__logs( created_at, subject, message ) VALUES
@@ -31,7 +31,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_logs_02(
+CREATE OR REPLACE FUNCTION fetchq_test.queue_drop_logs_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -40,7 +40,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
 
     INSERT INTO fetchq_data.foo__logs( created_at, subject, message ) VALUES
@@ -61,7 +61,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_logs_03(
+CREATE OR REPLACE FUNCTION fetchq_test.queue_drop_logs_03(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -70,7 +70,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
     PERFORM fetchq.queue_set_logs_retention('foo', '1h');
 

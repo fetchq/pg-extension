@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__load_01(
+CREATE OR REPLACE FUNCTION fetchq_test.load_01(
     PAR_limit INTEGER,
     OUT passed BOOLEAN
 ) AS $$
@@ -10,8 +10,9 @@ DECLARE
     Delta double precision;
 BEGIN
     
-    -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+    -- initialize 
+    PERFORM fetchq_test.__beforeEach();
+
     PERFORM fetchq.queue_create('foo');
 
     -- insert documents one by one
@@ -36,13 +37,14 @@ BEGIN
     RAISE NOTICE 'Maintenance Duration in millisecs=%', ROUND(Delta);
     
 
-
+    -- cleanup
+    PERFORM fetchq_test.__afterEach();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__load_02(
+CREATE OR REPLACE FUNCTION fetchq_test.load_02(
     PAR_limit INTEGER,
     OUT passed BOOLEAN
 ) AS $$
@@ -57,7 +59,8 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+    PERFORM fetchq_test.__beforeEach();
+
     PERFORM fetchq.queue_create('foo');
 
     -- Generate the push command with multiple documents
@@ -94,12 +97,13 @@ BEGIN
     RAISE NOTICE 'Maintenance Duration in millisecs=%', ROUND(Delta);
 
 
-
+    -- cleanup
+    PERFORM fetchq_test.__afterEach();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__load_03_make_query(
+CREATE OR REPLACE FUNCTION fetchq_test.load_03_make_query(
     PAR_limit INTEGER,
     PAR_nextIteration TIMESTAMP WITH TIME ZONE,
     OUT query TEXT,
@@ -134,7 +138,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__load_03_run_query(
+CREATE OR REPLACE FUNCTION fetchq_test.load_03_run_query(
     PAR_query TEXT,
     OUT duration INTEGER,
     OUT queued_docs INTEGER
@@ -155,7 +159,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__load_03_run_maintenance(
+CREATE OR REPLACE FUNCTION fetchq_test.load_03_run_maintenance(
     PAR_limit INTEGER,
     OUT duration INTEGER
 ) AS $$
@@ -174,7 +178,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__load_03_pick_reschedule(
+CREATE OR REPLACE FUNCTION fetchq_test.load_03_pick_reschedule(
     PAR_queue VARCHAR,
     PAR_limit INTEGER,
     OUT duration INTEGER
@@ -195,7 +199,7 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__load_03(
+CREATE OR REPLACE FUNCTION fetchq_test.load_03(
     PAR_iterations INTEGER,
     PAR_docsPerIteration INTEGER,
     OUT passed BOOLEAN,
@@ -212,17 +216,18 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+    PERFORM fetchq_test.__beforeEach();
+
     PERFORM fetchq.queue_create('foo');
 
     -- populate documents
     FOR VAR_r IN
 		SELECT generate_series(1, PAR_iterations) AS id, md5(random()::text) AS descr
 	LOOP
-        -- SELECT * INTO VAR_r1 FROM fetchq_test.fetchq_test__load_03_make_query(PAR_docsPerIteration, NOW() +(random() *(NOW() + '60 days' - NOW())) + '-30 days');
-        SELECT * INTO VAR_r1 FROM fetchq_test.fetchq_test__load_03_make_query(PAR_docsPerIteration, NOW() - INTERVAL '30 days');
-        SELECT * INTO VAR_r2 FROM fetchq_test.fetchq_test__load_03_run_query(VAR_r1.query);
-        SELECT * INTO VAR_r3 FROM fetchq_test.fetchq_test__load_03_run_maintenance(PAR_docsPerIteration * 2);
+        -- SELECT * INTO VAR_r1 FROM fetchq_test.load_03_make_query(PAR_docsPerIteration, NOW() +(random() *(NOW() + '60 days' - NOW())) + '-30 days');
+        SELECT * INTO VAR_r1 FROM fetchq_test.load_03_make_query(PAR_docsPerIteration, NOW() - INTERVAL '30 days');
+        SELECT * INTO VAR_r2 FROM fetchq_test.load_03_run_query(VAR_r1.query);
+        SELECT * INTO VAR_r3 FROM fetchq_test.load_03_run_maintenance(PAR_docsPerIteration * 2);
         VAR_sumTime = VAR_sumTime + VAR_r2.duration;
         VAR_sumRecords = VAR_sumRecords + VAR_r2.queued_docs;
         docsPerSecond =(VAR_sumRecords * 1000) / VAR_sumTime;
@@ -230,7 +235,7 @@ BEGIN
 	END LOOP;
 
     -- run last maintenance
-    PERFORM fetchq_test.fetchq_test__load_03_run_maintenance(PAR_iterations * PAR_docsPerIteration);
+    PERFORM fetchq_test.load_03_run_maintenance(PAR_iterations * PAR_docsPerIteration);
 
     -- test pick document performance
     -- VAR_sumTime = 0;
@@ -238,7 +243,7 @@ BEGIN
     -- FOR VAR_r IN
 	-- 	SELECT generate_series(1, 5) AS id
 	-- LOOP
-    --     SELECT * INTO VAR_r1 FROM fetchq_test.fetchq_test__load_03_pick_reschedule('foo', 1);
+    --     SELECT * INTO VAR_r1 FROM fetchq_test.load_03_pick_reschedule('foo', 1);
     --     VAR_sumTime = VAR_sumTime + VAR_r1.duration;
     --     VAR_sumRecords = VAR_sumRecords + 1;
     --     docsPerSecond =(VAR_sumRecords * 1000) / VAR_sumTime;
@@ -249,8 +254,7 @@ BEGIN
     -- RAISE NOTICE '%', VAR_r;
 
     -- cleanup
-    -- PERFORM fetchq_test.fetchq_test_clean();
-
+    PERFORM fetchq_test.__afterEach();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

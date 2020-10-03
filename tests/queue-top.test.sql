@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_top_01(
+CREATE OR REPLACE FUNCTION fetchq_test.queue_top_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
     VAR_r RECORD;
 BEGIN
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
 
     -- create & drop the queue
     PERFORM fetchq.queue_create('foo');

@@ -1,5 +1,5 @@
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_indexes_01(
+CREATE OR REPLACE FUNCTION fetchq_test.queue_drop_indexes_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
 
     -- assert normal indexes

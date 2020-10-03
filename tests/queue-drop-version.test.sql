@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_version_01(
+CREATE OR REPLACE FUNCTION fetchq_test.queue_drop_version_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
 
     -- perform the operation
@@ -27,7 +27,7 @@ END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_version_02(
+CREATE OR REPLACE FUNCTION fetchq_test.queue_drop_version_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -36,7 +36,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
 
     -- perform the operation

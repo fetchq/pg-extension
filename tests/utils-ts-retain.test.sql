@@ -1,5 +1,5 @@
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__utils_ts_retain_01(
+CREATE OR REPLACE FUNCTION fetchq_test.utils_ts_retain_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
 
     CREATE TABLE fetchq_data.test_utils_ts_retain(
         id SERIAL PRIMARY KEY,

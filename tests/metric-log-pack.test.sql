@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_log_pack_01(
+CREATE OR REPLACE FUNCTION fetchq_test.metric_log_pack_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
 
     -- set some basic metrics
     PERFORM fetchq.metric_log_set('foo', 'cnt', 10);

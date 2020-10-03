@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_snap_01(
+CREATE OR REPLACE FUNCTION fetchq_test.metric_snap_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     
     -- insert dummy data - queue foo
     PERFORM fetchq.queue_create('foo');
@@ -35,7 +35,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_snap_02(
+CREATE OR REPLACE FUNCTION fetchq_test.metric_snap_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -44,7 +44,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     
     -- insert dummy data - queue foo
     PERFORM fetchq.queue_create('foo');
@@ -74,7 +74,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_snap_03(
+CREATE OR REPLACE FUNCTION fetchq_test.metric_snap_03(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -83,7 +83,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     
     -- insert dummy data - queue foo
     PERFORM fetchq.queue_create('foo');

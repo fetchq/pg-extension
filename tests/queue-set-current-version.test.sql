@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_set_current_version_01(
+CREATE OR REPLACE FUNCTION fetchq_test.queue_set_current_version_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
 
     -- perform the operation

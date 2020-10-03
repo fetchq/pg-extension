@@ -1,15 +1,13 @@
 
 -- declare test case
--- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__init();
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__init(
+-- DROP FUNCTION IF EXISTS fetchq_test.init();
+CREATE OR REPLACE FUNCTION fetchq_test.init(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
 	VAR_numDocs INTEGER;
     VAR_r RECORD;
 BEGIN
-    -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
 
     -- should be able to gracefully fail
     PERFORM fetchq.init();
@@ -21,11 +19,10 @@ BEGIN
     PERFORM * from fetchq.metrics_writes;
     PERFORM * from fetchq.jobs;
 
-
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
 -- run test & cleanup
--- SELECT * FROM fetchq_test.fetchq_test__init();
--- DROP FUNCTION IF EXISTS fetchq_test.fetchq_test__init();
+-- SELECT * FROM fetchq_test.init();
+-- DROP FUNCTION IF EXISTS fetchq_test.init();

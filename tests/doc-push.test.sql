@@ -1,6 +1,6 @@
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_push_01(
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -10,7 +10,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
 
     -- should be able to queue a document with future schedule
@@ -37,7 +37,7 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_push_02(
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -47,7 +47,7 @@ DECLARE
 BEGIN
 
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
     PERFORM fetchq.queue_enable_notify('foo');
 
@@ -75,7 +75,7 @@ END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__doc_push_03(
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_03(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -85,7 +85,7 @@ DECLARE
 BEGIN
 
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
     PERFORM fetchq.queue_enable_notify('foo');
 

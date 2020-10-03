@@ -1,5 +1,5 @@
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_metrics_01(
+CREATE OR REPLACE FUNCTION fetchq_test.queue_drop_metrics_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -9,7 +9,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
 
     INSERT INTO fetchq_data.foo__metrics( created_at, metric, value ) VALUES
@@ -46,7 +46,7 @@ END; $$
 LANGUAGE plpgsql;
 
 -- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__queue_drop_metrics_02(
+CREATE OR REPLACE FUNCTION fetchq_test.queue_drop_metrics_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -56,7 +56,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
     PERFORM fetchq.queue_set_metrics_retention('foo', '[{"to": "0s", "from": "1h", "retain": "minute"}, {"to": "1h", "from": "100y", "retain": "hour"}]');
 

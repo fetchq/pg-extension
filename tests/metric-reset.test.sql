@@ -1,5 +1,5 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_reset_01(
+CREATE OR REPLACE FUNCTION fetchq_test.metric_reset_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
     
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     
     -- insert dummy data - queue foo
     PERFORM fetchq.queue_create('foo');

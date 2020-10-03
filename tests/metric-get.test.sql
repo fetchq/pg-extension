@@ -1,6 +1,6 @@
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_01(
+CREATE OR REPLACE FUNCTION fetchq_test.metric_get_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -8,7 +8,7 @@ DECLARE
 BEGIN
 
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
     PERFORM fetchq.queue_create('foo');
 
     -- test set counters
@@ -44,7 +44,7 @@ END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_02(
+CREATE OR REPLACE FUNCTION fetchq_test.metric_get_02(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -54,7 +54,7 @@ DECLARE
 BEGIN
 
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
 
     -- test set counters
     PERFORM fetchq.metric_set(VAR_qA, 'b', 4);
@@ -89,7 +89,7 @@ END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.fetchq_test__metric_get_03(
+CREATE OR REPLACE FUNCTION fetchq_test.metric_get_03(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
@@ -100,7 +100,7 @@ DECLARE
 BEGIN
 
     -- initialize test
-    PERFORM fetchq_test.fetchq_test_init();
+
 
     -- set counters
     PERFORM fetchq.metric_set(VAR_qA, 'a', 2);
