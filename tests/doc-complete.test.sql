@@ -30,9 +30,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %(failed to find the document after complete)', VAR_testName;
     END IF;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
-
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
@@ -67,9 +64,6 @@ BEGIN
     IF VAR_r.subject IS NULL THEN
         RAISE EXCEPTION 'failed - %(failed to find the document after complete)', VAR_testName;
     END IF;
-
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$

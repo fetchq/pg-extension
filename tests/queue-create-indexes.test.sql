@@ -23,8 +23,6 @@ BEGIN
         RAISE EXCEPTION 'failed -(expected: 6, got: %)', VAR_r.total;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$

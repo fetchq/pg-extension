@@ -46,8 +46,6 @@ BEGIN
 	END IF;
 
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
@@ -76,8 +74,6 @@ BEGIN
         RAISE EXCEPTION 'drop queue failed to return the correct queue_id';
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

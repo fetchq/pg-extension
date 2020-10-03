@@ -26,9 +26,6 @@ BEGIN
         RAISE EXCEPTION 'failed -(identical ids) %', VAR_testName;
     END IF;
 
-    -- cleanup test
-    DROP EXTENSION IF EXISTS "uuid-ossp";
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
@@ -65,9 +62,6 @@ BEGIN
         RAISE EXCEPTION 'failed -(mismatch %/%) %', VAR_appended, VAR_expected, VAR_testName;
     END IF;
 
-    -- cleanup test
-    DROP EXTENSION IF EXISTS "uuid-ossp";
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

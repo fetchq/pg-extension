@@ -33,8 +33,7 @@ BEGIN
     -- RAISE NOTICE '%', VAR_r;
     -- RAISE EXCEPTION '##################################################################';
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

@@ -21,8 +21,6 @@ BEGIN
     PERFORM * from fetchq.metrics_writes;
     PERFORM * from fetchq.jobs;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$

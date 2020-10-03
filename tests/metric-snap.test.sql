@@ -28,8 +28,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %(success, got false)', VAR_testName;
     END IF;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
@@ -68,8 +67,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %(inserts, expected 10, got %)', VAR_testName, VAR_r.inserts;
     END IF;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
@@ -108,8 +106,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %(inserts, expected 2, got %)', VAR_testName, VAR_r.inserts;
     END IF;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

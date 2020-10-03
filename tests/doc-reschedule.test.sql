@@ -25,8 +25,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %(unespected number of iterations)', VAR_testName;
     END IF;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
 
     passed = TRUE;
 END; $$
@@ -62,8 +61,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %(unespected number of iterations)', VAR_testName;
     END IF;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
 
     passed = TRUE;
 END; $$

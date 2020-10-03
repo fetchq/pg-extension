@@ -38,8 +38,6 @@ BEGIN
         RAISE EXCEPTION 'Wrong metric computation';
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
@@ -85,8 +83,6 @@ BEGIN
         RAISE EXCEPTION 'Wrong metric computation2, %', VAR_r.current_value;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
@@ -131,8 +127,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %(metric, expected "a", got "%")', VAR_testName, VAR_r.metric;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

@@ -29,8 +29,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %(is_active, got %)', VAR_testName, VAR_r.is_active;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

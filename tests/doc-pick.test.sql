@@ -26,9 +26,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
 
-    -- cleanup
-    -- PERFORM fetchq_test.fetchq_test_clean();
-
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
@@ -61,9 +58,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
-
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
@@ -95,8 +89,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %(returned % rows instead of 2)', VAR_testName, VAR_affectedRows;
     END IF;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
 
     passed = TRUE;
 END; $$
@@ -151,8 +144,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %(pending, expected 1, received %)', VAR_testName, VAR_r.current_value;
     END IF;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
 
     passed = TRUE;
 END; $$
@@ -203,8 +195,7 @@ BEGIN
         RAISE EXCEPTION 'failed - %(subject, expected "a2", received %)', VAR_testName, VAR_r.subject;
     END IF;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

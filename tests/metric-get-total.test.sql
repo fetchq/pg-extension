@@ -25,8 +25,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %(current_value, expected "4", got "%")', VAR_testName, VAR_r.current_value;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

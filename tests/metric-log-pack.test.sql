@@ -34,8 +34,7 @@ BEGIN
         RAISE EXCEPTION 'failed value - %(count, expected 13, received %)', VAR_testName, VAR_r.current_value;
     END IF;
     
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

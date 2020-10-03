@@ -48,8 +48,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %(current_value, expected "105", got "%")', VAR_testName, VAR_sum;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

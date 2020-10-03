@@ -50,8 +50,7 @@ BEGIN
 
     DROP TABLE fetchq_data.test_utils_ts_retain;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

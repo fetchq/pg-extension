@@ -29,8 +29,7 @@ BEGIN
         RAISE EXCEPTION 'failed -(expected: 1, got: %)', VAR_r.total;
     END IF;
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

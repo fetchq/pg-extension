@@ -35,8 +35,7 @@ BEGIN
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
     RAISE NOTICE 'Maintenance Duration in millisecs=%', ROUND(Delta);
     
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
 
     passed = TRUE;
 END; $$
@@ -94,8 +93,7 @@ BEGIN
     Delta := 1000 *( extract(epoch from EndTime) - extract(epoch from StartTime) );
     RAISE NOTICE 'Maintenance Duration in millisecs=%', ROUND(Delta);
 
-    -- cleanup
-    PERFORM fetchq_test.fetchq_test_clean();
+
 
     passed = TRUE;
 END; $$

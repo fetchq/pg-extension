@@ -26,8 +26,6 @@ BEGIN
 		RAISE EXCEPTION 'it seems there are not enough maintenance jobs';
 	END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
@@ -50,8 +48,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
@@ -74,8 +70,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %', VAR_testName;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

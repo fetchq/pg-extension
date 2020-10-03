@@ -30,8 +30,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %(affected_rows, expected "2", got "%")', VAR_testName, VAR_affectedRows;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

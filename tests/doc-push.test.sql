@@ -31,9 +31,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %(Wrong planned documents count)', VAR_testName;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
-
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
@@ -72,8 +69,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %(Wrong planned documents count)', VAR_testName;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$
@@ -106,8 +101,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %(Wrong pending documents count when adding multiple documents)', VAR_testName;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
 
     passed = TRUE;
 END; $$

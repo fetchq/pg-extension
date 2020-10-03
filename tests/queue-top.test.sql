@@ -34,8 +34,6 @@ BEGIN
         RAISE EXCEPTION 'failed - %(offset, got %)', VAR_testName, VAR_r.subject;
     END IF;
 
-    -- cleanup test
-    PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
