@@ -24,7 +24,7 @@ BEGIN
         VAR_rowSrc = REPLACE(VAR_rowSrc, 'from', 'a' );
         VAR_rowSrc = REPLACE(VAR_rowSrc, 'to', 'b' );
         VAR_rowSrc = REPLACE(VAR_rowSrc, 'retain', 'c' );
-        select * INTO VAR_rowCfg from jsonb_to_record(VAR_rowSrc::jsonb) as x(a text, b text, c text);
+        SELECT * INTO VAR_rowCfg from jsonb_to_record(VAR_rowSrc::jsonb) as x(a text, b text, c text);
         -- RAISE NOTICE 'from: %, to: %, retain: %', VAR_rowCfg.a, VAR_rowCfg.b, VAR_rowCfg.c;
 
         VAR_q = 'SELECT * FROM fetchq.utils_ts_retain(''fetchq__%s__metrics'', ''created_at'', ''%s'', NOW() - INTERVAL ''%s'', NOW() - INTERVAL ''%s'')';
@@ -63,7 +63,7 @@ BEGIN
         VAR_retention = VAR_r.metrics_retention;
     END IF;
 
-    RAISE NOTICE 'retention %', VAR_retention;
+    -- RAISE NOTICE 'retention %', VAR_retention;
 
     -- run the operation
     SELECT * INTO VAR_r FROM fetchq.queue_drop_metrics(PAR_queue, VAR_retention::jsonb);

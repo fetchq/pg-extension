@@ -4,7 +4,9 @@ CREATE OR REPLACE FUNCTION fetchq.queue_drop_version(
 	PAR_queue VARCHAR,
 	PAR_oldVersion INTEGER,
 	OUT was_dropped BOOLEAN
-) AS $$
+) 
+SET client_min_messages = error
+AS $$
 DECLARE
 	VAR_q VARCHAR;
 	VAR_r RECORD;

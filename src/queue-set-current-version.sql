@@ -5,7 +5,9 @@ CREATE OR REPLACE FUNCTION fetchq.queue_set_current_version(
 	PAR_newVersion INTEGER,
 	OUT affected_rows INTEGER,
 	OUT was_reindexed BOOLEAN
-) AS $$
+) 
+SET client_min_messages = error
+AS $$
 DECLARE
 	VAR_q VARCHAR;
 	VAR_r RECORD;

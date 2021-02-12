@@ -58,7 +58,9 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION fetchq.queue_disable_notify(
     PAR_queue VARCHAR,
     OUT success BOOLEAN
-) AS $$
+) 
+SET client_min_messages = error
+AS $$
 DECLARE
 	VAR_q VARCHAR;
 BEGIN

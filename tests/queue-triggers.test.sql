@@ -1,7 +1,9 @@
 
 CREATE OR REPLACE FUNCTION fetchq_test.queue_triggers_01(
     OUT passed BOOLEAN
-) AS $$
+) 
+SET client_min_messages = error
+AS $$
 DECLARE
     VAR_testName VARCHAR = 'IT SHOULD ACTIVATE TRIGGERS';
 	VAR_numDocs INTEGER;
@@ -28,7 +30,7 @@ BEGIN
     
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq.queue_top('foo', 0, 3, 0);
     IF VAR_numDocs != 3 THEN
-        RAISE EXCEPTION 'failed - %(count, got %)', VAR_testName, VAR_numDocs;
+        RAISE EXCEPTION 'failed - %(count; expected 3, got %)', VAR_testName, VAR_numDocs;
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq.queue_top('foo', 1, 2, 0);

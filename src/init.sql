@@ -1,7 +1,9 @@
 
 CREATE OR REPLACE FUNCTION fetchq.init(
     OUT was_initialized BOOLEAN
-) AS $$
+) 
+SET client_min_messages = error
+AS $$
 BEGIN
     was_initialized = TRUE;
 

@@ -9,8 +9,6 @@ BEGIN
     
     -- initialize test
 
-    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
     -- prepare some queues
     PERFORM fetchq.queue_create('q1');
     PERFORM fetchq.queue_create('q2');

@@ -30,7 +30,7 @@ BEGIN
     -- drop metrics by policy
     VAR_policy = '[{ "retain":"minute", "from":"1h", "to":"0s" }, { "retain":"hour", "from":"100y", "to":"1h" }]';
     SELECT * INTO VAR_r FROM fetchq.queue_drop_metrics('foo', VAR_policy::jsonb);
-    RAISE NOTICE 'result %', VAR_r;
+    -- RAISE NOTICE 'result %', VAR_r;
 
     IF VAR_r.removed_rows IS NULL THEN
         RAISE EXCEPTION 'failed -(null value) %', VAR_testName;
@@ -54,9 +54,7 @@ DECLARE
     VAR_policy VARCHAR;
     VAR_r RECORD;
 BEGIN
-    
     -- initialize test
-
     PERFORM fetchq.queue_create('foo');
     PERFORM fetchq.queue_set_metrics_retention('foo', '[{"to": "0s", "from": "1h", "retain": "minute"}, {"to": "1h", "from": "100y", "retain": "hour"}]');
 
@@ -77,7 +75,7 @@ BEGIN
 
     -- drop metrics by policy
     SELECT * INTO VAR_r FROM fetchq.queue_drop_metrics('foo');
-    RAISE NOTICE 'result %', VAR_r;
+    -- RAISE NOTICE 'result %', VAR_r;
 
     IF VAR_r.removed_rows IS NULL THEN
         RAISE EXCEPTION 'failed -(null value) %', VAR_testName;
@@ -86,8 +84,6 @@ BEGIN
         RAISE NOTICE 'failed -(expected >= 5, got: %) %', VAR_r.removed_rows, VAR_testName;
     END IF;
 
-    -- cleanup
-    -- PERFORM fetchq_test.fetchq_test_clean();
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

@@ -13,21 +13,22 @@ pg_version ?= 13.0
 pg_extension_folder ?= 13
 
 reset:
+	@echo "[fetchq] reset local system..."
 	# Cleanup current db
-	docker stop fetchq || true
-	docker rm -f fetchq || true
+	@docker stop fetchq || true
+	@docker rm -f fetchq || true
 
 	# Cleanup data folders
-	rm -rf $(CURDIR)/data
-	rm -rf $(CURDIR)/extension
-	mkdir $(CURDIR)/data
-	mkdir $(CURDIR)/data/pg
-	mkdir $(CURDIR)/extension
+	@sudo rm -rf $(CURDIR)/data
+	@rm -rf $(CURDIR)/extension
+	@mkdir $(CURDIR)/data
+	@mkdir $(CURDIR)/data/pg
+	@mkdir $(CURDIR)/extension
 
 build:
-	mkdir -p $(CURDIR)/extension
-	cp $(CURDIR)/src/fetchq.control $(CURDIR)/extension/fetchq.control
-	cat $(CURDIR)/src/info.sql \
+	@mkdir -p $(CURDIR)/extension
+	@cp $(CURDIR)/src/fetchq.control $(CURDIR)/extension/fetchq.control
+	@cat $(CURDIR)/src/info.sql \
 		$(CURDIR)/src/trigger-notify-as-json.sql \
 		$(CURDIR)/src/init.sql \
 		$(CURDIR)/src/destroy.sql \
@@ -86,8 +87,8 @@ build:
 		> $(CURDIR)/extension/fetchq--${version}.sql
 
 build-test:
-	mkdir -p $(CURDIR)/data
-	cat $(CURDIR)/tests/_before.sql \
+	@mkdir -p $(CURDIR)/data
+	@cat $(CURDIR)/tests/_before.sql \
 		$(CURDIR)/tests/init.test.sql \
 		$(CURDIR)/tests/queue-create.test.sql \
 		$(CURDIR)/tests/queue-create-indexes.test.sql \
@@ -220,19 +221,24 @@ start: reset build build-test start-pg
 	docker logs -f fetchq
 
 stop:
-	docker stop fetchq
+	@echo "Stopping Fetchq..."
+	@docker stop fetchq || true
 
 test: reset build build-test start-pg start-delay test-run stop
 
 test-run: build build-test
-	docker exec \
+	@echo "Running test..."
+	@docker exec \
 		fetchq \
 		psql \
 			-v ON_ERROR_STOP=1 \
 			-h localhost \
 			--username postgres \
 			--dbname postgres \
-			-a -f /tests/fetchq--${version}.test.sql
+			-b \
+			--echo-hidden \
+			--quiet \
+			-f /tests/fetchq--${version}.test.sql
 
 init: build
 	docker exec \

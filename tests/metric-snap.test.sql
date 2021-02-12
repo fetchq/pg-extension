@@ -7,9 +7,6 @@ DECLARE
     VAR_r RECORD;
 BEGIN
     
-    -- initialize test
-
-    
     -- insert dummy data - queue foo
     PERFORM fetchq.queue_create('foo');
     PERFORM fetchq.doc_push('foo', 'a1', 0, 1, NOW() - INTERVAL '10s', '{}');

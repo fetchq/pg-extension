@@ -1,7 +1,9 @@
 
 CREATE OR REPLACE FUNCTION fetchq_test.queue_truncate_01(
     OUT passed BOOLEAN
-) AS $$
+) 
+SET client_min_messages = error
+AS $$
 DECLARE
 	VAR_numDocs INTEGER;
     VAR_r RECORD;
@@ -79,7 +81,6 @@ BEGIN
 
     PERFORM fetchq.log_error('foo', 'a1', 'some error', '{"a":1}');
 
-    
     PERFORM fetchq.mnt();
     PERFORM fetchq.metric_snap('foo');
 

@@ -18,7 +18,9 @@ CREATE SCHEMA fetchq_test;
 -- Called at the beginning of every test case
 CREATE OR REPLACE FUNCTION fetchq_test.__beforeEach(
     OUT done BOOLEAN
-) AS $$
+) 
+SET client_min_messages = error
+AS $$
 BEGIN
     -- Cleanup previous state
     DROP SCHEMA IF EXISTS fetchq CASCADE;
@@ -39,7 +41,9 @@ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION fetchq_test.__afterEach(
     OUT done BOOLEAN
-) AS $$
+) 
+SET client_min_messages = error
+AS $$
 BEGIN
     -- Cleanup previous state
     DROP SCHEMA IF EXISTS fetchq CASCADE;
@@ -55,7 +59,8 @@ CREATE OR REPLACE FUNCTION fetchq_test.__run(
     PAR_testName VARCHAR,
     PAR_testAssert VARCHAR,
     OUT done BOOLEAN
-) AS $$
+) 
+AS $$
 DECLARE
 	VAR_q VARCHAR;
     VAR_errMessage TEXT;
@@ -74,6 +79,7 @@ BEGIN
 
     -- Try/catch the test and present a nice error message
     BEGIN
+        RAISE NOTICE '>>> [RUN] %', PAR_testName;
         EXECUTE VAR_q;
     EXCEPTION WHEN OTHERS THEN
         GET STACKED DIAGNOSTICS VAR_errMessage = MESSAGE_TEXT,

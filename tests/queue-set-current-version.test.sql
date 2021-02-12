@@ -8,7 +8,6 @@ DECLARE
 BEGIN
     
     -- initialize test
-
     PERFORM fetchq.queue_create('foo');
 
     -- perform the operation

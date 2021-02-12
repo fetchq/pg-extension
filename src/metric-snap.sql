@@ -12,7 +12,7 @@ DECLARE
 BEGIN
 	success = true;
     SELECT * INTO VAR_r FROM fetchq.metric_get(PAR_queue, PAR_metric);
-    RAISE NOTICE '%', VAR_r.current_value;
+    -- RAISE NOTICE '%', VAR_r.current_value;
 
     VAR_q = 'INSERT INTO fetchq_data.%s__metrics ';
 	VAR_q = VAR_q || '( metric,  value) VALUES ';

@@ -2,7 +2,9 @@
 
 CREATE OR REPLACE FUNCTION fetchq_test.doc_upsert_01(
     OUT passed BOOLEAN
-) AS $$
+) 
+SET client_min_messages = error
+AS $$
 DECLARE
     VAR_testName VARCHAR = 'SHOULD BE ABLE TO UPSERT(INSERT) A SINGLE DOCUMENT';
     VAR_r RECORD;
@@ -42,9 +44,7 @@ DECLARE
     VAR_testName VARCHAR = 'SHOULD NOT BE ABLE TO UPSERT AN ACTIVE DOCUMENT';
     VAR_r RECORD;
 BEGIN
-    
     -- initialize test
-
     PERFORM fetchq.queue_create('foo');
 
     -- should be able to queue a document

@@ -1,7 +1,9 @@
 
 CREATE OR REPLACE FUNCTION fetchq_test.doc_append_01(
     OUT passed BOOLEAN
-) AS $$
+) 
+SET client_min_messages = error
+AS $$
 DECLARE
     VAR_testName VARCHAR = 'SHOULD BE ABLE TO APPEND A DOCUMENT RETURNING AN ID';
 	VAR_subject1 VARCHAR;
@@ -43,21 +45,17 @@ DECLARE
     VAR_expected INTEGER = 25;
     VAR_appended INTEGER = 0;
 BEGIN
-    
-    -- initialize test
-
     PERFORM fetchq.queue_create('foo');
-    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
     FOR VAR_i IN 1..VAR_expected LOOP
         SELECT * INTO VAR_subject1 FROM fetchq.doc_append('foo', '{"a":1}', 0, VAR_i);
-        RAISE NOTICE 'uuid % (%/%)', VAR_subject1, VAR_i, VAR_expected;
+        -- RAISE NOTICE 'uuid % (%/%)', VAR_subject1, VAR_i, VAR_expected;
         IF VAR_subject1 IS NOT NULL THEN
             VAR_appended = VAR_appended + 1;
         END IF;
     END LoOP;
 
-    -- -- should be able to queue documents with different ids
+    -- should be able to queue documents with different ids
     IF VAR_appended != VAR_expected THEN
         RAISE EXCEPTION 'failed -(mismatch %/%) %', VAR_appended, VAR_expected, VAR_testName;
     END IF;

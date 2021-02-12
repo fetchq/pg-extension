@@ -1,23 +1,23 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.__runWIP(
-    OUT done BOOLEAN
-) AS $$
-DECLARE
-    VAR_errMessage TEXT;
-BEGIN
-    BEGIN
+-- CREATE OR REPLACE FUNCTION fetchq_test.__runWIP(
+--     OUT done BOOLEAN
+-- ) AS $$
+-- DECLARE
+--     VAR_errMessage TEXT;
+-- BEGIN
+--     BEGIN
 
-        -- >>> Run tests
-        PERFORM fetchq_test.__runWIP('queue_triggers_01', 'It should run triggers on documents');
-        -- <<<
+--         -- >>> Run tests
+--         PERFORM fetchq_test.__runWIP('queue_triggers_01', 'It should run triggers on documents');
+--         -- <<<
 
-    EXCEPTION WHEN OTHERS THEN
-        GET STACKED DIAGNOSTICS VAR_errMessage = MESSAGE_TEXT;
-        RAISE EXCEPTION '%', VAR_errMessage;
-    END;
-    done = TRUE;
-END; $$
-LANGUAGE plpgsql;
+--     EXCEPTION WHEN OTHERS THEN
+--         GET STACKED DIAGNOSTICS VAR_errMessage = MESSAGE_TEXT;
+--         RAISE EXCEPTION '%', VAR_errMessage;
+--     END;
+--     done = TRUE;
+-- END; $$
+-- LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION fetchq_test.__runBasics(
