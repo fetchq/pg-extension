@@ -1,15 +1,31 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 3.1.0
+version ?= 3.1.1
 
 ## Testing with Postgres Versions
 ## It's a good idea to always test with all the versions
 ## it's manual and it sucks, we'll see about that in the future
 
-# 9.6 10.11 11.6 12.1 12.4 13.0
-pg_version ?= 13.0
-# 9.6 10 11.6 12 13
+# pg_version ?= 9.6
+# pg_extension_folder ?= 9.6
+
+# pg_version ?= 10.4
+# pg_extension_folder ?= 10
+
+# pg_version ?= 10.11
+# pg_extension_folder ?= 10
+
+# pg_version ?= 12.1
+# pg_extension_folder ?= 12
+
+# pg_version ?= 12.4
+# pg_extension_folder ?= 12
+
+# pg_version ?= 13.0
+# pg_extension_folder ?= 13
+
+pg_version ?= 13.2
 pg_extension_folder ?= 13
 
 reset:
@@ -148,6 +164,7 @@ build-image: reset build
 	docker build --no-cache -t ${name}:12.1-${version} -f Dockerfile-12.1 .
 	docker build --no-cache -t ${name}:12.4-${version} -f Dockerfile-12.4 .
 	docker build --no-cache -t ${name}:13.0-${version} -f Dockerfile-13.0 .
+	docker build --no-cache -t ${name}:13.2-${version} -f Dockerfile-13.2 .
 
 publish: build-image
 	# 9.6
@@ -190,6 +207,11 @@ publish: build-image
 	docker tag ${name}:13.0-${version} ${registry}/${name}:13.0-latest
 	docker push ${registry}/${name}:13.0-${version}
 	docker push ${registry}/${name}:13.0-latest
+	# 13.2
+	docker tag ${name}:13.2-${version} ${registry}/${name}:13.2-${version}
+	docker tag ${name}:13.2-${version} ${registry}/${name}:13.2-latest
+	docker push ${registry}/${name}:13.2-${version}
+	docker push ${registry}/${name}:13.2-latest
 	# latest
 	docker tag ${name}:13.0-${version} ${registry}/${name}:latest
 	docker push ${registry}/${name}:latest
