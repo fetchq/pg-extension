@@ -1,5 +1,52 @@
 # FetchQ Changelog
 
+## v3.1.1
+
+- Uses `uuid` data type in `fetchq.metrics_writes` to prevent
+  running out of integer IDs over time.  
+  (https://github.com/fetchq/pg-extension/issues/38)
+
+### Migrating from a previous version:
+
+> **NOTE:** we suggest you stop all your workers and put your 
+> Fetchq on hold while performing the upgrade operation. 
+> 
+> If anything goes wrong, this should only screw up the counters
+> and you can easily rebuild them.
+>
+> It should be a safe operation 😇.
+
+Migrating from version 3.1.0 is quite easy as we started to
+provide migration scripts as built-in functions:
+
+```sql
+SELECT * FROM fetchq.upgrade__310__311();
+```
+
+From previous versions, you may need to adjust the following SQL:
+
+```sql
+BEGIN;
+-- temporary cast integers to strings:
+ALTER TABLE "fetchq"."metrics_writes" 
+ALTER COLUMN "id" SET DATA TYPE VARCHAR(36),
+ALTER COLUMN "id" SET DEFAULT uuid_generate_v1();
+
+-- update the existing lines to use uuids:
+UPDATE "fetchq"."metrics_writes" SET "id" = uuid_generate_v1();
+
+-- cast the string type to be uuid:
+ALTER TABLE "fetchq"."metrics_writes"
+ALTER COLUMN "id" SET DATA TYPE UUID USING "id"::UUID,
+ALTER COLUMN "id" SET DEFAULT uuid_generate_v1();
+
+-- drop the integer sequence:
+DROP SEQUENCE IF EXISTS "fetchq"."metrics_writes_id_seq" CASCADE;
+COMMIT;
+```
+
+
+
 ## v3.1.0
 
 - Adds `fetchq.queue_truncate('queue_name')` to drop current documents in a queue

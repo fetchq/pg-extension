@@ -100,6 +100,7 @@ build:
 		$(CURDIR)/src/queue-truncate.sql \
 		$(CURDIR)/src/utils-ts-retain.sql \
 		$(CURDIR)/src/trace.sql \
+		$(CURDIR)/src/upgrade_3.1.0_3.1.1.sql \
 		> $(CURDIR)/extension/fetchq--${version}.sql
 
 build-test:
