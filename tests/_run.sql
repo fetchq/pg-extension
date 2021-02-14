@@ -8,17 +8,10 @@ BEGIN
     BEGIN
 
         -- >>> Run tests
-        -- PERFORM fetchq_test.__runWIP('queue_triggers_01', 'It should run triggers on documents');
-        -- PERFORM fetchq_test.__run('queue_create_01', '');
-        -- PERFORM fetchq_test.__run('metric_log_pack_01', '');
-        -- PERFORM fetchq_test.__run('metric_log_pack_02', '');
-        -- PERFORM fetchq_test.__run('doc_push_01', '');
-        -- PERFORM fetchq_test.__run('doc_push_02', '');
-        -- PERFORM fetchq_test.__run('doc_push_03', '');
-        -- PERFORM fetchq_test.__run('doc_push_04', '');
-        -- PERFORM fetchq_test.__run('doc_push_05', '');
-        -- PERFORM fetchq_test.__run('doc_push_06', '');
-        -- PERFORM fetchq_test.__run('queue_truncate_01', 'It should truncate a queue by name');
+        PERFORM fetchq_test.__run('doc_append_01', 'It should append a document and returns its subject');
+        PERFORM fetchq_test.__run('doc_append_02', 'It should be able to append many documents without collisions');
+        PERFORM fetchq_test.__run('doc_append_03', 'It should append using the simplified form');
+        PERFORM fetchq_test.__run('doc_append_04', 'it should NOT append a non existing queue');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
@@ -47,8 +40,7 @@ BEGIN
         PERFORM fetchq_test.__run('queue_triggers_01', 'It should run triggers on documents');
         PERFORM fetchq_test.__run('queue_truncate_01', 'It should truncate a queue by name');
         PERFORM fetchq_test.__run('doc_push_01', '');
-        PERFORM fetchq_test.__run('doc_append_01', '');
-        PERFORM fetchq_test.__run('doc_append_03', '');
+        PERFORM fetchq_test.__run('doc_append_01', 'It should append a document and returns its subject');
         PERFORM fetchq_test.__run('doc_upsert_01', '');
         PERFORM fetchq_test.__run('doc_pick_01', '');
         PERFORM fetchq_test.__run('doc_reschedule_01', '');
@@ -89,7 +81,9 @@ BEGIN
         PERFORM fetchq_test.__run('doc_push_04', '');
         PERFORM fetchq_test.__run('doc_push_05', '');
         PERFORM fetchq_test.__run('doc_push_06', '');
-        PERFORM fetchq_test.__run('doc_append_02', '');
+        PERFORM fetchq_test.__run('doc_append_02', 'It should be able to append many documents without collisions');
+        PERFORM fetchq_test.__run('doc_append_03', 'It should append using the simplified form');
+        PERFORM fetchq_test.__run('doc_append_04', 'it should NOT append a non existing queue');
         PERFORM fetchq_test.__run('doc_upsert_02', '');
         PERFORM fetchq_test.__run('doc_pick_02', '');
         PERFORM fetchq_test.__run('doc_pick_03', '');
