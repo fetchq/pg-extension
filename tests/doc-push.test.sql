@@ -1,8 +1,6 @@
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.doc_push_01(
-    OUT passed BOOLEAN
-) AS $$
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_01() RETURNS void AS $$
 DECLARE
     VAR_testName VARCHAR = 'SHOULD BE ABLE TO QUEUE A SINGLE DOCUMENT WITH FUTURE SCHEDULE';
 	VAR_queuedDocs INTEGER;
@@ -30,16 +28,12 @@ BEGIN
     IF VAR_r.current_value <> 1 THEN
         RAISE EXCEPTION 'failed - %(Wrong planned documents count)', VAR_testName;
     END IF;
-
-    passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.doc_push_02(
-    OUT passed BOOLEAN
-) AS $$
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_02() RETURNS void AS $$
 DECLARE
     VAR_testName VARCHAR = 'SHOULD BE ABLE TO QUEUE A SINGLE DOCUMENT WITH PAST SCHEDULE';
 	VAR_queuedDocs INTEGER;
@@ -68,16 +62,11 @@ BEGIN
     IF VAR_r.current_value <> 1 THEN
         RAISE EXCEPTION 'failed - %(Wrong planned documents count)', VAR_testName;
     END IF;
-
-
-    passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fetchq_test.doc_push_03(
-    OUT passed BOOLEAN
-) AS $$
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_03() RETURNS void AS $$
 DECLARE
     VAR_testName VARCHAR = 'SHOULD BE ABLE TO QUEUE MULTIPLE DOCUMENTS';
 	VAR_queuedDocs INTEGER;
@@ -100,15 +89,10 @@ BEGIN
     -- IF VAR_r.current_value <> 2 THEN
     --     RAISE EXCEPTION 'failed - %(Wrong pending documents count when adding multiple documents)', VAR_testName;
     -- END IF;
-
-
-    passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test.doc_push_04(
-    OUT passed BOOLEAN
-) AS $$
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_04() RETURNS void AS $$
 DECLARE
 	VAR_queuedDocs INTEGER;
     VAR_r RECORD;
@@ -123,15 +107,27 @@ BEGIN
 
     SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pnd');
     PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'should push a document');
-    
-
-    passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fetchq_test.doc_push_05(
-    OUT passed BOOLEAN
-) AS $$
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_05() RETURNS void AS $$
+DECLARE
+	VAR_queuedDocs INTEGER;
+    VAR_r RECORD;
+BEGIN
+    -- initialize test
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.doc_push('foo', 'd1', '{"a": 1}');
+
+    PERFORM fetchq.mnt();
+    PERFORM fetchq.metric_log_pack();
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pnd');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'should push a document');
+END; $$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_06() RETURNS void AS $$
 DECLARE
 	VAR_queuedDocs INTEGER;
     VAR_r RECORD;
@@ -139,7 +135,7 @@ BEGIN
 
     -- initialize test
     PERFORM fetchq.queue_create('foo');
-    PERFORM fetchq.doc_push('foo', 'd1', '{"a": 1}'::jsonb);
+    PERFORM fetchq.doc_push('foo', 'd1', '{"a":2}', NOW() - INTERVAL '5m');
 
     PERFORM fetchq.mnt();
     PERFORM fetchq.metric_log_pack();
@@ -147,53 +143,5 @@ BEGIN
     SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pnd');
     PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'should push a document');
     
-
-    passed = TRUE;
-END; $$
-LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION fetchq_test.doc_push_06(
-    OUT passed BOOLEAN
-) AS $$
-DECLARE
-	VAR_queuedDocs INTEGER;
-    VAR_r RECORD;
-BEGIN
-
-    -- initialize test
-    PERFORM fetchq.queue_create('foo');
-    PERFORM fetchq.doc_push('foo', 'd1', NOW() + INTERVAL '5m');
-
-    PERFORM fetchq.mnt();
-    PERFORM fetchq.metric_log_pack();
-
-    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pln');
-    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'should push a document');
-    
-
-    passed = TRUE;
-END; $$
-LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION fetchq_test.doc_push_07(
-    OUT passed BOOLEAN
-) AS $$
-DECLARE
-	VAR_queuedDocs INTEGER;
-    VAR_r RECORD;
-BEGIN
-
-    -- initialize test
-    PERFORM fetchq.queue_create('foo');
-    PERFORM fetchq.doc_push('foo', 'd1', NOW() - INTERVAL '5m', '{"a":2}'::jsonb);
-
-    PERFORM fetchq.mnt();
-    PERFORM fetchq.metric_log_pack();
-
-    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pnd');
-    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'should push a document');
-    
-
-    passed = TRUE;
 END; $$
 LANGUAGE plpgsql;

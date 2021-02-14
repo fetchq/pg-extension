@@ -67,3 +67,14 @@ BEGIN
 	END;
 END; $$
 LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS fetchq.doc_append(CHARACTER VARYING, JSONB);
+CREATE OR REPLACE FUNCTION fetchq.doc_append(
+    PAR_queue VARCHAR,
+    PAR_payload JSONB,
+    OUT subject VARCHAR
+) AS $$
+BEGIN
+    SELECT * INTO subject FROM fetchq.doc_append(PAR_queue, PAR_payload, 0, 0);
+END; $$
+LANGUAGE plpgsql;

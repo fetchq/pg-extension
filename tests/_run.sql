@@ -12,10 +12,12 @@ BEGIN
         -- PERFORM fetchq_test.__run('queue_create_01', '');
         -- PERFORM fetchq_test.__run('metric_log_pack_01', '');
         -- PERFORM fetchq_test.__run('metric_log_pack_02', '');
-        PERFORM fetchq_test.__run('doc_push_04', '');
-        PERFORM fetchq_test.__run('doc_push_05', '');
-        PERFORM fetchq_test.__run('doc_push_06', '');
-        PERFORM fetchq_test.__run('doc_push_07', '');
+        -- PERFORM fetchq_test.__run('doc_push_01', '');
+        -- PERFORM fetchq_test.__run('doc_push_02', '');
+        -- PERFORM fetchq_test.__run('doc_push_03', '');
+        -- PERFORM fetchq_test.__run('doc_push_04', '');
+        -- PERFORM fetchq_test.__run('doc_push_05', '');
+        -- PERFORM fetchq_test.__run('doc_push_06', '');
         -- PERFORM fetchq_test.__run('queue_truncate_01', 'It should truncate a queue by name');
         -- <<<
 
@@ -46,6 +48,7 @@ BEGIN
         PERFORM fetchq_test.__run('queue_truncate_01', 'It should truncate a queue by name');
         PERFORM fetchq_test.__run('doc_push_01', '');
         PERFORM fetchq_test.__run('doc_append_01', '');
+        PERFORM fetchq_test.__run('doc_append_03', '');
         PERFORM fetchq_test.__run('doc_upsert_01', '');
         PERFORM fetchq_test.__run('doc_pick_01', '');
         PERFORM fetchq_test.__run('doc_reschedule_01', '');
@@ -86,7 +89,6 @@ BEGIN
         PERFORM fetchq_test.__run('doc_push_04', '');
         PERFORM fetchq_test.__run('doc_push_05', '');
         PERFORM fetchq_test.__run('doc_push_06', '');
-        PERFORM fetchq_test.__run('doc_push_07', '');
         PERFORM fetchq_test.__run('doc_append_02', '');
         PERFORM fetchq_test.__run('doc_upsert_02', '');
         PERFORM fetchq_test.__run('doc_pick_02', '');
@@ -147,7 +149,7 @@ LANGUAGE plpgsql;
 
 
 -- Define which groups to run
--- select * from fetchq_test.__runDevelopement();
+select * from fetchq_test.__runDevelopement();
 select * from fetchq_test.__runBasics();
 select * from fetchq_test.__runOptionals();
 
