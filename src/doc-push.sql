@@ -66,3 +66,54 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
+
+-- queue + subject
+DROP FUNCTION IF EXISTS fetchq.doc_push(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.doc_push(
+    PAR_queue VARCHAR,
+    PAR_subject VARCHAR,
+    OUT queued_docs INTEGER
+) AS $$
+DECLARE
+	VAR_q VARCHAR;
+    VAR_status INTEGER = 0;
+BEGIN
+    SELECT * INTO queued_docs
+    FROM fetchq.doc_push(PAR_queue, PAR_subject, 0, 0, NOW(), '{}');
+END; $$
+LANGUAGE plpgsql;
+
+-- queue + subject + payload
+DROP FUNCTION IF EXISTS fetchq.doc_push(CHARACTER VARYING, CHARACTER VARYING, JSONB);
+CREATE OR REPLACE FUNCTION fetchq.doc_push(
+    PAR_queue VARCHAR,
+    PAR_subject VARCHAR,
+    PAR_payload JSONB,
+    OUT queued_docs INTEGER
+) AS $$
+DECLARE
+	VAR_q VARCHAR;
+    VAR_status INTEGER = 0;
+BEGIN
+    SELECT * INTO queued_docs
+    FROM fetchq.doc_push(PAR_queue, PAR_subject, 0, 0, NOW(), PAR_payload);
+END; $$
+LANGUAGE plpgsql;
+
+-- queue + subject + nextIteration + payload
+DROP FUNCTION IF EXISTS fetchq.doc_push(CHARACTER VARYING, CHARACTER VARYING, JSONB, TIMESTAMP WITH TIME ZONE);
+CREATE OR REPLACE FUNCTION fetchq.doc_push(
+    PAR_queue VARCHAR,
+    PAR_subject VARCHAR,
+    PAR_payload JSONB,
+    PAR_nextIteration TIMESTAMP WITH TIME ZONE,
+    OUT queued_docs INTEGER
+) AS $$
+DECLARE
+	VAR_q VARCHAR;
+    VAR_status INTEGER = 0;
+BEGIN
+    SELECT * INTO queued_docs
+    FROM fetchq.doc_push(PAR_queue, PAR_subject, 0, 0, PAR_nextIteration, PAR_payload);
+END; $$
+LANGUAGE plpgsql;

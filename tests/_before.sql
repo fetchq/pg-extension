@@ -133,3 +133,18 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION fetchq_test.expect_equalStr(
+    VAR_received CHARACTER VARYING,
+    VAR_expected CHARACTER VARYING,
+    VAR_message TEXT,
+    OUT VAR_res BOOLEAN
+) 
+SET client_min_messages = error
+AS $$
+BEGIN
+    IF VAR_expected != VAR_received THEN 
+        RAISE EXCEPTION '% - (expected %, got %)', VAR_message, VAR_expected, VAR_received; 
+    END IF;
+    VAR_res = true;
+END; $$
+LANGUAGE plpgsql;
