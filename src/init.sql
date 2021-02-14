@@ -40,7 +40,7 @@ BEGIN
 
     -- Metrics Writes
     CREATE TABLE IF NOT EXISTS fetchq.metrics_writes(
-        id SERIAL PRIMARY KEY,
+        id UUID DEFAULT uuid_generate_v1(),
         created_at TIMESTAMP WITH TIME ZONE,
         queue CHARACTER VARYING(40) NOT NULL,
         metric CHARACTER VARYING(40) NOT NULL,

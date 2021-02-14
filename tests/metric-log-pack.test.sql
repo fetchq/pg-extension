@@ -39,3 +39,63 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION fetchq_test.metric_log_pack_02(
+    OUT passed BOOLEAN
+) AS $$
+DECLARE
+    VAR_testName VARCHAR = 'SHOULD PACK WRITES';
+    VAR_expected INTEGER;
+    VAR_numDocs INTEGER;
+    VAR_r RECORD;
+BEGIN
+    -- init test
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.queue_create('faa');
+
+    -- push items into the queue
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
+    PERFORM fetchq.doc_push('faa', 'a1', 0, 0, NOW() + INTERVAL '1m', '{}');
+    PERFORM fetchq.doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '1m', '{}');
+    PERFORM fetchq.doc_push('faa', 'a2', 0, 0, NOW() - INTERVAL '1m', '{}');
+    PERFORM fetchq.doc_push('faa', 'a3', 0, 0, NOW() - INTERVAL '2m', '{}');
+    PERFORM fetchq.mnt();
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'cnt');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 2, 'foo: failed count total documents (before pick)');
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pln');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'foo: failed count planned documents (before pick)');
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pnd');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'foo: failed count pending documents (before pick)');
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'ent');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 2, 'foo: failed count entered documents (before pick)');
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('faa', 'cnt');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 3, 'faa: failed count total documents (before pick)');
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('faa', 'pln');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'faa: failed count planned documents (before pick)');
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('faa', 'pnd');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 2, 'faa: failed count pending documents (before pick)');
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('faa', 'ent');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 3, 'faa: failed count entered documents (before pick)');
+
+
+    -- pick and complete
+    SELECT * INTO VAR_r FROM fetchq.doc_pick('faa', 0, 1, '5m');
+    PERFORM fetchq.doc_complete('faa', VAR_r.subject);    
+    PERFORM fetchq.mnt();
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('faa', 'pnd');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'faa: failed count pending documents (after pick)');
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('faa', 'cpl');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'faa: failed count completed documents (after pick)');
+    
+    passed = TRUE;
+END; $$
+LANGUAGE plpgsql;

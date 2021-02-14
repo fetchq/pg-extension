@@ -1,23 +1,27 @@
 
--- CREATE OR REPLACE FUNCTION fetchq_test.__runWIP(
---     OUT done BOOLEAN
--- ) AS $$
--- DECLARE
---     VAR_errMessage TEXT;
--- BEGIN
---     BEGIN
+CREATE OR REPLACE FUNCTION fetchq_test.__runDevelopement(
+    OUT done BOOLEAN
+) AS $$
+DECLARE
+    VAR_errMessage TEXT;
+BEGIN
+    BEGIN
 
---         -- >>> Run tests
---         PERFORM fetchq_test.__runWIP('queue_triggers_01', 'It should run triggers on documents');
---         -- <<<
+        -- >>> Run tests
+        -- PERFORM fetchq_test.__runWIP('queue_triggers_01', 'It should run triggers on documents');
+        -- PERFORM fetchq_test.__run('queue_create_01', '');
+        PERFORM fetchq_test.__run('metric_log_pack_01', '');
+        PERFORM fetchq_test.__run('metric_log_pack_02', '');
+        -- PERFORM fetchq_test.__run('queue_truncate_01', 'It should truncate a queue by name');
+        -- <<<
 
---     EXCEPTION WHEN OTHERS THEN
---         GET STACKED DIAGNOSTICS VAR_errMessage = MESSAGE_TEXT;
---         RAISE EXCEPTION '%', VAR_errMessage;
---     END;
---     done = TRUE;
--- END; $$
--- LANGUAGE plpgsql;
+    EXCEPTION WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS VAR_errMessage = MESSAGE_TEXT;
+        RAISE EXCEPTION '%', VAR_errMessage;
+    END;
+    done = TRUE;
+END; $$
+LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION fetchq_test.__runBasics(
@@ -45,6 +49,7 @@ BEGIN
         PERFORM fetchq_test.__run('doc_complete_01', '');
         PERFORM fetchq_test.__run('doc_kill_01', '');
         PERFORM fetchq_test.__run('doc_drop_01', '');
+        PERFORM fetchq_test.__run('metric_log_pack_02', '');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
@@ -134,7 +139,7 @@ LANGUAGE plpgsql;
 
 
 -- Define which groups to run
--- select * from fetchq_test.__runWIP();
+-- select * from fetchq_test.__runDevelopement();
 select * from fetchq_test.__runBasics();
 select * from fetchq_test.__runOptionals();
 
