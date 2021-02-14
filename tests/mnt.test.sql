@@ -1,14 +1,11 @@
--- declare test case
-CREATE OR REPLACE FUNCTION fetchq_test.mnt_01(
-    OUT passed BOOLEAN
-) AS $$
+-- It should be possible to run a maintanance job for all the existing queues
+CREATE OR REPLACE FUNCTION fetchq_test.mnt_01() RETURNS void AS $$
 DECLARE
     VAR_testName VARCHAR = 'IT SHOULD BE POSSIBLE TO RUN A MAINTENANCE JOB FOR EVERYTHING';
     VAR_r RECORD;
 BEGIN
     
     -- initialize test
-
     PERFORM fetchq.queue_create('foo');
     PERFORM fetchq.queue_create('faa');
 
@@ -42,7 +39,7 @@ BEGIN
     IF VAR_r.processed != 8 THEN
         RAISE EXCEPTION 'failed - %(processed jobs should be 8, received %)', VAR_testName, VAR_r.processed;
     END IF;
-    IF VAR_r.packed != 35 THEN
+    IF VAR_r.packed != 21 THEN
         RAISE EXCEPTION 'failed - %(packed logs should be 35, received %)', VAR_testName, VAR_r.packed;
     END IF;
 
@@ -56,9 +53,6 @@ BEGIN
     IF VAR_r.current_value != 1 THEN
         RAISE EXCEPTION 'failed - %(killed count)', VAR_testName;
     END IF;
-
-
-    passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 

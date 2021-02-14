@@ -8,10 +8,15 @@ BEGIN
     BEGIN
 
         -- >>> Run tests
-        PERFORM fetchq_test.__run('doc_append_01', 'It should append a document and returns its subject');
-        PERFORM fetchq_test.__run('doc_append_02', 'It should be able to append many documents without collisions');
-        PERFORM fetchq_test.__run('doc_append_03', 'It should append using the simplified form');
-        PERFORM fetchq_test.__run('doc_append_04', 'it should NOT append a non existing queue');
+        PERFORM fetchq_test.__run('mnt_01', 'It should be possible to run a maintanance job for all the existing queues');
+        PERFORM fetchq_test.__run('metric_snap_02', '');
+        -- PERFORM fetchq_test.__run('queue_truncate_02', 'It should truncate a queue, also with logs and metrics');
+        -- PERFORM fetchq_test.__run('queue_truncate_all_01', 'It should truncate all existing queues data');
+        -- PERFORM fetchq_test.__run('queue_truncate_all_02', 'It should truncate all existing queues, also with logs and metrics');
+        -- PERFORM fetchq_test.__run('doc_append_01', 'It should append a document and returns its subject');
+        -- PERFORM fetchq_test.__run('doc_append_02', 'It should be able to append many documents without collisions');
+        -- PERFORM fetchq_test.__run('doc_append_03', 'It should append using the simplified form');
+        -- PERFORM fetchq_test.__run('doc_append_04', 'it should NOT append a non existing queue');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
@@ -107,7 +112,7 @@ BEGIN
         PERFORM fetchq_test.__run('mnt_mark_dead_02', '');
         PERFORM fetchq_test.__run('mnt_job_reschedule_01', '');
         PERFORM fetchq_test.__run('mnt_job_run_01', '');
-        PERFORM fetchq_test.__run('mnt_01', '');
+        PERFORM fetchq_test.__run('mnt_01', 'It should be possible to run a maintanance job for all the existing queues');
 
         PERFORM fetchq_test.__run('metric_snap_01', '');
         PERFORM fetchq_test.__run('metric_snap_02', '');
@@ -143,13 +148,13 @@ LANGUAGE plpgsql;
 
 
 -- Define which groups to run
-select * from fetchq_test.__runDevelopement();
-select * from fetchq_test.__runBasics();
-select * from fetchq_test.__runOptionals();
+-- select * from fetchq_test.__runDevelopement();
+-- select * from fetchq_test.__runBasics();
+-- select * from fetchq_test.__runOptionals();
 
 
 
 -- load tests
--- SELECT * FROM fetchq_test.load_01(10000);
--- SELECT * FROM fetchq_test.load_02(5000);
--- SELECT * FROM fetchq_test.load_03(10, 10000);
+-- SELECT * FROM fetchq_test.load_01(100000);
+-- SELECT * FROM fetchq_test.load_02(10000);
+-- SELECT * FROM fetchq_test.load_03(25, 10000);

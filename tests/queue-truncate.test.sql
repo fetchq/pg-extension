@@ -1,7 +1,6 @@
 
-CREATE OR REPLACE FUNCTION fetchq_test.queue_truncate_01(
-    OUT passed BOOLEAN
-) 
+-- It should truncate only a queue data
+CREATE OR REPLACE FUNCTION fetchq_test.queue_truncate_01() RETURNS void 
 SET client_min_messages = error
 AS $$
 DECLARE
@@ -20,51 +19,39 @@ BEGIN
     PERFORM fetchq.metric_snap('foo');
 
     SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'cnt');
-    IF VAR_r.current_value != 2 THEN
-        RAISE EXCEPTION 'failed count documents before truncate - (expected 2, got %)', VAR_r.current_value;
-    END IF;
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 2, 'before truncate #01');
 
-    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__logs;
-    IF VAR_numDocs != 1 THEN
-        RAISE EXCEPTION 'failed count logs before truncate - (expected 1, got %)', VAR_numDocs;
-    END IF;
+    SELECT COUNT(*) AS current_value INTO VAR_r FROM fetchq_data.foo__logs;
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value::int, 1, 'before truncate #02');
     
-    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__metrics;
-    IF VAR_numDocs != 9 THEN
-        RAISE EXCEPTION 'failed count metrics before truncate - (expected 9, got %)', VAR_numDocs;
-    END IF;
+    SELECT COUNT(*) AS current_value INTO VAR_r FROM fetchq_data.foo__metrics;
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value::int, 5, 'before truncate #03');
 
-    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq.jobs WHERE queue = 'foo' AND iterations > 0;
-    IF VAR_numDocs != 4 THEN
-        RAISE EXCEPTION 'failed count jobs counters before truncate - (expected 4, got %)', VAR_numDocs;
-    END IF;
+    SELECT COUNT(*) AS current_value INTO VAR_r FROM fetchq.jobs WHERE queue = 'foo' AND iterations > 0;
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value::int, 4, 'before truncate #04');
 
     PERFORM fetchq.queue_truncate('foo');
 
     SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'cnt');
-    IF VAR_r.current_value != 0 THEN
-        RAISE EXCEPTION 'failed count documents after truncate - (expected 0, got %)', VAR_r.current_value;
-    END IF;
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 0, 'after truncate #01');
 
-    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__metrics;
-    IF VAR_numDocs != 9 THEN
-        RAISE EXCEPTION 'failed count metrics after truncate - (expected 9, got %)', VAR_numDocs;
-    END IF;
+    -- metrics should be unaffected
+    SELECT COUNT(*) AS current_value INTO VAR_r FROM fetchq_data.foo__metrics;
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value::int, 5, 'after truncate #02');
 
-    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__logs;
-    IF VAR_numDocs != 1 THEN
-        RAISE EXCEPTION 'failed count logs after truncate - (expected 1, got %)', VAR_numDocs;
-    END IF;
+    -- logs should be unaffected
+    SELECT COUNT(*) AS current_value INTO VAR_r FROM fetchq_data.foo__logs;
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value::int, 1, 'after truncate #03');
 
-    SELECT COUNT(*) INTO VAR_numDocs FROM fetchq.jobs WHERE queue = 'foo' AND iterations > 0;
-    IF VAR_numDocs != 4 THEN
-        RAISE EXCEPTION 'failed count jobs counters after truncate - (expected 4, got %)', VAR_numDocs;
-    END IF;
+    -- jobs should be uneffected
+    SELECT COUNT(*) AS current_value INTO VAR_r FROM fetchq.jobs WHERE queue = 'foo' AND iterations > 0;
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value::int, 4, 'after truncate #04');
 
-    passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
 
+-- It should truncate a queue, also with logs and metrics
+-- TODO: refactor me
 CREATE OR REPLACE FUNCTION fetchq_test.queue_truncate_02(
     OUT passed BOOLEAN
 ) AS $$
@@ -90,8 +77,8 @@ BEGIN
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__metrics;
-    IF VAR_numDocs != 9 THEN
-        RAISE EXCEPTION 'failed count metrics before truncate - (expected 9, got %)', VAR_numDocs;
+    IF VAR_numDocs != 5 THEN
+        RAISE EXCEPTION 'failed count metrics before truncate - (expected 5, got %)', VAR_numDocs;
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__logs;
@@ -125,6 +112,8 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
+-- It should truncate all existing queues data
+-- TODO: refactor me
 CREATE OR REPLACE FUNCTION fetchq_test.queue_truncate_all_01(
     OUT passed BOOLEAN
 ) AS $$
@@ -157,13 +146,13 @@ BEGIN
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__metrics;
-    IF VAR_numDocs != 9 THEN
-        RAISE EXCEPTION 'foo: failed count metrics before truncate - (expected 9, got %)', VAR_numDocs;
+    IF VAR_numDocs != 4 THEN
+        RAISE EXCEPTION 'foo: failed count metrics before truncate - (expected 4, got %)', VAR_numDocs;
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.faa__metrics;
-    IF VAR_numDocs != 9 THEN
-        RAISE EXCEPTION 'faa: failed count metrics before truncate - (expected 9, got %)', VAR_numDocs;
+    IF VAR_numDocs != 4 THEN
+        RAISE EXCEPTION 'faa: failed count metrics before truncate - (expected 4, got %)', VAR_numDocs;
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__logs;
@@ -189,13 +178,13 @@ BEGIN
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__metrics;
-    IF VAR_numDocs != 9 THEN
-        RAISE EXCEPTION 'foo: failed count metrics after truncate - (expected 9, got %)', VAR_numDocs;
+    IF VAR_numDocs != 4 THEN
+        RAISE EXCEPTION 'foo: failed count metrics after truncate - (expected 4, got %)', VAR_numDocs;
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.faa__metrics;
-    IF VAR_numDocs != 9 THEN
-        RAISE EXCEPTION 'faa: failed count metrics after truncate - (expected 9, got %)', VAR_numDocs;
+    IF VAR_numDocs != 4 THEN
+        RAISE EXCEPTION 'faa: failed count metrics after truncate - (expected 4, got %)', VAR_numDocs;
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__logs;
@@ -222,6 +211,8 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
+-- It should truncate all existing queues, also with logs and metrics
+-- TODO: refactor me
 CREATE OR REPLACE FUNCTION fetchq_test.queue_truncate_all_02(
     OUT passed BOOLEAN
 ) AS $$
@@ -254,13 +245,13 @@ BEGIN
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__metrics;
-    IF VAR_numDocs != 9 THEN
-        RAISE EXCEPTION 'foo: failed count metrics before truncate - (expected 9, got %)', VAR_numDocs;
+    IF VAR_numDocs != 4 THEN
+        RAISE EXCEPTION 'foo: failed count metrics before truncate - (expected 4, got %)', VAR_numDocs;
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.faa__metrics;
-    IF VAR_numDocs != 9 THEN
-        RAISE EXCEPTION 'faa: failed count metrics before truncate - (expected 9, got %)', VAR_numDocs;
+    IF VAR_numDocs != 4 THEN
+        RAISE EXCEPTION 'faa: failed count metrics before truncate - (expected 4, got %)', VAR_numDocs;
     END IF;
 
     SELECT COUNT(*) INTO VAR_numDocs FROM fetchq_data.foo__logs;
