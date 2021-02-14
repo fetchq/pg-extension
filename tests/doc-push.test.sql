@@ -105,3 +105,95 @@ BEGIN
     passed = TRUE;
 END; $$
 LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_04(
+    OUT passed BOOLEAN
+) AS $$
+DECLARE
+	VAR_queuedDocs INTEGER;
+    VAR_r RECORD;
+BEGIN
+
+    -- initialize test
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.doc_push('foo', 'd1');
+
+    PERFORM fetchq.mnt();
+    PERFORM fetchq.metric_log_pack();
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pnd');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'should push a document');
+    
+
+    passed = TRUE;
+END; $$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_05(
+    OUT passed BOOLEAN
+) AS $$
+DECLARE
+	VAR_queuedDocs INTEGER;
+    VAR_r RECORD;
+BEGIN
+
+    -- initialize test
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.doc_push('foo', 'd1', '{"a": 1}'::jsonb);
+
+    PERFORM fetchq.mnt();
+    PERFORM fetchq.metric_log_pack();
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pnd');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'should push a document');
+    
+
+    passed = TRUE;
+END; $$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_06(
+    OUT passed BOOLEAN
+) AS $$
+DECLARE
+	VAR_queuedDocs INTEGER;
+    VAR_r RECORD;
+BEGIN
+
+    -- initialize test
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.doc_push('foo', 'd1', NOW() + INTERVAL '5m');
+
+    PERFORM fetchq.mnt();
+    PERFORM fetchq.metric_log_pack();
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pln');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'should push a document');
+    
+
+    passed = TRUE;
+END; $$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_07(
+    OUT passed BOOLEAN
+) AS $$
+DECLARE
+	VAR_queuedDocs INTEGER;
+    VAR_r RECORD;
+BEGIN
+
+    -- initialize test
+    PERFORM fetchq.queue_create('foo');
+    PERFORM fetchq.doc_push('foo', 'd1', NOW() - INTERVAL '5m', '{"a":2}'::jsonb);
+
+    PERFORM fetchq.mnt();
+    PERFORM fetchq.metric_log_pack();
+
+    SELECT * INTO VAR_r FROM fetchq.metric_get('foo', 'pnd');
+    PERFORM fetchq_test.expect_equalInt(VAR_r.current_value, 1, 'should push a document');
+    
+
+    passed = TRUE;
+END; $$
+LANGUAGE plpgsql;
