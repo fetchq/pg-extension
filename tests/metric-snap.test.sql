@@ -60,8 +60,8 @@ BEGIN
     IF VAR_r.success != true THEN
         RAISE EXCEPTION 'failed - %(success, got false)', VAR_testName;
     END IF;
-    IF VAR_r.inserts != 10 THEN
-        RAISE EXCEPTION 'failed - %(inserts, expected 10, got %)', VAR_testName, VAR_r.inserts;
+    IF VAR_r.inserts != 6 THEN
+        RAISE EXCEPTION 'failed - %(inserts, expected 6, got %)', VAR_testName, VAR_r.inserts;
     END IF;
 
 

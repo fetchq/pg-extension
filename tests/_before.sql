@@ -148,3 +148,33 @@ BEGIN
     VAR_res = true;
 END; $$
 LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION fetchq_test.expect_null(
+    VAR_received TEXT,
+    VAR_message TEXT,
+    OUT VAR_res BOOLEAN
+) 
+SET client_min_messages = error
+AS $$
+BEGIN
+    IF VAR_received IS NOT NULL THEN 
+        RAISE EXCEPTION '% - (expected NULL, got %)', VAR_message, VAR_received; 
+    END IF;
+    VAR_res = true;
+END; $$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION fetchq_test.expect_notNull(
+    VAR_received TEXT,
+    VAR_message TEXT,
+    OUT VAR_res BOOLEAN
+) 
+SET client_min_messages = error
+AS $$
+BEGIN
+    IF VAR_received IS NULL THEN 
+        RAISE EXCEPTION '% - (expected NOT NULL, got %)', VAR_message, VAR_received; 
+    END IF;
+    VAR_res = true;
+END; $$
+LANGUAGE plpgsql;

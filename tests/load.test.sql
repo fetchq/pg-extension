@@ -122,7 +122,7 @@ BEGIN
     StartTime := clock_timestamp();
     VAR_q = 'select * from fetchq.doc_push(''foo'', 0, ''%s'', ''';
     FOR VAR_r IN
-		SELECT generate_series(1, PAR_limit - 1) AS id, md5(random()::text) AS descr
+		SELECT generate_series(1, PAR_limit - 1) AS id, uuid_generate_v1() AS descr
 	LOOP
         VAR_sq = '(''''%s'''', 0, ''''{}'''', {DATA}),';
         VAR_q = VAR_q || FORMAT(VAR_sq, VAR_r.descr);

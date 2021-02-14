@@ -7,10 +7,14 @@ CREATE OR REPLACE FUNCTION fetchq.metric_log_increment(
 	OUT affected_rows INTEGER
 ) AS $$
 BEGIN
-	INSERT INTO fetchq.metrics_writes
-	( created_at, queue, metric, increment )
-	VALUES
-	( NOW(), PAR_queue, PAR_subject, PAR_value );
-	GET DIAGNOSTICS affected_rows := ROW_COUNT;
+	IF PAR_value = 0 THEN
+		affected_rows = 0;
+	ELSE
+		INSERT INTO fetchq.metrics_writes
+		( created_at, queue, metric, increment )
+		VALUES
+		( NOW(), PAR_queue, PAR_subject, PAR_value );
+		GET DIAGNOSTICS affected_rows := ROW_COUNT;
+	END IF;
 END; $$
 LANGUAGE plpgsql;
