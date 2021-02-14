@@ -5,6 +5,7 @@
 - Uses `uuid` data type in `fetchq.metrics_writes` to prevent
   running out of integer IDs over time.  
   (https://github.com/fetchq/pg-extension/issues/38)
+- Reduces `metric_writes` by ignoring increments of Zero value
 - Add new methods:
   - `fetchq.doc_push('queue', 'subject')`
   - `fetchq.doc_push('queue', 'subject', '{"payload": true}')`

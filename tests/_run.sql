@@ -149,8 +149,8 @@ LANGUAGE plpgsql;
 
 -- Define which groups to run
 -- select * from fetchq_test.__runDevelopement();
--- select * from fetchq_test.__runBasics();
--- select * from fetchq_test.__runOptionals();
+select * from fetchq_test.__runBasics();
+select * from fetchq_test.__runOptionals();
 
 
 
