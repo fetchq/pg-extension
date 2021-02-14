@@ -1,7 +1,7 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 3.1.1
+version ?= 3.2.0
 
 ## Testing with Postgres Versions
 ## It's a good idea to always test with all the versions
@@ -100,7 +100,7 @@ build:
 		$(CURDIR)/src/queue-truncate.sql \
 		$(CURDIR)/src/utils-ts-retain.sql \
 		$(CURDIR)/src/trace.sql \
-		$(CURDIR)/src/upgrade_3.1.0_3.1.1.sql \
+		$(CURDIR)/src/upgrade_3.1.0_3.2.0.sql \
 		> $(CURDIR)/extension/fetchq--${version}.sql
 
 build-test:

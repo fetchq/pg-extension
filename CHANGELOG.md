@@ -1,6 +1,6 @@
 # FetchQ Changelog
 
-## v3.1.1
+## v3.2.0
 
 - Uses `uuid` data type in `fetchq.metrics_writes` to prevent
   running out of integer IDs over time.  
