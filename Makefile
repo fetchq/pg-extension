@@ -28,9 +28,6 @@ version ?= 3.2.0
 pg_version ?= 13.2
 pg_extension_folder ?= 13
 
-pg_version ?= 13.2
-pg_extension_folder ?= 13
-
 reset:
 	@echo "[fetchq] reset local system..."
 	# Cleanup current db
