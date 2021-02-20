@@ -2944,8 +2944,8 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS fetchq.upgrade__310__311();
-CREATE OR REPLACE FUNCTION fetchq.upgrade__310__311(
+DROP FUNCTION IF EXISTS fetchq.upgrade__310__320();
+CREATE OR REPLACE FUNCTION fetchq.upgrade__310__320(
     OUT success BOOLEAN
 ) AS $$
 DECLARE
