@@ -26,7 +26,7 @@ Migrating from version 3.1.0 is quite easy as we started to
 provide migration scripts as built-in functions:
 
 ```sql
-SELECT * FROM fetchq.upgrade__310__311();
+SELECT * FROM fetchq.upgrade__310__320();
 ```
 
 From previous versions, you may need to adjust the following SQL:
