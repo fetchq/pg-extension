@@ -217,7 +217,7 @@ publish: build-image
 	docker tag ${name}:13.0-${version} ${registry}/${name}:latest
 	docker push ${registry}/${name}:latest
 
-start-pg:
+start-pg: build build-test
 	docker run --rm -d \
 		--name fetchq \
 		-p 5432:5432 \

@@ -8,8 +8,9 @@ BEGIN
     BEGIN
 
         -- >>> Run tests
-        PERFORM fetchq_test.__run('mnt_01', 'It should be possible to run a maintanance job for all the existing queues');
-        PERFORM fetchq_test.__run('metric_snap_02', '');
+        -- PERFORM fetchq_test.__run('mnt_01', 'It should be possible to run a maintanance job for all the existing queues');
+        -- PERFORM fetchq_test.__run('metric_snap_02', '');
+        PERFORM fetchq_test.__run('doc_push_07', 'It should throw errors in case of oversized subject');
         -- PERFORM fetchq_test.__run('queue_truncate_02', 'It should truncate a queue, also with logs and metrics');
         -- PERFORM fetchq_test.__run('queue_truncate_all_01', 'It should truncate all existing queues data');
         -- PERFORM fetchq_test.__run('queue_truncate_all_02', 'It should truncate all existing queues, also with logs and metrics');
@@ -86,6 +87,7 @@ BEGIN
         PERFORM fetchq_test.__run('doc_push_04', '');
         PERFORM fetchq_test.__run('doc_push_05', '');
         PERFORM fetchq_test.__run('doc_push_06', '');
+        PERFORM fetchq_test.__run('doc_push_07', 'It should throw errors in case of oversized subject');
         PERFORM fetchq_test.__run('doc_append_02', 'It should be able to append many documents without collisions');
         PERFORM fetchq_test.__run('doc_append_03', 'It should append using the simplified form');
         PERFORM fetchq_test.__run('doc_append_04', 'it should NOT append a non existing queue');
