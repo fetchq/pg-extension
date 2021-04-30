@@ -1,5 +1,9 @@
 # FetchQ Changelog
 
+## v3.x.x
+
+- Throws error if the subject exceeds the limits in `doc.push()`
+
 ## v3.2.0
 
 - Uses `uuid` data type in `fetchq.metrics_writes` to prevent
