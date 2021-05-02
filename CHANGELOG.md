@@ -2,7 +2,10 @@
 
 ## v3.x.x
 
-- Throws error if the subject exceeds the limits in `doc.push()`
+- Throws error if the subject exceeds the limits in `doc_push()`
+- Add short method `doc_pick(queue, limit)`
+- Add short method `doc_pick(queue, lockDuration)`
+- Add short method `doc_pick(queue)`
 
 ## v3.2.0
 
@@ -18,9 +21,9 @@
 
 ### Migrating from a previous version:
 
-> **NOTE:** we suggest you stop all your workers and put your 
-> Fetchq on hold while performing the upgrade operation. 
-> 
+> **NOTE:** we suggest you stop all your workers and put your
+> Fetchq on hold while performing the upgrade operation.
+>
 > If anything goes wrong, this should only screw up the counters
 > and you can easily rebuild them.
 >
@@ -38,7 +41,7 @@ From previous versions, you may need to adjust the following SQL:
 ```sql
 BEGIN;
 -- temporary cast integers to strings:
-ALTER TABLE "fetchq"."metrics_writes" 
+ALTER TABLE "fetchq"."metrics_writes"
 ALTER COLUMN "id" SET DATA TYPE VARCHAR(36),
 ALTER COLUMN "id" SET DEFAULT uuid_generate_v1();
 
@@ -54,8 +57,6 @@ ALTER COLUMN "id" SET DEFAULT uuid_generate_v1();
 DROP SEQUENCE IF EXISTS "fetchq"."metrics_writes_id_seq" CASCADE;
 COMMIT;
 ```
-
-
 
 ## v3.1.0
 

@@ -1,4 +1,5 @@
 -- PICK AND LOCK A DOCUMENT THAT NEEDS TO BE EXECUTED NEXT
+-- SELECT * FROM "fetchq"."doc_pick"('foo', 0, 1, '5m');
 -- returns:
 -- { document_structure }
 DROP FUNCTION IF EXISTS fetchq.doc_pick(CHARACTER VARYING, INTEGER, INTEGER, CHARACTER VARYING);
@@ -69,5 +70,81 @@ BEGIN
 	EXECUTE VAR_q;	
 
 	EXCEPTION WHEN OTHERS THEN BEGIN END;
+END; $$
+LANGUAGE plpgsql;
+
+
+-- PICK AND LOCK A SINGLE DOCUMENT THAT NEEDS TO BE EXECUTED NEXT
+-- SELECT * FROM "fetchq"."doc_pick"('foo','5m');
+-- returns:
+-- { document_structure }
+DROP FUNCTION IF EXISTS fetchq.doc_pick(CHARACTER VARYING, CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.doc_pick(
+	PAR_queue VARCHAR,
+	PAR_duration VARCHAR
+) RETURNS TABLE(
+	subject VARCHAR,
+	payload JSONB,
+	version INTEGER,
+	priority INTEGER,
+	attempts INTEGER,
+	iterations INTEGER,
+	created_at TIMESTAMP WITH TIME ZONE,
+	last_iteration TIMESTAMP WITH TIME ZONE,
+	next_iteration TIMESTAMP WITH TIME ZONE,
+	lock_upgrade TIMESTAMP WITH TIME ZONE
+) AS $$
+BEGIN
+	RETURN QUERY SELECT * FROM "fetchq"."doc_pick"(PAR_queue, 0, 1, PAR_duration);
+END; $$
+LANGUAGE plpgsql;
+
+-- PICK AND LOCK A SINGLE DOCUMENT THAT NEEDS TO BE EXECUTED NEXT (default lock vale)
+-- SELECT * FROM "fetchq"."doc_pick"('foo');
+-- returns:
+-- { document_structure }
+DROP FUNCTION IF EXISTS fetchq.doc_pick(CHARACTER VARYING);
+CREATE OR REPLACE FUNCTION fetchq.doc_pick(
+	PAR_queue VARCHAR
+) RETURNS TABLE(
+	subject VARCHAR,
+	payload JSONB,
+	version INTEGER,
+	priority INTEGER,
+	attempts INTEGER,
+	iterations INTEGER,
+	created_at TIMESTAMP WITH TIME ZONE,
+	last_iteration TIMESTAMP WITH TIME ZONE,
+	next_iteration TIMESTAMP WITH TIME ZONE,
+	lock_upgrade TIMESTAMP WITH TIME ZONE
+) AS $$
+BEGIN
+	RETURN QUERY SELECT * FROM "fetchq"."doc_pick"(PAR_queue, 0, 1, '5m');
+END; $$
+LANGUAGE plpgsql;
+
+
+-- PICK AND LOCK A LIST OF DOCUMENTS THAT NEEDS TO BE EXECUTED NEXT (default lock vale)
+-- SELECT * FROM "fetchq"."doc_pick"('foo', 5);
+-- returns:
+-- { document_structure }
+DROP FUNCTION IF EXISTS fetchq.doc_pick(CHARACTER VARYING, INTEGER);
+CREATE OR REPLACE FUNCTION fetchq.doc_pick(
+	PAR_queue VARCHAR,
+	PAR_limit INTEGER
+) RETURNS TABLE(
+	subject VARCHAR,
+	payload JSONB,
+	version INTEGER,
+	priority INTEGER,
+	attempts INTEGER,
+	iterations INTEGER,
+	created_at TIMESTAMP WITH TIME ZONE,
+	last_iteration TIMESTAMP WITH TIME ZONE,
+	next_iteration TIMESTAMP WITH TIME ZONE,
+	lock_upgrade TIMESTAMP WITH TIME ZONE
+) AS $$
+BEGIN
+	RETURN QUERY SELECT * FROM "fetchq"."doc_pick"(PAR_queue, 0, PAR_limit, '5m');
 END; $$
 LANGUAGE plpgsql;

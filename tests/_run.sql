@@ -8,16 +8,10 @@ BEGIN
     BEGIN
 
         -- >>> Run tests
-        -- PERFORM fetchq_test.__run('mnt_01', 'It should be possible to run a maintanance job for all the existing queues');
-        -- PERFORM fetchq_test.__run('metric_snap_02', '');
-        PERFORM fetchq_test.__run('doc_push_07', 'It should throw errors in case of oversized subject');
-        -- PERFORM fetchq_test.__run('queue_truncate_02', 'It should truncate a queue, also with logs and metrics');
-        -- PERFORM fetchq_test.__run('queue_truncate_all_01', 'It should truncate all existing queues data');
-        -- PERFORM fetchq_test.__run('queue_truncate_all_02', 'It should truncate all existing queues, also with logs and metrics');
-        -- PERFORM fetchq_test.__run('doc_append_01', 'It should append a document and returns its subject');
-        -- PERFORM fetchq_test.__run('doc_append_02', 'It should be able to append many documents without collisions');
-        -- PERFORM fetchq_test.__run('doc_append_03', 'It should append using the simplified form');
-        -- PERFORM fetchq_test.__run('doc_append_04', 'it should NOT append a non existing queue');
+        -- PERFORM fetchq_test.__run('doc_pick_06', 'It should pick a single document with a custom lock');
+        -- PERFORM fetchq_test.__run('doc_pick_07', 'It should pick a single document with the default lock');
+        -- PERFORM fetchq_test.__run('doc_pick_08', 'It should pick a list of documents and lock it with the default lock');
+        PERFORM fetchq_test.__run('queue_truncate_02', 'It should fully truncate a table');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
@@ -92,10 +86,14 @@ BEGIN
         PERFORM fetchq_test.__run('doc_append_03', 'It should append using the simplified form');
         PERFORM fetchq_test.__run('doc_append_04', 'it should NOT append a non existing queue');
         PERFORM fetchq_test.__run('doc_upsert_02', '');
+
         PERFORM fetchq_test.__run('doc_pick_02', '');
         PERFORM fetchq_test.__run('doc_pick_03', '');
         PERFORM fetchq_test.__run('doc_pick_04', '');
         PERFORM fetchq_test.__run('doc_pick_05', '');
+        PERFORM fetchq_test.__run('doc_pick_06', 'It should pick a single document with a custom lock');
+        PERFORM fetchq_test.__run('doc_pick_07', 'It should pick a single document with the default lock');
+        PERFORM fetchq_test.__run('doc_pick_08', 'It should pick a list of documents and lock it with the default lock');
         
         PERFORM fetchq_test.__run('doc_reschedule_02', '');
         
