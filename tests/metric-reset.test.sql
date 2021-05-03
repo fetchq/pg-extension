@@ -3,7 +3,6 @@ CREATE OR REPLACE FUNCTION fetchq_test.metric_reset_01(
     OUT passed BOOLEAN
 ) AS $$
 DECLARE
-    VAR_testName VARCHAR = 'COULD NOT COMPUTE QUEUE METRICS';
     VAR_r RECORD;
 BEGIN
     
@@ -32,32 +31,30 @@ BEGIN
     PERFORM fetchq.mnt_run_all(100);
     PERFORM fetchq.metric_log_pack();
 
-    -- empty stats so to force recreate
-    TRUNCATE __fetchq_metrics;
-    TRUNCATE __fetchq_metrics_writes;
-
     -- get computed metrics
     SELECT * INTO VAR_r from fetchq.metric_reset('foo');
+
+    -- test on results
     IF VAR_r.cnt IS NULL THEN
-        RAISE EXCEPTION 'failed - %(cnt, got null value)', VAR_testName;
+        RAISE EXCEPTION 'cnt, got null value';
     END IF;
     IF VAR_r.cnt <> 4 THEN
-        RAISE EXCEPTION 'failed - %(cnt, expected "4", got "%")', VAR_testName, VAR_r.cnt;
+        RAISE EXCEPTION 'cnt, expected "4", got "%"', VAR_r.cnt;
     END IF;
     IF VAR_r.pln <> 1 THEN
-        RAISE EXCEPTION 'failed - %(pln, expected "1", got "%")', VAR_testName, VAR_r.pln;
+        RAISE EXCEPTION 'pln, expected "1", got "%"', VAR_r.pln;
     END IF;
     IF VAR_r.pnd <> 1 THEN
-        RAISE EXCEPTION 'failed - %(pnd, expected "1", got "%")', VAR_testName, VAR_r.pnd;
+        RAISE EXCEPTION 'pnd, expected "1", got "%"', VAR_r.pnd;
     END IF;
     IF VAR_r.kll <> 1 THEN
-        RAISE EXCEPTION 'failed - %(kll, expected "1", got "%")', VAR_testName, VAR_r.kll;
+        RAISE EXCEPTION 'kll, expected "1", got "%"', VAR_r.kll;
     END IF;
     IF VAR_r.cpl <> 1 THEN
-        RAISE EXCEPTION 'failed - %(cpl, expected "1", got "%")', VAR_testName, VAR_r.cpl;
+        RAISE EXCEPTION 'cpl, expected "1", got "%"', VAR_r.cpl;
     END IF;
     IF VAR_r.act <> 0 THEN
-        RAISE EXCEPTION 'failed - %(act, expected "1", got "%")', VAR_testName, VAR_r.act;
+        RAISE EXCEPTION 'act, expected "1", got "%"', VAR_r.act;
     END IF;
 
 
