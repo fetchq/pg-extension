@@ -6,6 +6,7 @@
 - Add short method `doc_pick(queue, limit)`
 - Add short method `doc_pick(queue, lockDuration)`
 - Add short method `doc_pick(queue)`
+- `reset_metrics()` now removes all existing counters and pending writes logs
 
 ## v3.2.0
 

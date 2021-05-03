@@ -11,7 +11,7 @@ BEGIN
         -- PERFORM fetchq_test.__run('doc_pick_06', 'It should pick a single document with a custom lock');
         -- PERFORM fetchq_test.__run('doc_pick_07', 'It should pick a single document with the default lock');
         -- PERFORM fetchq_test.__run('doc_pick_08', 'It should pick a list of documents and lock it with the default lock');
-        PERFORM fetchq_test.__run('queue_truncate_02', 'It should fully truncate a table');
+        PERFORM fetchq_test.__run('metric_reset_01', 'It should reset metrics');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
@@ -148,7 +148,7 @@ LANGUAGE plpgsql;
 
 
 -- Define which groups to run
--- select * from fetchq_test.__runDevelopement();
+select * from fetchq_test.__runDevelopement();
 select * from fetchq_test.__runBasics();
 select * from fetchq_test.__runOptionals();
 
