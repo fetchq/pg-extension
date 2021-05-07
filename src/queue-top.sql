@@ -11,7 +11,7 @@ CREATE OR REPLACE FUNCTION fetchq.queue_top(
 	version INTEGER,
 	priority INTEGER,
 	attempts INTEGER,
-	iterations INTEGER,
+	iterations BIGINT,
 	created_at TIMESTAMP WITH TIME ZONE,
 	last_iteration TIMESTAMP WITH TIME ZONE,
 	next_iteration TIMESTAMP WITH TIME ZONE,

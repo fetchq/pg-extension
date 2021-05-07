@@ -1,12 +1,31 @@
 # FetchQ Changelog
 
-## v3.x.x
+## v3.3.0
 
 - Throws error if the subject exceeds the limits in `doc_push()`
 - Add short method `doc_pick(queue, limit)`
 - Add short method `doc_pick(queue, lockDuration)`
 - Add short method `doc_pick(queue)`
 - `reset_metrics()` now removes all existing counters and pending writes logs
+- `iterations` field got promoted to BIGINT
+
+### Migrating from a previous version:
+
+> **NOTE:** we suggest you stop all your workers and put your
+> Fetchq on hold while performing the upgrade operation.
+>
+> If anything goes wrong, this should simply fail to execute.  
+> It should be a safe operation 😇.
+
+Migrating from version 3.2.0 is quite easy as we started to
+provide migration scripts as built-in functions:
+
+```sql
+SELECT * FROM fetchq.upgrade__320__330();
+```
+
+👉 From previous versions you need first to follow the v3.2.0 migration
+instructions, then you can run this migration script.
 
 ## v3.2.0
 
