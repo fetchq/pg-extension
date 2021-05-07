@@ -1,4 +1,4 @@
 # FetchQ Node Extension
 comment = 'fetchq node'
-default_version = '3.2.0'
+default_version = '3.3.0'
 relocatable = true

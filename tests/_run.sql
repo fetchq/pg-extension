@@ -8,10 +8,8 @@ BEGIN
     BEGIN
 
         -- >>> Run tests
-        -- PERFORM fetchq_test.__run('doc_pick_06', 'It should pick a single document with a custom lock');
-        -- PERFORM fetchq_test.__run('doc_pick_07', 'It should pick a single document with the default lock');
-        -- PERFORM fetchq_test.__run('doc_pick_08', 'It should pick a list of documents and lock it with the default lock');
-        PERFORM fetchq_test.__run('metric_reset_01', 'It should reset metrics');
+        -- PERFORM fetchq_test.__run('mnt_01', 'It should be possible to run a maintanance job for all the existing queues');
+        -- PERFORM fetchq_test.__run('queue_truncate_01', 'It should truncate a queue by name');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
@@ -135,6 +133,8 @@ BEGIN
         PERFORM fetchq_test.__run('queue_status_01', '');
         PERFORM fetchq_test.__run('utils_ts_retain_01', '');
         PERFORM fetchq_test.__run('trace_01', '');
+
+        PERFORM fetchq_test.__run('upgrade__320__330', 'It should run the v3.3.0 migration script');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
