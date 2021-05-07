@@ -57,7 +57,7 @@ BEGIN
         task character varying(40) NOT NULL,
         queue character varying(40) NOT NULL,
         attempts integer DEFAULT 0,
-        iterations integer DEFAULT 0,
+        iterations bigint DEFAULT 0,
         next_iteration timestamp with time zone,
         last_iteration timestamp with time zone,
         settings jsonb,
