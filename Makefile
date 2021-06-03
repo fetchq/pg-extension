@@ -1,7 +1,7 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 3.3.0
+version ?= 4.0.0
 
 ## Testing with Postgres Versions
 ## It's a good idea to always test with all the versions

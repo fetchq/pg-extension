@@ -41,7 +41,7 @@ BEGIN
 	VAR_q = VAR_q || 'UPDATE %s ';
 	VAR_q = VAR_q || 'SET status = 2, next_iteration = NOW() + ''%s'', attempts = attempts + 1 ';
 	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM %s ';
-    VAR_q = VAR_q || 'WHERE lock_upgrade IS NULL AND status = 1 AND version = %s AND next_iteration < NOW() ';
+    VAR_q = VAR_q || 'WHERE lock_upgrade IS NULL AND status = 1 AND version = %s AND next_iteration <= NOW() ';
 	VAR_q = VAR_q || 'ORDER BY priority DESC, next_iteration ASC, attempts ASC ';
 	VAR_q = VAR_q || 'LIMIT %s FOR UPDATE SKIP LOCKED) RETURNING subject) ';
 	VAR_q = VAR_q || 'INSERT INTO %s(subject) ';

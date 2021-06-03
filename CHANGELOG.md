@@ -1,5 +1,18 @@
 # FetchQ Changelog
 
+## v4.0.0
+
+This is a major release because the reschedule and document pick have changed their behavior.
+
+Document pick "sees" a document that is scheduled exactly on "now()".
+
+Rescheduling a document in the past sets its status to pending, so that document is available for picking without the need for a maintenance loop.
+
+That should be a crazy performance improvement!
+
+- `doc_reschedule()` is able to set `status=1` when a document is rescheduled in the past (or present)
+- `doc_pick()` picks documents that are scheduled at `NOW()`
+
 ## v3.3.0
 
 - Throws error if the subject exceeds the limits in `doc_push()`

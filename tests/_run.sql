@@ -10,6 +10,7 @@ BEGIN
         -- >>> Run tests
         -- PERFORM fetchq_test.__run('mnt_01', 'It should be possible to run a maintanance job for all the existing queues');
         -- PERFORM fetchq_test.__run('queue_truncate_01', 'It should truncate a queue by name');
+        PERFORM fetchq_test.__run('doc_reschedule_03', 'It should reschedule a document as pending');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
@@ -42,6 +43,7 @@ BEGIN
         PERFORM fetchq_test.__run('doc_upsert_01', '');
         PERFORM fetchq_test.__run('doc_pick_01', '');
         PERFORM fetchq_test.__run('doc_reschedule_01', '');
+        PERFORM fetchq_test.__run('doc_reschedule_03', 'It should reschedule a document as pending');
         PERFORM fetchq_test.__run('doc_reject_01', '');
         PERFORM fetchq_test.__run('doc_complete_01', '');
         PERFORM fetchq_test.__run('doc_kill_01', '');
