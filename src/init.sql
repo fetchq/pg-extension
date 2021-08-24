@@ -7,6 +7,8 @@ AS $$
 BEGIN
     was_initialized = TRUE;
 
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
     -- Create the FetchQ Schema
     CREATE SCHEMA IF NOT EXISTS fetchq_data;
 

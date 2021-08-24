@@ -1,5 +1,9 @@
 # FetchQ Changelog
 
+## v4.0.1
+
+Fix `fetchq.init()` so to create the `uuid-ossp` extension.
+
 ## v4.0.0
 
 This is a major release because the reschedule and document pick have changed their behavior.

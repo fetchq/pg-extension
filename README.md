@@ -29,7 +29,7 @@ docker run --rm \
 	--name fetchq \
 	-p 5432:5432 \
 	-e "POSTGRES_PASSWORD=postgres" \
-	fetchq/fetchq:13.0-3.1.0
+	fetchq/fetchq:13.3-4.0.1
 ```
 
 This runs a PostgreSQL instance with Fetchq installed and ready to work.
