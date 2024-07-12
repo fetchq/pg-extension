@@ -1,5 +1,56 @@
 # FetchQ Changelog
 
+## v4.0.2
+
+- Removed temporary table from `fetchq.doc_pick()`
+- Reduced the utilization of FROMAT to table name only in `fetchq.doc_pick()`
+
+<small>(you never stop learning new tricks!)</small>
+
+## v4.0.1
+
+Fix `fetchq.init()` so to create the `uuid-ossp` extension.
+
+## v4.0.0
+
+This is a major release because the reschedule and document pick have changed their behavior.
+
+Document pick "sees" a document that is scheduled exactly on "now()".
+
+Rescheduling a document in the past sets its status to pending, so that document is available for picking without the need for a maintenance loop.
+
+That should be a crazy performance improvement!
+
+- `doc_reschedule()` is able to set `status=1` when a document is rescheduled in the past (or present)
+- `doc_pick()` picks documents that are scheduled at `NOW()`
+
+## v3.3.0
+
+- Throws error if the subject exceeds the limits in `doc_push()`
+- Add short method `doc_pick(queue, limit)`
+- Add short method `doc_pick(queue, lockDuration)`
+- Add short method `doc_pick(queue)`
+- `reset_metrics()` now removes all existing counters and pending writes logs
+- `iterations` field got promoted to BIGINT
+
+### Migrating from a previous version:
+
+> **NOTE:** we suggest you stop all your workers and put your
+> Fetchq on hold while performing the upgrade operation.
+>
+> If anything goes wrong, this should simply fail to execute.  
+> It should be a safe operation 😇.
+
+Migrating from version 3.2.0 is quite easy as we started to
+provide migration scripts as built-in functions:
+
+```sql
+SELECT * FROM fetchq.upgrade__320__330();
+```
+
+👉 From previous versions you need first to follow the v3.2.0 migration
+instructions, then you can run this migration script.
+
 ## v3.2.0
 
 - Uses `uuid` data type in `fetchq.metrics_writes` to prevent
@@ -14,9 +65,9 @@
 
 ### Migrating from a previous version:
 
-> **NOTE:** we suggest you stop all your workers and put your 
-> Fetchq on hold while performing the upgrade operation. 
-> 
+> **NOTE:** we suggest you stop all your workers and put your
+> Fetchq on hold while performing the upgrade operation.
+>
 > If anything goes wrong, this should only screw up the counters
 > and you can easily rebuild them.
 >
@@ -34,7 +85,7 @@ From previous versions, you may need to adjust the following SQL:
 ```sql
 BEGIN;
 -- temporary cast integers to strings:
-ALTER TABLE "fetchq"."metrics_writes" 
+ALTER TABLE "fetchq"."metrics_writes"
 ALTER COLUMN "id" SET DATA TYPE VARCHAR(36),
 ALTER COLUMN "id" SET DEFAULT uuid_generate_v1();
 
@@ -50,8 +101,6 @@ ALTER COLUMN "id" SET DEFAULT uuid_generate_v1();
 DROP SEQUENCE IF EXISTS "fetchq"."metrics_writes_id_seq" CASCADE;
 COMMIT;
 ```
-
-
 
 ## v3.1.0
 

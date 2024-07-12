@@ -10,8 +10,8 @@ DECLARE
 BEGIN
     
     -- initialize test
-
     PERFORM fetchq.queue_create('foo');
+
 
     -- insert dummy data
     PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1s', '{}');
@@ -197,5 +197,124 @@ BEGIN
 
 
     passed = TRUE;
+END; $$
+LANGUAGE plpgsql;
+
+
+-- It should pick a single document with a custom lock
+CREATE OR REPLACE FUNCTION fetchq_test.doc_pick_06(
+    OUT passed BOOLEAN
+) AS $$
+DECLARE
+    VAR_affectedRows INTEGER;
+    VAR_r RECORD;
+BEGIN
+    
+    -- initialize test
+    PERFORM fetchq.queue_create('foo');
+
+    -- insert dummy data
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '50s', '{}');
+    PERFORM fetchq.doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '40s', '{}');
+
+    -- get first document
+    SELECT * INTO VAR_r FROM fetchq.doc_pick('foo', '5m');
+    GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
+    IF VAR_r.subject IS NULL THEN
+        RAISE EXCEPTION 'null value';
+    END IF;
+    IF VAR_affectedRows <> 1 THEN
+        RAISE EXCEPTION 'count: expected 1, received %)', VAR_affectedRows;
+    END IF;
+    IF VAR_r.subject <> 'a1' THEN
+        RAISE EXCEPTION 'subject: expected "a1", received "%")', VAR_r.subject;
+    END IF;
+
+    -- get second document
+    SELECT * INTO VAR_r FROM fetchq.doc_pick('foo', 0, 1, '5m');
+    GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
+    IF VAR_r.subject IS NULL THEN
+        RAISE EXCEPTION 'null value';
+    END IF;
+    IF VAR_affectedRows <> 1 THEN
+        RAISE EXCEPTION 'count: expected 1, received %)', VAR_affectedRows;
+    END IF;
+    IF VAR_r.subject <> 'a2' THEN
+        RAISE EXCEPTION 'subject: expected "a2", received "%")', VAR_r.subject;
+    END IF;
+
+END; $$
+LANGUAGE plpgsql;
+
+-- It should pick a single document with the default lock
+CREATE OR REPLACE FUNCTION fetchq_test.doc_pick_07(
+    OUT passed BOOLEAN
+) AS $$
+DECLARE
+    VAR_affectedRows INTEGER;
+    VAR_r RECORD;
+BEGIN
+    
+    -- initialize test
+    PERFORM fetchq.queue_create('foo');
+
+    -- insert dummy data
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '50s', '{}');
+    PERFORM fetchq.doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '40s', '{}');
+
+    -- get first document
+    SELECT * INTO VAR_r FROM fetchq.doc_pick('foo', '5m');
+    GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
+    IF VAR_r.subject IS NULL THEN
+        RAISE EXCEPTION 'null value';
+    END IF;
+    IF VAR_affectedRows <> 1 THEN
+        RAISE EXCEPTION 'count: expected 1, received %)', VAR_affectedRows;
+    END IF;
+    IF VAR_r.subject <> 'a1' THEN
+        RAISE EXCEPTION 'subject: expected "a1", received "%")', VAR_r.subject;
+    END IF;
+
+    -- get second document
+    SELECT * INTO VAR_r FROM fetchq.doc_pick('foo', 0, 1, '5m');
+    GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
+    IF VAR_r.subject IS NULL THEN
+        RAISE EXCEPTION 'null value';
+    END IF;
+    IF VAR_affectedRows <> 1 THEN
+        RAISE EXCEPTION 'count: expected 1, received %)', VAR_affectedRows;
+    END IF;
+    IF VAR_r.subject <> 'a2' THEN
+        RAISE EXCEPTION 'subject: expected "a2", received "%")', VAR_r.subject;
+    END IF;
+
+END; $$
+LANGUAGE plpgsql;
+
+
+-- It should pick a list of documents and lock it with the default lock
+CREATE OR REPLACE FUNCTION fetchq_test.doc_pick_08(
+    OUT passed BOOLEAN
+) AS $$
+DECLARE
+    VAR_affectedRows INTEGER;
+    VAR_r RECORD;
+BEGIN
+    
+    -- initialize test
+    PERFORM fetchq.queue_create('foo');
+
+    -- insert dummy data
+    PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '50s', '{}');
+    PERFORM fetchq.doc_push('foo', 'a2', 0, 0, NOW() - INTERVAL '40s', '{}');
+
+    -- get first document
+    PERFORM fetchq.doc_pick('foo', 2);
+    GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
+
+    IF VAR_affectedRows <> 2 THEN
+        RAISE EXCEPTION 'count: expected 2, received %', VAR_affectedRows;
+    END IF;
+
 END; $$
 LANGUAGE plpgsql;

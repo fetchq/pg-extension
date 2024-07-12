@@ -1,7 +1,7 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 3.2.0
+version ?= 4.0.2
 
 ## Testing with Postgres Versions
 ## It's a good idea to always test with all the versions
@@ -25,8 +25,11 @@ version ?= 3.2.0
 # pg_version ?= 13.0
 # pg_extension_folder ?= 13
 
-pg_version ?= 13.2
+pg_version ?= 13.3
 pg_extension_folder ?= 13
+
+# pg_version ?= 16.3
+# pg_extension_folder ?= 16
 
 reset:
 	@echo "[fetchq] reset local system..."
@@ -35,7 +38,7 @@ reset:
 	@docker rm -f fetchq || true
 
 	# Cleanup data folders
-	@sudo rm -rf $(CURDIR)/data
+	@rm -rf $(CURDIR)/data
 	@rm -rf $(CURDIR)/extension
 	@mkdir $(CURDIR)/data
 	@mkdir $(CURDIR)/data/pg
@@ -101,6 +104,7 @@ build:
 		$(CURDIR)/src/utils-ts-retain.sql \
 		$(CURDIR)/src/trace.sql \
 		$(CURDIR)/src/upgrade_3.1.0_3.2.0.sql \
+		$(CURDIR)/src/upgrade_3.2.0_3.3.0.sql \
 		> $(CURDIR)/extension/fetchq--${version}.sql
 
 build-test:
@@ -152,6 +156,7 @@ build-test:
 		$(CURDIR)/tests/utils-ts-retain.test.sql \
 		$(CURDIR)/tests/trace.test.sql \
 		$(CURDIR)/tests/load.test.sql \
+		$(CURDIR)/tests/upgrade_3.2.0_3.3.0.test.sql \
 		$(CURDIR)/tests/_run.sql \
 		$(CURDIR)/tests/_after.sql \
 		> $(CURDIR)/data/fetchq--${version}.test.sql
@@ -166,6 +171,9 @@ build-image: reset build
 	docker build --no-cache -t ${name}:12.4-${version} -f Dockerfile-12.4 .
 	docker build --no-cache -t ${name}:13.0-${version} -f Dockerfile-13.0 .
 	docker build --no-cache -t ${name}:13.2-${version} -f Dockerfile-13.2 .
+	docker build --no-cache -t ${name}:13.3-${version} -f Dockerfile-13.3 .
+	docker build --no-cache -t ${name}:13.4-${version} -f Dockerfile-13.4 .
+	docker build --no-cache -t ${name}:16.4-${version} -f Dockerfile-16.3 .
 
 publish: build-image
 	# 9.6
@@ -213,16 +221,35 @@ publish: build-image
 	docker tag ${name}:13.2-${version} ${registry}/${name}:13.2-latest
 	docker push ${registry}/${name}:13.2-${version}
 	docker push ${registry}/${name}:13.2-latest
+	# 13.3
+	docker tag ${name}:13.3-${version} ${registry}/${name}:13.3-${version}
+	docker tag ${name}:13.3-${version} ${registry}/${name}:13.3-latest
+	docker push ${registry}/${name}:13.3-${version}
+	docker push ${registry}/${name}:13.3-latest
+	# 13.4
+	docker tag ${name}:13.4-${version} ${registry}/${name}:13.4-${version}
+	docker tag ${name}:13.4-${version} ${registry}/${name}:13.4-latest
+	docker push ${registry}/${name}:13.4-${version}
+	docker push ${registry}/${name}:13.4-latest
 	# latest
 	docker tag ${name}:13.0-${version} ${registry}/${name}:latest
 	docker push ${registry}/${name}:latest
 
-start-pg:
+start-pg: build build-test
 	docker run --rm -d \
 		--name fetchq \
 		-p 5432:5432 \
 		-e POSTGRES_PASSWORD=postgres \
-		-v $(CURDIR)/data/pg:/var/lib/postgresql/data \
+		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq.control \
+		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq--${version}.sql \
+		-v $(CURDIR)/data/fetchq--${version}.test.sql:/tests/fetchq--${version}.test.sql \
+		postgres:$(pg_version)
+
+start-pg-sync: build build-test
+	docker run \
+		--name fetchq \
+		-p 5432:5432 \
+		-e POSTGRES_PASSWORD=postgres \
 		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq.control \
 		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq--${version}.sql \
 		-v $(CURDIR)/data/fetchq--${version}.test.sql:/tests/fetchq--${version}.test.sql \
@@ -271,4 +298,4 @@ init: build
 			-h localhost \
 			--username postgres \
 			--dbname postgres \
-			-c 'DROP SCHEMA public CASCADE;CREATE SCHEMA public;CREATE EXTENSION fetchq;SELECT * FROM fetchq_init();'
+			-c 'DROP SCHEMA public CASCADE;CREATE SCHEMA public;CREATE EXTENSION fetchq;SELECT * FROM fetchq.init();'

@@ -22,7 +22,7 @@ BEGIN
 	VAR_q = VAR_q || 'priority INTEGER DEFAULT 0,';
 	VAR_q = VAR_q || 'status INTEGER DEFAULT 0,';
 	VAR_q = VAR_q || 'attempts INTEGER DEFAULT 0,';
-	VAR_q = VAR_q || 'iterations INTEGER DEFAULT 0,';
+	VAR_q = VAR_q || 'iterations BIGINT DEFAULT 0,';
 	VAR_q = VAR_q || 'next_iteration TIMESTAMP WITH TIME ZONE,';
 	VAR_q = VAR_q || 'lock_upgrade TIMESTAMP WITH TIME ZONE,';
 	VAR_q = VAR_q || 'created_at TIMESTAMP WITH TIME ZONE,';

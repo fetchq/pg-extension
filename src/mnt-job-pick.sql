@@ -8,7 +8,7 @@ CREATE OR REPLACE FUNCTION fetchq.mnt_job_pick(
     task VARCHAR,
     queue VARCHAR,
     attempts INTEGER,
-    iterations INTEGER,
+    iterations BIGINT,
     next_iteration TIMESTAMP WITH TIME ZONE,
     last_iteration TIMESTAMP WITH TIME ZONE,
     settings JSONB,

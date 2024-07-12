@@ -6,6 +6,7 @@ CREATE OR REPLACE FUNCTION fetchq.destroy_with_terrible_consequences(
 DECLARE
     VAR_q RECORD;
 BEGIN
+    DROP SCHEMA IF EXISTS fetchq CASCADE;
     DROP SCHEMA IF EXISTS fetchq_data CASCADE;
 
     -- drop all queues

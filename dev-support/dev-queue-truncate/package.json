@@ -1,0 +1,15 @@
+{
+  "name": "dev-queue-truncate",
+  "version": "1.0.0",
+  "description": "Small app that aims to test and reproduce concurrency while trying to reset a queue",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/nodemon index"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.7",
+    "pg": "^8.6.0"
+  }
+}

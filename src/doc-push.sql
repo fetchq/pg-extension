@@ -1,5 +1,6 @@
 
 -- PUSH A SINGLE DOCUMENT
+-- SELECT * FROM "fetchq"."doc_push"('q1', 'doc1', 0, 0, NOW() + INTERVAL '1m', '{"foo": 123}');
 DROP FUNCTION IF EXISTS fetchq.doc_push(CHARACTER VARYING, CHARACTER VARYING, INTEGER, INTEGER, TIMESTAMP WITH TIME ZONE, JSONB);
 CREATE OR REPLACE FUNCTION fetchq.doc_push(
     PAR_queue VARCHAR,
@@ -14,6 +15,7 @@ DECLARE
 	VAR_q VARCHAR;
     VAR_status INTEGER = 0;
 BEGIN
+
     -- pick right status based on nextIteration date
     IF PAR_nextIteration <= NOW() THEN
 		VAR_status = 1;
@@ -60,8 +62,12 @@ BEGIN
 	END IF;
 
     -- handle exception
-	EXCEPTION WHEN OTHERS THEN BEGIN
-		queued_docs = 0;
+	EXCEPTION 
+        WHEN sqlstate '22001' THEN
+            RAISE EXCEPTION 'The subject exceeds 50 characters limit';
+        WHEN OTHERS THEN BEGIN
+            -- RAISE EXCEPTION '% -- %', sqlstate, SQLERRM;
+            queued_docs = 0;
 	END;
 END; $$
 LANGUAGE plpgsql;

@@ -29,7 +29,7 @@ docker run --rm \
 	--name fetchq \
 	-p 5432:5432 \
 	-e "POSTGRES_PASSWORD=postgres" \
-	fetchq/fetchq:13.0-3.1.0
+	fetchq/fetchq:13.3-4.0.1
 ```
 
 This runs a PostgreSQL instance with Fetchq installed and ready to work.
@@ -296,3 +296,11 @@ select * from fetchq.doc_append('foo', '{"a":1}', 0, 0);
   against a running Postgres instance
 - `make test` runs a full test agains a newly created database instance
 - `make init` re-initialize a running Postgres instance
+
+In order to actually run the tests while develping:
+
+```bash
+make reset
+make start-pg
+make test-run
+```

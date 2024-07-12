@@ -145,3 +145,26 @@ BEGIN
     
 END; $$
 LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION fetchq_test.doc_push_07() RETURNS void AS $$
+DECLARE
+	VAR_queuedDocs INTEGER;
+    VAR_r RECORD;
+    VAR_t TEXT;
+BEGIN
+    -- initialize test
+    PERFORM fetchq.queue_create('foo');
+
+    SELECT CONCAT(md5(random()::text), md5(random()::text))::TEXT INTO VAR_t;
+    PERFORM fetchq.doc_push('foo', VAR_t, '{"a":2}', NOW());
+
+
+    EXCEPTION 
+        WHEN sqlstate 'P0001' THEN
+        WHEN OTHERS THEN BEGIN
+            RAISE EXCEPTION '% -- %', SQLSTATE, SQLERRM;
+	END;
+    
+END; $$
+LANGUAGE plpgsql;

@@ -8,15 +8,17 @@ BEGIN
     BEGIN
 
         -- >>> Run tests
-        PERFORM fetchq_test.__run('mnt_01', 'It should be possible to run a maintanance job for all the existing queues');
-        PERFORM fetchq_test.__run('metric_snap_02', '');
-        -- PERFORM fetchq_test.__run('queue_truncate_02', 'It should truncate a queue, also with logs and metrics');
-        -- PERFORM fetchq_test.__run('queue_truncate_all_01', 'It should truncate all existing queues data');
-        -- PERFORM fetchq_test.__run('queue_truncate_all_02', 'It should truncate all existing queues, also with logs and metrics');
-        -- PERFORM fetchq_test.__run('doc_append_01', 'It should append a document and returns its subject');
-        -- PERFORM fetchq_test.__run('doc_append_02', 'It should be able to append many documents without collisions');
-        -- PERFORM fetchq_test.__run('doc_append_03', 'It should append using the simplified form');
-        -- PERFORM fetchq_test.__run('doc_append_04', 'it should NOT append a non existing queue');
+        -- PERFORM fetchq_test.__run('mnt_01', 'It should be possible to run a maintanance job for all the existing queues');
+        -- PERFORM fetchq_test.__run('queue_truncate_01', 'It should truncate a queue by name');
+        -- PERFORM fetchq_test.__run('doc_reschedule_03', 'It should reschedule a document as pending');
+        PERFORM fetchq_test.__run('doc_pick_01', '');
+        PERFORM fetchq_test.__run('doc_pick_02', '');
+        PERFORM fetchq_test.__run('doc_pick_03', '');
+        PERFORM fetchq_test.__run('doc_pick_04', '');
+        PERFORM fetchq_test.__run('doc_pick_05', '');
+        PERFORM fetchq_test.__run('doc_pick_06', '');
+        PERFORM fetchq_test.__run('doc_pick_07', '');
+        PERFORM fetchq_test.__run('doc_pick_08', '');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
@@ -49,6 +51,7 @@ BEGIN
         PERFORM fetchq_test.__run('doc_upsert_01', '');
         PERFORM fetchq_test.__run('doc_pick_01', '');
         PERFORM fetchq_test.__run('doc_reschedule_01', '');
+        PERFORM fetchq_test.__run('doc_reschedule_03', 'It should reschedule a document as pending');
         PERFORM fetchq_test.__run('doc_reject_01', '');
         PERFORM fetchq_test.__run('doc_complete_01', '');
         PERFORM fetchq_test.__run('doc_kill_01', '');
@@ -86,14 +89,19 @@ BEGIN
         PERFORM fetchq_test.__run('doc_push_04', '');
         PERFORM fetchq_test.__run('doc_push_05', '');
         PERFORM fetchq_test.__run('doc_push_06', '');
+        PERFORM fetchq_test.__run('doc_push_07', 'It should throw errors in case of oversized subject');
         PERFORM fetchq_test.__run('doc_append_02', 'It should be able to append many documents without collisions');
         PERFORM fetchq_test.__run('doc_append_03', 'It should append using the simplified form');
         PERFORM fetchq_test.__run('doc_append_04', 'it should NOT append a non existing queue');
         PERFORM fetchq_test.__run('doc_upsert_02', '');
+
         PERFORM fetchq_test.__run('doc_pick_02', '');
         PERFORM fetchq_test.__run('doc_pick_03', '');
         PERFORM fetchq_test.__run('doc_pick_04', '');
         PERFORM fetchq_test.__run('doc_pick_05', '');
+        PERFORM fetchq_test.__run('doc_pick_06', 'It should pick a single document with a custom lock');
+        PERFORM fetchq_test.__run('doc_pick_07', 'It should pick a single document with the default lock');
+        PERFORM fetchq_test.__run('doc_pick_08', 'It should pick a list of documents and lock it with the default lock');
         
         PERFORM fetchq_test.__run('doc_reschedule_02', '');
         
@@ -135,6 +143,8 @@ BEGIN
         PERFORM fetchq_test.__run('queue_status_01', '');
         PERFORM fetchq_test.__run('utils_ts_retain_01', '');
         PERFORM fetchq_test.__run('trace_01', '');
+
+        PERFORM fetchq_test.__run('upgrade__320__330', 'It should run the v3.3.0 migration script');
         -- <<<
 
     EXCEPTION WHEN OTHERS THEN
@@ -155,6 +165,6 @@ select * from fetchq_test.__runOptionals();
 
 
 -- load tests
--- SELECT * FROM fetchq_test.load_01(100000);
+-- SELECT * FROM fetchq_test.load_01(1000);
 -- SELECT * FROM fetchq_test.load_02(10000);
 -- SELECT * FROM fetchq_test.load_03(25, 10000);

@@ -7,6 +7,8 @@ AS $$
 BEGIN
     was_initialized = TRUE;
 
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
     -- Create the FetchQ Schema
     CREATE SCHEMA IF NOT EXISTS fetchq_data;
 
@@ -57,7 +59,7 @@ BEGIN
         task character varying(40) NOT NULL,
         queue character varying(40) NOT NULL,
         attempts integer DEFAULT 0,
-        iterations integer DEFAULT 0,
+        iterations bigint DEFAULT 0,
         next_iteration timestamp with time zone,
         last_iteration timestamp with time zone,
         settings jsonb,
