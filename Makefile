@@ -1,7 +1,7 @@
 
 registry ?= fetchq
 name ?= fetchq
-version ?= 4.0.1
+version ?= 4.0.2
 
 ## Testing with Postgres Versions
 ## It's a good idea to always test with all the versions
@@ -28,6 +28,9 @@ version ?= 4.0.1
 pg_version ?= 13.3
 pg_extension_folder ?= 13
 
+# pg_version ?= 16.3
+# pg_extension_folder ?= 16
+
 reset:
 	@echo "[fetchq] reset local system..."
 	# Cleanup current db
@@ -35,7 +38,7 @@ reset:
 	@docker rm -f fetchq || true
 
 	# Cleanup data folders
-	@sudo rm -rf $(CURDIR)/data
+	@rm -rf $(CURDIR)/data
 	@rm -rf $(CURDIR)/extension
 	@mkdir $(CURDIR)/data
 	@mkdir $(CURDIR)/data/pg
@@ -170,6 +173,7 @@ build-image: reset build
 	docker build --no-cache -t ${name}:13.2-${version} -f Dockerfile-13.2 .
 	docker build --no-cache -t ${name}:13.3-${version} -f Dockerfile-13.3 .
 	docker build --no-cache -t ${name}:13.4-${version} -f Dockerfile-13.4 .
+	docker build --no-cache -t ${name}:16.4-${version} -f Dockerfile-16.3 .
 
 publish: build-image
 	# 9.6
@@ -236,7 +240,16 @@ start-pg: build build-test
 		--name fetchq \
 		-p 5432:5432 \
 		-e POSTGRES_PASSWORD=postgres \
-		-v $(CURDIR)/data/pg:/var/lib/postgresql/data \
+		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq.control \
+		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq--${version}.sql \
+		-v $(CURDIR)/data/fetchq--${version}.test.sql:/tests/fetchq--${version}.test.sql \
+		postgres:$(pg_version)
+
+start-pg-sync: build build-test
+	docker run \
+		--name fetchq \
+		-p 5432:5432 \
+		-e POSTGRES_PASSWORD=postgres \
 		-v $(CURDIR)/extension/fetchq.control:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq.control \
 		-v $(CURDIR)/extension/fetchq--${version}.sql:/usr/share/postgresql/$(pg_extension_folder)/extension/fetchq--${version}.sql \
 		-v $(CURDIR)/data/fetchq--${version}.test.sql:/tests/fetchq--${version}.test.sql \
@@ -285,4 +298,4 @@ init: build
 			-h localhost \
 			--username postgres \
 			--dbname postgres \
-			-c 'DROP SCHEMA public CASCADE;CREATE SCHEMA public;CREATE EXTENSION fetchq;SELECT * FROM fetchq_init();'
+			-c 'DROP SCHEMA public CASCADE;CREATE SCHEMA public;CREATE EXTENSION fetchq;SELECT * FROM fetchq.init();'
