@@ -22,32 +22,26 @@ CREATE OR REPLACE FUNCTION fetchq.doc_pick(
 ) AS $$
 DECLARE
 	VAR_tableName VARCHAR;
-	VAR_tempTable VARCHAR;
-	VAR_updateCtx VARCHAR;
 	VAR_q VARCHAR;
 	VAR_affectedRows INTEGER;
 BEGIN
-	-- get temporary table name
-	VAR_tableName = FORMAT('fetchq_data.%s__docs', PAR_queue);
-	VAR_tempTable = FORMAT('fetchq__%s__pick_table', PAR_queue);
-	VAR_updateCtx = FORMAT('fetchq__%s__pick_ctx', PAR_queue);
+	VAR_q = FORMAT(
+		'UPDATE fetchq_data.%I__docs SET status = 2, next_iteration = NOW() + $1::interval, attempts = attempts + 1 
+		WHERE subject IN (
+			SELECT subject FROM fetchq_data.%I__docs
+			WHERE lock_upgrade IS NULL AND status = 1 AND version = $2 AND next_iteration <= NOW() 
+			ORDER BY priority DESC, next_iteration ASC, attempts ASC 
+			LIMIT $3 FOR UPDATE SKIP LOCKED
+		) 
+		RETURNING subject, payload, version, priority, attempts, iterations, created_at, last_iteration, next_iteration, lock_upgrade;', 
+		PAR_queue, PAR_queue
+	);
 
-	-- create temporary table
-	VAR_q = FORMAT('CREATE TEMP TABLE %s(subject VARCHAR(50)) ON COMMIT DROP;', VAR_tempTable);
-	EXECUTE VAR_q;
+	-- RAISE EXCEPTION 'query: %', VAR_q;
 
-	-- perform lock on the rows
-	VAR_q = 'WITH %s AS( ';
-	VAR_q = VAR_q || 'UPDATE %s ';
-	VAR_q = VAR_q || 'SET status = 2, next_iteration = NOW() + ''%s'', attempts = attempts + 1 ';
-	VAR_q = VAR_q || 'WHERE subject IN( SELECT subject FROM %s ';
-    VAR_q = VAR_q || 'WHERE lock_upgrade IS NULL AND status = 1 AND version = %s AND next_iteration <= NOW() ';
-	VAR_q = VAR_q || 'ORDER BY priority DESC, next_iteration ASC, attempts ASC ';
-	VAR_q = VAR_q || 'LIMIT %s FOR UPDATE SKIP LOCKED) RETURNING subject) ';
-	VAR_q = VAR_q || 'INSERT INTO %s(subject) ';
-	VAR_q = VAR_q || 'SELECT subject FROM %s; ';
-	VAR_q = FORMAT(VAR_q, VAR_updateCtx, VAR_tableName, PAR_duration, VAR_tableName, PAR_version, PAR_limit, VAR_tempTable, VAR_updateCtx);
-	EXECUTE VAR_q;
+	RETURN QUERY EXECUTE VAR_q
+	USING PAR_duration, PAR_version, PAR_limit;
+
 	GET DIAGNOSTICS VAR_affectedRows := ROW_COUNT;
 
 	-- RAISE NOTICE 'attempt';
@@ -57,17 +51,6 @@ BEGIN
 	PERFORM fetchq.metric_log_increment(PAR_queue, 'pkd', VAR_affectedRows);
 	PERFORM fetchq.metric_log_increment(PAR_queue, 'act', VAR_affectedRows);
 	PERFORM fetchq.metric_log_decrement(PAR_queue, 'pnd', VAR_affectedRows);
-
-	-- return documents
-	VAR_q = 'SELECT subject, payload, version, priority, attempts, iterations, created_at, last_iteration, next_iteration, lock_upgrade ';
-	VAR_q = VAR_q || 'FROM %s WHERE subject IN( SELECT subject ';
-	VAR_q = VAR_q || 'FROM %s); ';
-	VAR_q = FORMAT(VAR_q, VAR_tableName, VAR_tempTable);
-	RETURN QUERY EXECUTE VAR_q;
-
-	-- drop temporary table
-	VAR_q = FORMAT('DROP TABLE %s;', VAR_tempTable);
-	EXECUTE VAR_q;	
 
 	EXCEPTION WHEN OTHERS THEN BEGIN END;
 END; $$

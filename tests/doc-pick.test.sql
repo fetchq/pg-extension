@@ -10,8 +10,8 @@ DECLARE
 BEGIN
     
     -- initialize test
-
     PERFORM fetchq.queue_create('foo');
+
 
     -- insert dummy data
     PERFORM fetchq.doc_push('foo', 'a1', 0, 0, NOW() - INTERVAL '1s', '{}');

@@ -1,5 +1,12 @@
 # FetchQ Changelog
 
+## v4.0.2
+
+- Removed temporary table from `fetchq.doc_pick()`
+- Reduced the utilization of FROMAT to table name only in `fetchq.doc_pick()`
+
+<small>(you never stop learning new tricks!)</small>
+
 ## v4.0.1
 
 Fix `fetchq.init()` so to create the `uuid-ossp` extension.
